@@ -29,6 +29,13 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData }) => {
   useEffect(() => {
     if (!geoJsonData || mapRef.current || typeof window === 'undefined') return;
 
+    // set map to fill screen
+    const mapContainer = document.getElementById('map');
+    if (mapContainer) {
+      mapContainer.style.height = '100vh';
+      mapContainer.style.width = '100vw';
+    }
+
     const map = L.map('map', {
       center: [42.2626, -71.8023],
       zoom: 13,
@@ -52,7 +59,6 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData }) => {
       }
     }).addTo(map);
 
-
     const bounds = L.geoJSON(geoJsonData).getBounds();
     if (bounds.isValid()) {
       map.fitBounds(bounds);
@@ -62,13 +68,15 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData }) => {
 
     mapRef.current = map;
 
+    map.invalidateSize();
+
     return () => {
       map.remove();
       mapRef.current = null;
     };
   }, [geoJsonData]);
 
-  return <div id="map" style={{ height: '500px', width: '100%' }}></div>;
+  return <div id="map" style={{}}></div>;
 };
 
 export default FreedomMap;
