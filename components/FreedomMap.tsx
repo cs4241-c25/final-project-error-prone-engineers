@@ -54,6 +54,10 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData }) => {
     const customIcon = L.icon(iconOptions);
 
     L.geoJSON(geoJsonData, {
+      style: () => ({
+        color: "#D00000",
+        weight: 6,
+      }),
       pointToLayer: (feature, latlng) => {
         return L.marker(latlng, {icon: customIcon});
       }
