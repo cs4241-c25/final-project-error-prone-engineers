@@ -4,6 +4,7 @@ import { FeatureCollection } from 'geojson';
 import Map from '../components/FreedomMap';
 import Menu from '../components/HamburgerMenu';
 import LoginButton from '../components/LoginButton';
+import Head from 'next/head';
 
 export default function Home() {
   const [geoJsonData, setGeoJsonData] = useState<FeatureCollection | null>(null);
