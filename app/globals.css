@@ -20,5 +20,11 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  /* font-family: Arial, Helvetica, sans-serif; */
+}
+
+#map {
+  background-image: url('/freedomtrail_medallion.jpg');
+  background-size: cover;
+  background-position: center;
 }

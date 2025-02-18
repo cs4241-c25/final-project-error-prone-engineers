@@ -41,10 +41,30 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData }) => {
       zoom: 13,
     });
 
-    //this is a regular street view map
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+    const imageUrl = '/freedomtrail_medallion.jpg';  // Correct path from the public folder
+    const imageBounds: [L.LatLngTuple, L.LatLngTuple] = [
+      [42.0, -72.0], // Bottom-left corner (lat, lon)
+      [42.5, -71.5]  // Top-right corner (lat, lon)
+    ];
+
+    L.imageOverlay(imageUrl, imageBounds, {
+      opacity: 0.7,
     }).addTo(map);
+
+    const overlay = document.createElement('div');
+    overlay.style.position = 'absolute';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.4)';
+    overlay.style.zIndex = '100';
+    mapContainer?.appendChild(overlay);
+
+    //this is a regular street view map
+    // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    //   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+    // }).addTo(map);
     
     //this is a transparent (ish) map. 
     // L.tileLayer('https://{s}.tile.toner-transparent.com/{z}/{x}/{y}.png', { // Use transparent tiles
