@@ -33,7 +33,10 @@ export default function Home() {
   }
 
   return (
-    <div>
+    <div className='flex flex-col'>
+      <div className='h-1/6 z-100 bg-[#D00000] text-center p-2'>
+        <h1 className='font-extrabold text-5xl font-cinzel'>Boston Freedom Trail</h1>
+      </div>
       <Map geoJsonData={geoJsonData} />
     </div>
   );
