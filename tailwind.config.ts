@@ -14,6 +14,7 @@ export default {
       },
       fontFamily: {
         cinzel: ["Cinzel Decorative", "serif"],
+        garamond: 'var(--font-garamond), serif',
       }
     },
   },

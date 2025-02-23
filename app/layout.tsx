@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    title: "Freedom Trail App",
-    description: "Freedom Trail Walking App",
+    title: "Freedoom Trail App",
+    description: "Freedom Trail Guide",
 };
 
 export default function RootLayout({children,}: Readonly<{ children: React.ReactNode; }>) {
