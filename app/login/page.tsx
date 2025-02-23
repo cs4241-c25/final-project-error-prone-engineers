@@ -1,14 +1,21 @@
 'use client';
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import React, { useState } from "react";
+import { signIn } from "next-auth/react"
+import Image from 'next/image';
 
-const login = () => {
+const Login = () => {
     // Initialize the username and password state as blank
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     //Initialize the router
     const router = useRouter();
 
+    async function handleGoogleLogin(e: React.FormEvent){
+        e.preventDefault();
+        await signIn('google')
+        router.push('/');
+    }
 
     // Handle the login
     async function handleLogin(e: React.FormEvent){
@@ -45,9 +52,9 @@ const login = () => {
           />
 
           {/* Google Sign-In Button */}
-          <button className="flex items-center justify-center bg-white text-black p-2 rounded-full shadow-md mb-4">
-            <img src="google.png" alt="Google Logo" className="w-6 h-6 mr-2" />
-            Sign in with Google
+          <button onClick={handleGoogleLogin} className="flex items-center justify-center bg-white text-black p-2 rounded-full shadow-md mb-4">
+              <Image src="/google.png" alt="Google Logo" width={24} height={24} className="mr-2" />
+              Sign in with Google
           </button>
 
           {/* Login Button */}
@@ -65,4 +72,4 @@ const login = () => {
     );
 };
 
-export default login;
+export default Login;

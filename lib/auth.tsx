@@ -11,8 +11,8 @@ export const authOptions: NextAuthOptions = {
     adapter: MongoDBAdapter(clientPromise),
     providers: [
         GoogleProvider({
-            clientId: process.env.GOOGLE_CLIENT_ID,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            clientId: process.env.GOOGLE_CLIENT_ID!,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
         }),
         CredentialsProvider({
             name: "Credentials",
@@ -38,5 +38,8 @@ export const authOptions: NextAuthOptions = {
     session: {
         strategy: "jwt",
         maxAge: 24 * 60 * 60,
+    },
+    pages: {
+        signIn: '/login', // Custom sign-in page
     },
 };
