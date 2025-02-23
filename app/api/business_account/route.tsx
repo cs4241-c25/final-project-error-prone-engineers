@@ -1,6 +1,6 @@
 import { MongoClient } from "mongodb";
-import { NextApiRequest, NextApiResponse } from "next";
 import { BusinessAccount } from "@/types/BusinessAccount";
+import {NextRequest, NextResponse} from "next/server";
 
 const dbconnect = new MongoClient(process.env.MONGO_URI!);
 let businessesCollection: any = null;
@@ -13,17 +13,28 @@ async function connectDB() {
     }
 }
 
-export async function POST(req: NextApiRequest, res: NextApiResponse) {
+export async function POST(request: NextRequest) {
     try {
         await connectDB();
-        const formData: BusinessAccount = req.body;
+        const formData: BusinessAccount = await request.json();
         const result = await businessesCollection.insertOne(formData);
         console.log(result);
-        return res.status(200)
+        return NextResponse.json({ status: 200 });
     }
     catch (error) {
         console.log(error);
-        return res.status(400);
+        return NextResponse.json({ status: 400 });
     }
+}
 
+export async function GET(request: NextRequest) {
+    try {
+        await connectDB();
+        const businesses: [BusinessAccount] = await businessesCollection.find({});
+        return NextResponse.json({ status: 200, message: businesses });
+    }
+    catch (error) {
+        console.log(error);
+        return NextResponse.json({ status: 400 });
+    }
 }
