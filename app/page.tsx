@@ -41,7 +41,7 @@ export default function Home() {
         <div className="flex-shrink-0">
           <Menu />
         </div>
-        <h1 className='font-extrabold text-5xl font-cinzel mx-auto'>Boston Freedom Trail</h1>
+        <h1 className='font-extrabold text-5xl font-garamond mx-auto'>Boston Freedom Trail</h1>
         <div className='flex-grow-0'>
           <LoginButton/>
         </div>
