@@ -49,7 +49,7 @@ export async function POST(req: Request) {
             html: `
                 <p>Hello,</p>
                 <p>We received a request to reset your password. Click the button below to proceed:</p>
-                <p><a href="http://localhost:3000/reset-password?email=${email}" style="background:blue;color:white;padding:10px 20px;text-decoration:none;border-radius:5px;">Reset Password</a></p>
+                <p><a href="${process.env.APP_BASE_URL}/reset-password?email=${email}" style="background:blue;color:white;padding:10px 20px;text-decoration:none;border-radius:5px;">Reset Password</a></p>
                 <p>If you did not request this, you can ignore this email.</p>
                 <p>Thank you,</p>
                 <p>The Support Team</p>
@@ -57,9 +57,7 @@ export async function POST(req: Request) {
         };
 
         const info = await transporter.sendMail(mailOptions);
-
         return NextResponse.json({ message: "Email sent successfully!", info }, { status: 200 });
-
     } catch (error: any) {
         return NextResponse.json({ message: "Error sending email", error: error.message }, { status: 500 });
     }

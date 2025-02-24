@@ -22,7 +22,7 @@ const ResetPassword = () => {
         }
 
         try {
-            await axios.post("/api/reset",
+            await axios.post("/api/auth/reset",
                 { email, newPassword },
                 { headers: { "Content-Type": "application/json" } }
             );

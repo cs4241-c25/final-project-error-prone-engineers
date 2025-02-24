@@ -13,7 +13,7 @@ const Forgot_Password = () => {
     async function handlePasswordReset(e: React.FormEvent){
         e.preventDefault()
         try {
-            await axios.post("/api/email", {
+            await axios.post("/api/auth/email", {
                 email,
             }, {
                 headers: {
