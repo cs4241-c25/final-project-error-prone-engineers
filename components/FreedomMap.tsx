@@ -30,9 +30,11 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData }) => {
     if (!geoJsonData || mapRef.current || typeof window === 'undefined') return;
 
     // set map to fill screen
+    // don't want to rotate the map container
     const mapContainer = document.getElementById('map');
     if (mapContainer) {
-      mapContainer.style.height = '100vh';
+      mapContainer.style.rotate = '90deg';
+      mapContainer.style.height = '100vw';
       mapContainer.style.width = '100vw';
     }
 
@@ -41,16 +43,21 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData }) => {
       zoom: 13,
     });
 
-    const imageUrl = '/freedomtrail_medallion.jpg';  // Correct path from the public folder
-    const imageBounds: [L.LatLngTuple, L.LatLngTuple] = [
-      [42.0, -72.0], // Bottom-left corner (lat, lon)
-      [42.5, -71.5]  // Top-right corner (lat, lon)
-    ];
+    //transparent map, can show image in back.
+    //this should give the ability to add street view? 
+    //in future
 
-    L.imageOverlay(imageUrl, imageBounds, {
-      opacity: 0.7,
-    }).addTo(map);
+    // const imageUrl = '/freedomtrail_medallion.jpg';  // Correct path from the public folder
+    // const imageBounds: [L.LatLngTuple, L.LatLngTuple] = [
+    //   [42.0, -72.0], // Bottom-left corner (lat, lon)
+    //   [42.5, -71.5]  // Top-right corner (lat, lon)
+    // ];
 
+    // L.imageOverlay(imageUrl, imageBounds, {
+    //   opacity: 0.7,
+    // }).addTo(map);
+
+    //this is the tranparent layer that adds a dark background
     const overlay = document.createElement('div');
     overlay.style.position = 'absolute';
     overlay.style.top = '0';
@@ -62,9 +69,10 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData }) => {
     mapContainer?.appendChild(overlay);
 
     //this is a regular street view map
-    // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    //   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
-    // }).addTo(map);
+    //this is the layer i want to rotate...
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+    }).addTo(map);
     
     //this is a transparent (ish) map. 
     // L.tileLayer('https://{s}.tile.toner-transparent.com/{z}/{x}/{y}.png', { // Use transparent tiles
@@ -73,6 +81,7 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData }) => {
 
     const customIcon = L.icon(iconOptions);
 
+    // and also i want to rotate this layer...
     L.geoJSON(geoJsonData, {
       style: () => ({
         color: "#D00000",
