@@ -1,6 +1,7 @@
 'use client';
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import axios from "axios";
 
 const Register = () => {
     // Initialize the username and password state as blank
@@ -17,18 +18,20 @@ const Register = () => {
     async function handleRegister(e: React.FormEvent){
         e.preventDefault();
 
-        const res = await fetch("/api/auth/register", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password }),
-        });
-
-        let data = await res.json()
-
-        if (res.ok) {
+        try {
+            await axios.post("/api/auth/register", {
+                email,
+                password,
+            }, {
+                headers: { "Content-Type": "application/json" }
+            });
             router.push(`/login`);
-        } else {
-            setError("Registration failed: " + data.error);
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                setError("Registration failed: " + (error.response?.data?.error || error.message));
+            } else {
+                setError("An unexpected error occurred.");
+            }
         }
     }
 

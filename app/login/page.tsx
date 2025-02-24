@@ -82,6 +82,7 @@ const Login = () => {
                         Sign in with Google
                     </button>
 
+                    {error && <p className="text-red-500 mb-2">{error}</p>}
 
                     {/* Login Button */}
                     <button type="submit"
@@ -92,7 +93,7 @@ const Login = () => {
 
                 {/* Forgot Password */}
                 <p className="text-center text-blue-900 font-garamond font-semibold mt-4">
-                    <a href="#" className="underline">Forgot your password?</a>
+                    <a href="/forgot-password" className="underline">Forgot your password?</a>
                 </p>
 
                 {/* Navigate to register page */}
