@@ -1,3 +1,4 @@
+import { Cinzel_Decorative } from "next/font/google";
 import type { Config } from "tailwindcss";
 
 export default {
@@ -15,7 +16,9 @@ export default {
       fontFamily: {
         cinzel: ["Cinzel Decorative", "serif"],
         garamond: 'var(--font-garamond), serif',
-      }
+        Cinzel_Decorative: ["Cinzel Decorative", "cursive"],
+      },
+      
     },
   },
   plugins: [],

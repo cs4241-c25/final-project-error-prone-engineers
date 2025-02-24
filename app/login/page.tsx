@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+
 const login = () => {
     // Initialize the username and password state as blank
     const [username, setUsername] = useState('');
@@ -25,7 +26,6 @@ const login = () => {
   }
 
     return (
-      //absolute inset-0 bg-black opacity-50 
       <div className="flex items-center justify-center min-h-screen bg-cover bg-center bg-[url('/freedomtrail_medallion.jpg')] " > 
       <div className="bg-[#DCEDFF] bg-opacity-20 backdrop-blur-lg p-8 rounded-3xl w-2/5 ">
         <h2 className="text-6xl font-bold text-center text-blue-900 mb-6 font-garamond">Sign in</h2>
