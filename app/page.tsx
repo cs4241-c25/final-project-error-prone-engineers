@@ -5,6 +5,15 @@ import Map from '../components/FreedomMap';
 import Menu from '../components/HamburgerMenu';
 import LoginButton from '../components/LoginButton';
 import Head from 'next/head';
+import dynamic from 'next/dynamic';
+
+//have to set this up with dynamic because leaflet can ONLY be rendered client-side
+const DynamicFreedomMap = dynamic(() => import('../components/FreedomMap'), {
+  ssr: false,
+});
+interface PageProps {
+  geoJsonData: FeatureCollection | null;
+}
 
 export default function Home() {
   const [geoJsonData, setGeoJsonData] = useState<FeatureCollection | null>(null);
@@ -46,7 +55,7 @@ export default function Home() {
           <LoginButton/>
         </div>
       </div>
-      <Map geoJsonData={geoJsonData} />
+      <DynamicFreedomMap geoJsonData={geoJsonData} />
     </div>
   );
 }
