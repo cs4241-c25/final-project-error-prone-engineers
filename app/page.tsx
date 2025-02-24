@@ -5,10 +5,20 @@ import Map from '../components/FreedomMap';
 import Menu from '../components/HamburgerMenu';
 import LoginButton from '../components/LoginButton';
 import Head from 'next/head';
+import { useSession } from "next-auth/react";
+
 
 export default function Home() {
   const [geoJsonData, setGeoJsonData] = useState<FeatureCollection | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  // Testing code to ensure user logs in
+  const { data: session } = useSession();
+  if (session) {
+    console.log("Logged in as: " + session.user?.name);
+  } else {
+    console.log("User not logged in");
+  }
 
   useEffect(() => {
     fetch('/freedom_path.geojson')

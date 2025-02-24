@@ -3,6 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { MongoClient } from "mongodb";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import GoogleProvider from 'next-auth/providers/google'
+import bcrypt from "bcrypt";
 
 const client = new MongoClient(process.env.MONGO_URI!);
 const clientPromise = client.connect();
@@ -25,12 +26,16 @@ export const authOptions: NextAuthOptions = {
                     throw new Error("Missing credentials");
                 }
 
-                const db = (await clientPromise).db();
+                const db = (await clientPromise).db("freedom-trail");
                 const user = await db.collection("users").findOne({ email: credentials.email });
 
-                if (!user || user.password !== credentials.password) return null;
+                if (!user || !(await bcrypt.compare(credentials.password, user.password))) return null;
 
-                return { id: user._id.toString(), email: user.email };
+                return {
+                    id: user._id.toString(),
+                    email: user.email,
+                    name: user.name || credentials.email.split("@")[0],
+                };
             },
         }),
     ],
@@ -39,7 +44,24 @@ export const authOptions: NextAuthOptions = {
         strategy: "jwt",
         maxAge: 24 * 60 * 60,
     },
-    pages: {
-        signIn: '/login', // Custom sign-in page
-    },
+    callbacks: {
+        async jwt({ token, user }) {
+            if (user) {
+                token.name = user.name;
+                token.email = user.email;
+            }
+            return token;
+        },
+        async session({ session, token }) {
+            if (token) {
+                session.user = session.user || {};
+                session.user.name = token.name || "Unknown User";
+                session.user.email = token.email || "";
+            }
+            return session;
+        },
+        async redirect({ url, baseUrl }) {
+            return baseUrl;
+        }
+    }
 };
