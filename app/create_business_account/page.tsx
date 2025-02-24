@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import axios from 'axios';
+import validator from 'validator';
 import { BusinessAccount, BusinessType, getEnumKeys } from "@/types/BusinessAccount";
 
 const createBusinessAccount = () => {
@@ -15,13 +16,48 @@ const createBusinessAccount = () => {
     const [description, setDescription] = useState("");
     const [accessibility, setAccessibility] = useState(false);
     const [publicRestroom, setPublicRestroom] = useState(false);
+    const [error, setError] = useState("");
+
+    function validateForm(): boolean {
+        if (!ownerName) {
+            setError("Name is required");
+        }
+        else if (!phoneNumber) {
+            setError("Phone number is required");
+        }
+        else if (!validator.isMobilePhone(phoneNumber)) {
+            setError("Phone number is not valid");
+        }
+        else if (!email) {
+            setError("Email is required");
+        }
+        else if (!validator.isEmail(email)) {
+            setError("Email is not valid");
+        }
+        else if (!businessName) {
+            setError("Business name is required");
+        }
+        else if (!address) {
+            setError("Address is required");
+        }
+        // TODO: validate address (multiple text boxes for address input?)
+        else {
+            setError("");
+            return true;
+        }
+        return false;
+    }
 
     async function submit() {
-        const formData: BusinessAccount = {ownerName: ownerName, phoneNumber: phoneNumber,
-            email: email, businessName: businessName, businessType: businessType, address: address,
-            description: description, accessibility: accessibility, publicRestroom: publicRestroom};
-        const response = await axios.post('/api/business_account', formData);
-        console.log(response);
+        if (validateForm()) {
+            const formData: BusinessAccount = {
+                ownerName: ownerName, phoneNumber: phoneNumber,
+                email: email, businessName: businessName, businessType: businessType, address: address,
+                description: description, accessibility: accessibility, publicRestroom: publicRestroom
+            };
+            const response = await axios.post('/api/business_account', formData);
+            console.log(response);
+        }
     }
 
     return (
@@ -56,6 +92,7 @@ const createBusinessAccount = () => {
             <textarea rows={5} id="description" name="description" value={description} placeholder="Business Description"
                    onChange={(e) => setDescription(e.target.value)} /><br/>
             <input type="submit" value="Create Your Business" onClick={submit} />
+            <p>{error}</p>
         </div>
     );
 }
