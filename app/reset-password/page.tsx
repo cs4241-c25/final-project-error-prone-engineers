@@ -7,7 +7,7 @@ import axios from "axios";
 const ResetPassword = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const email = searchParams.get("email") || ""; // Extract email from URL
+    const email = searchParams.get("email") || "";
 
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
