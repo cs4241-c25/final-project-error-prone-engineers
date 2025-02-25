@@ -4,6 +4,7 @@ import { FeatureCollection } from 'geojson';
 import Map from '../components/FreedomMap';
 import Menu from '../components/HamburgerMenu';
 import LoginButton from '../components/LoginButton';
+import LocationNode from '../components/LocationNode';
 import Head from 'next/head';
 
 export default function Home() {
@@ -39,14 +40,17 @@ export default function Home() {
     <div className='flex flex-col'>
       <div className='flex flex-row h-1/6 z-100 bg-[#D00000] text-center items-center p-2'>
         <div className="flex-shrink-0">
-          <Menu />
+          <Menu/>
         </div>
         <h1 className='font-extrabold text-5xl font-cinzel mx-auto'>Boston Freedom Trail</h1>
         <div className='flex-grow-0'>
           <LoginButton/>
         </div>
+        <div className='flex-grow-0'>
+          <LocationNode/>
+        </div>
       </div>
-      <Map geoJsonData={geoJsonData} />
+      <Map geoJsonData={geoJsonData}/>
     </div>
   );
 }
