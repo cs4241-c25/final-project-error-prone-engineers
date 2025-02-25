@@ -1,3 +1,4 @@
+import { Cinzel_Decorative } from "next/font/google";
 import type { Config } from "tailwindcss";
 
 export default {
