@@ -1,10 +1,19 @@
 'use client';
 import { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import { FeatureCollection } from 'geojson';
 import Map from '../components/FreedomMap';
-import Menu from '../components/HamburgerMenu';
-import LoginButton from '../components/LoginButton';
+import Banner from '../components/Banner';
 import Head from 'next/head';
+
+//so the map has to be dynamic
+//bc it can't render on server side, it can only render on client side
+const DynamicFreedomMap = dynamic(() => import('../components/FreedomMap'), {
+  ssr: false,
+});
+interface PageProps {
+  geoJsonData: FeatureCollection | null;
+}
 
 export default function Home() {
   const [geoJsonData, setGeoJsonData] = useState<FeatureCollection | null>(null);
@@ -37,16 +46,8 @@ export default function Home() {
 
   return (
     <div className='flex flex-col'>
-      <div className='flex flex-row h-1/6 z-100 bg-[#D00000] text-center items-center p-2'>
-        <div className="flex-shrink-0">
-          <Menu />
-        </div>
-        <h1 className='font-extrabold text-5xl font-cinzel mx-auto'>Boston Freedom Trail</h1>
-        <div className='flex-grow-0'>
-          <LoginButton/>
-        </div>
-      </div>
-      <Map geoJsonData={geoJsonData} />
+      <Banner />
+      <DynamicFreedomMap geoJsonData={geoJsonData} />
     </div>
   );
 }

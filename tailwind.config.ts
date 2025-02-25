@@ -14,11 +14,12 @@ export default {
         foreground: "var(--foreground)",
       },
       fontFamily: {
+
         cinzel: ["Cinzel Decorative", "serif"],
         garamond: 'var(--font-garamond), serif',
-        Cinzel_Decorative: ["Cinzel Decorative", "cursive"],
-      },
-      
+        girassol: ['Girassol', 'serif'],
+        cinzel_decorative: ['Cinzel Decorative', 'serif'],
+      }
     },
   },
   plugins: [],
