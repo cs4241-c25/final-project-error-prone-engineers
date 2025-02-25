@@ -13,6 +13,9 @@ export default {
         foreground: "var(--foreground)",
       },
       fontFamily: {
+
+        cinzel: ["Cinzel Decorative", "serif"],
+        garamond: 'var(--font-garamond), serif',
         girassol: ['Girassol', 'serif'],
         cinzel_decorative: ['Cinzel Decorative', 'serif'],
       }

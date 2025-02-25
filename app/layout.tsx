@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Girassol, Cinzel_Decorative } from "next/font/google";
+import { Geist, Geist_Mono, Cormorant_Garamond, Girassol, Cinzel_Decorative } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -10,6 +10,12 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const garamond = Cormorant_Garamond({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-garamond',
 });
 
 const girassol = Girassol({
@@ -37,7 +43,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${girassol.variable} ${cinzelDecorative.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${garamond.variable} ${geistMono.variable} ${girassol.variable} ${cinzelDecorative.variable} antialiased`}
       >
         {children}
       </body>
