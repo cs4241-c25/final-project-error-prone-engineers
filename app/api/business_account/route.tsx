@@ -30,8 +30,9 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
     try {
         await connectDB();
-        const businesses: [BusinessAccount] = await businessesCollection.find({});
-        return NextResponse.json({ status: 200, message: businesses });
+        const email: string | null = request.nextUrl.searchParams.get("email");
+        const businesses: [BusinessAccount] = await businessesCollection.find({email: email}).toArray();
+        return NextResponse.json({ status: 200, businesses });
     }
     catch (error) {
         console.log(error);

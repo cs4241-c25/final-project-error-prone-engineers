@@ -1,9 +1,11 @@
 export type BusinessAccount = {
+    _id?: string;
+    email: string;
     ownerName: string;
     phoneNumber: string;
-    email: string;
+    businessEmail: string;
     businessName: string;
-    businessType: BusinessType;
+    businessType: string;
     address: string;
     description: string;
     accessibility: boolean;
