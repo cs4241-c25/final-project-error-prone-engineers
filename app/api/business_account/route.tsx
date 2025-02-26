@@ -1,6 +1,6 @@
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 import { BusinessAccount } from "@/types/BusinessAccount";
-import {NextRequest, NextResponse} from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const dbconnect = new MongoClient(process.env.MONGO_URI!);
 let businessesCollection: any = null;
@@ -27,11 +27,54 @@ export async function POST(request: NextRequest) {
     }
 }
 
+export async function PUT(request: NextRequest) {
+    try {
+        await connectDB();
+        const formData: BusinessAccount = await request.json();
+        const _id = formData._id;
+        delete formData._id;
+        delete formData.email;
+        const result = await businessesCollection.updateOne({_id: new ObjectId(_id)}, {$set: formData});
+        console.log("Edited " + result.modifiedCount + " task with ID " + _id);
+        return NextResponse.json({ status: 200 });
+    }
+    catch (error) {
+        console.log(error);
+        return NextResponse.json({ status: 400 });
+    }
+}
+
 export async function GET(request: NextRequest) {
     try {
         await connectDB();
-        const businesses: [BusinessAccount] = await businessesCollection.find({});
-        return NextResponse.json({ status: 200, message: businesses });
+        const email: string | null = request.nextUrl.searchParams.get("email");
+        const _id: string | null = request.nextUrl.searchParams.get("_id");
+        if (email) {
+            const businesses: [BusinessAccount] = await businessesCollection.find({email: email}).toArray();
+            return NextResponse.json({status: 200, businesses});
+        }
+        else if (_id) {
+            const business: BusinessAccount = await businessesCollection.findOne({_id: new ObjectId(_id)});
+            return NextResponse.json({status: 200, business});
+        }
+        else {
+            const businesses: [BusinessAccount] = await businessesCollection.find({}).toArray();
+            return NextResponse.json({status: 200, businesses});
+        }
+    }
+    catch (error) {
+        console.log(error);
+        return NextResponse.json({ status: 400 });
+    }
+}
+
+export async function DELETE(request: NextRequest) {
+    try {
+        await connectDB();
+        const _id: string = request.nextUrl.searchParams.get("_id")!;
+        const result = await businessesCollection.deleteOne({_id: new ObjectId(_id)});
+        console.log("Deleted " + result.deletedCount + " task with ID " + _id);
+        return NextResponse.json({ status: 200 });
     }
     catch (error) {
         console.log(error);
