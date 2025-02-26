@@ -4,7 +4,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { FeatureCollection } from "geojson";
 
-// 🔹 Define absolute paths for Leaflet marker icons
+// Define absolute paths for Leaflet marker icons
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: "/_next/static/images/marker-icon-2x.png",
   iconUrl: "/_next/static/images/marker-icon.png",
