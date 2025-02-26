@@ -108,7 +108,7 @@ const createBusinessAccount = () => {
                         <label className="text-blue-900 font-garamond text-l font-semibold mb-1">Business Type:</label>
                         <select id="businessType" name="businessType" value={businessType}
                             className="w-full p-3 rounded-full font-garamond bg-[#2F1000] bg-opacity-50 text-white focus:outline-none mb-1 h-auto"
-                            onChange={(e) => setBusinessType(e.target.value as BusinessType)}>
+                            onChange={(e) => setBusinessType(BusinessType[e.target.value as keyof typeof BusinessType])}>
                             {getEnumKeys(BusinessType).map((key, index) => (
                                 <option key={index} value={BusinessType[key]}>{BusinessType[key]}</option>
                             ))}
@@ -147,9 +147,9 @@ const createBusinessAccount = () => {
                                 onChange={(e) => setPublicRestroom(e.target.checked)} />
                         </p>
                     </div>
-
+                    
                 </div>
-
+                
                 <div className='flex flex-col items-center'>
                     <label className="text-blue-900 font-garamond text-l font-semibold mb-1 justify-center">Business Description:</label>
                     <textarea rows={5} id="description" name="description" value={description} placeholder="Business Description"
