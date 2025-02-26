@@ -10,25 +10,26 @@ import LocationNode from "./LocationNode";
 import LocationPage from "./LocationPage"
 import ReactDOMServer from "react-dom/server";
 import ReactDOM from "react-dom/client";
-import styles from "../PopupStyles.module.css";
 
+
+//Associates name with gps location
 const locations = [
-  { name: "Boston Common", coordinates: [42.35532, -71.063639] }, //works
-  { name: "Massachusetts State House", coordinates: [42.35770, -71.06350] }, //works
-  { name: "Park Street Church", coordinates: [42.35666, -71.06183] }, //works
-  { name: "Granary Burying Ground", coordinates: [42.35719, -71.06125] }, // works
-  { name: "King's Chapel & King's Chapel Burying Ground", coordinates: [42.35831, -71.06000] }, // not
-  { name: "Boston Latin School Site/Benjamin Franklin Statue", coordinates: [42.35784, -71.05977] }, //not
-  { name: "Old Corner Bookstore", coordinates: [42.35745, -71.05835] }, // works
-  { name: "Old South Meeting House", coordinates: [42.35703, -71.05855] }, // works
-  { name: "Old State House", coordinates: [42.35858, -71.05750] }, //works
-  { name: "Boston Massacre Site", coordinates: [42.35858, -71.05728] }, //not
-  { name: "Faneuil Hall", coordinates: [42.36002, -71.05595] }, //works
-  { name: "Paul Revere House", coordinates: [42.36372, -71.05355] }, //not
-  { name: "Old North Church", coordinates: [42.36637, -71.05460] }, //not
-  { name: "USS Constitution", coordinates: [42.37290, -71.05740] }, //works
-  { name: "Bunker Hill Monument", coordinates: [42.37620, -71.06075] }, //not
-  { name: "Copp's Hill Burying Ground", coordinates: [42.36694, -71.05615] },// not
+  { name: "Boston Common", coordinates: [42.35532, -71.063639] },
+  { name: "Massachusetts State House", coordinates: [42.35770, -71.06350] },
+  { name: "Park Street Church", coordinates: [42.35666, -71.06183] },
+  { name: "Granary Burying Ground", coordinates: [42.35719, -71.06125] },
+  { name: "King's Chapel & King's Chapel Burying Ground", coordinates: [42.35831, -71.06000] },
+  { name: "Boston Latin School Site/Benjamin Franklin Statue", coordinates: [42.35784, -71.05977] },
+  { name: "Old Corner Bookstore", coordinates: [42.35745, -71.05835] },
+  { name: "Old South Meeting House", coordinates: [42.35703, -71.05855] },
+  { name: "Old State House", coordinates: [42.35858, -71.05750] },
+  { name: "Boston Massacre Site", coordinates: [42.35858, -71.05728] },
+  { name: "Faneuil Hall", coordinates: [42.36002, -71.05595] },
+  { name: "Paul Revere House", coordinates: [42.36372, -71.05355] },
+  { name: "Old North Church", coordinates: [42.36637, -71.05460] },
+  { name: "USS Constitution", coordinates: [42.37290, -71.05740] },
+  { name: "Bunker Hill Monument", coordinates: [42.37620, -71.06075] },
+  { name: "Copp's Hill Burying Ground", coordinates: [42.36694, -71.05615] },
 
 ];
 
@@ -95,26 +96,28 @@ const FreedomMap: ({geoJsonData}: { geoJsonData: any }) => JSX.Element = ({ geoJ
         className: "custom-icon",
         iconSize: [50, 50],
         iconAnchor: [25, 25],
+        popupAnchor: [-16, -8],
       });
 
+      //Plot marker
       const marker = L.marker(coordinates, {
         icon: myIcon,
         interactive: true,
       }).addTo(map);
 
+      //Add popup
       marker.bindPopup(() => {
         const container = document.createElement("div");
 
-        // Add Tailwind classes for the outer popup container
+        //Styling for outer container.
         container.className = "bg-white flex justify-center rounded-2xl p-1 w-[300px] max-w-[90vw]";
-
-        // Render the LocationPage with the corresponding location name dynamically
         const root = ReactDOM.createRoot(container);
-        root.render(<LocationPage locationName={name} />);  {/* Dynamic location name */}
+        root.render(<LocationPage locationName={name} />); //Pass name
 
         setTimeout(() => {
-          const popupWrapper = container.closest('.leaflet-popup-content-wrapper');
+          const popupWrapper = container.closest('.leaflet-popup-content-wrapper'); //Located in PopupStyles.module.css
           if (popupWrapper) {
+            //Border Styling
             popupWrapper.classList.add("border-4", "border-[#0a2463]", "rounded-2xl");
           }
         }, 0);
