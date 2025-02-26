@@ -2,16 +2,17 @@
 
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import validator from 'validator';
-import { BusinessAccount, BusinessType, getEnumKeys } from "@/types/BusinessAccount";
+import { BusinessAccount } from "@/types/BusinessAccount";
 import {useSession} from "next-auth/react";
+import Link from "next/link";
 
 const businessAccount = () => {
 
     const { data: session, status } = useSession();
-    const loading: boolean = status === "loading";
+    const loadingSession: boolean = status === "loading";
 
     const [businessAccounts, setBusinessAccounts] = useState<BusinessAccount[]>([]);
+    const [reload, setReload] = useState<boolean>(true);
 
     useEffect(() => {
         async function loadAccounts() {
@@ -22,14 +23,19 @@ const businessAccount = () => {
             }
         }
         loadAccounts().then();
-    }, [loading, session])
+    }, [loadingSession, reload])
 
-    if (!loading && !session) {
+    if (!loadingSession && !session) {
         // TODO: redirect to homepage instead
         return <div><p>Please log in</p></div>;
     }
-    else if (loading) {
+    else if (loadingSession) {
         return <div><p>Loading...</p></div>;
+    }
+
+    const deleteAccount = (businessAccount: BusinessAccount) => {
+        axios.delete('/api/business_account', {params: {_id: businessAccount._id}})
+            .then(() => setReload(!reload));
     }
 
     const tableRow = (business: BusinessAccount) => {
@@ -41,6 +47,8 @@ const businessAccount = () => {
                 <td>{business.ownerName}</td>
                 <td>{business.businessEmail}</td>
                 <td>{business.phoneNumber}</td>
+                <td><button><Link href={{pathname: "/business-account/edit", query: {_id: business._id}}}>Edit</Link></button></td>
+                <td><button onClick={() => deleteAccount(business)}>Delete</button></td>
             </tr>
         );
     }
@@ -55,6 +63,8 @@ const businessAccount = () => {
                 <td>Owner Name</td>
                 <td>Email</td>
                 <td>Phone Number</td>
+                <td></td>
+                <td></td>
             </tr>
             </thead>
             <tbody>

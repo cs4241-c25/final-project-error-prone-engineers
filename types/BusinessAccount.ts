@@ -1,6 +1,6 @@
 export type BusinessAccount = {
     _id?: string;
-    email: string;
+    email?: string;
     ownerName: string;
     phoneNumber: string;
     businessEmail: string;
