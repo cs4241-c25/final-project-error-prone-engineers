@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
 
-const dbconnect = new MongoClient("mongodb+srv://admin:apqQgl3AIOu4wp4a@cluster0.prrnc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0");
+const dbconnect = new MongoClient(process.env.MONGO_URI!);
 let nodeCollection: any = null;
 
 async function connectDB() {
