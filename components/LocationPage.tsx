@@ -16,16 +16,19 @@ const nodeImageMap: Record<string, string> = {
     "Massachusetts State House": "/location_images/Massachusetts State House.jpg",
     "Park Street Church": "/location_images/Park Street Church.jpg",
     "Granary Burying Ground": "/location_images/Granary Burying Ground.jpg",
-    "King's Chapel & King's Chapel Burying Ground": "/location_images/King's Chapel & King's Chapel Burying Ground.jpg",
-    "Boston Latin School Site/Benjamin Franklin Statue": "/location_images/Boston Latin School Site/Benjamin Franklin Statue",
+    "King's Chapel & King's Chapel Burying Ground": "/location_images/King's Chapel.jpg",
+    "Boston Latin School Site/Benjamin Franklin Statue": "/location_images/Statue of Benjamin Franklin.jpg",
     "Old Corner Bookstore": "/location_images/Old Corner Bookstore.jpg",
     "Old South Meeting House": "/location_images/Old South Meeting House.jpg",
     "Old State House": "/location_images/Old State House.jpg",
     "Boston Massacre Site": "/location_images/Boston Massacre Site.jpg",
-    "Paul Revere House": "/location_images/Old North Churc.jpg",
-    "Old North Church": "/location_images/Old North Church",
+    "Paul Revere House": "/location_images/Paul Revere House.jpg",
+    "Old North Church": "/location_images/Old North Church.jpg",
     "USS Constitution": "/location_images/USS Constitution.jpg",
-    "Faneuil Hall": "/location_images/Faneuil Hall.jpg"
+    "Faneuil Hall": "/location_images/Faneuil Hall.jpg",
+    "Bunker Hill Monument": "/location_images/Bunker Hill Monument.jpg",
+    "Copp's Hill Burying Ground": "/location_images/Copp's Hill Burying Ground.jpg"
+
 
 };
 
@@ -64,12 +67,12 @@ const LocationPage = ({ locationName }: { locationName: string }) => {
                         alt={nodeInfo.name}
                         width={1000}
                         height={1000}
-                        className="rounded-md flex justify-center object-fill"
+                        className="rounded-md flex justify-center object-cover w-full h-full"
                     />
                     <div className="grid grid-cols-2 gap-4 mt-4">
                         {nodeInfo.description ? (
                             splitStringAtNearestSpace(nodeInfo.description).map((part, index) => (
-                                <p key={index} className="text-gray-700 text-center">
+                                <p key={index} className="text-black">
                                     {part}
                                 </p>
                             ))

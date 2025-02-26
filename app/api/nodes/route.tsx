@@ -10,6 +10,7 @@ async function connectDB() {
             await dbconnect.connect();
             const db = dbconnect.db("freedom-trail");
             nodeCollection = db.collection("nodes");
+
         } catch (error) {
             console.error("Database connection error:", error);
             throw new Error("Database connection failed.");
@@ -35,6 +36,7 @@ export async function GET(req: Request) {
         }
 
         console.log("Fetched Node:", nodeInformation);
+
         return NextResponse.json(nodeInformation);
     } catch (error) {
         console.error("API Error:", error);

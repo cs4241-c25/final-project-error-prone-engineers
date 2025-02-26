@@ -13,24 +13,25 @@ import ReactDOM from "react-dom/client";
 import styles from "../PopupStyles.module.css";
 
 const locations = [
-  { name: "Boston Common", coordinates: [42.3554693, -71.0663677] },
-  { name: "Massachusetts State House", coordinates: [42.3601, -71.0589] },
-  { name: "Park Street Church", coordinates: [42.3604, -71.0583] },
-  { name: "Granary Burying Ground", coordinates: [42.3600, -71.0620] },
-  { name: "King's Chapel & King's Chapel Burying Ground", coordinates: [42.3588, -71.0616] },
-  { name: "Boston Latin School Site/Benjamin Franklin Statue", coordinates: [42.3611, -71.0656] },
-  { name: "Old Corner Bookstore", coordinates: [42.3608, -71.0581] },
-  { name: "Old South Meeting House", coordinates: [42.3571312, -71.0587301] },
-  { name: "Old State House", coordinates: [42.3603, -71.0577] },
-  { name: "Boston Massacre Site", coordinates: [42.3600, -71.0574] },
-  { name: "Paul Revere House", coordinates: [42.3634, -71.0549] },
-  { name: "Old North Church", coordinates: [42.3645, -71.0544] },
-  { name: "USS Constitution", coordinates: [42.3754, -71.0291] },
-  { name: "Faneuil Hall", coordinates: [42.3601, -71.0572] },
-  { name: "Bunker Hill", coordinates: [42.3605, -71.0579] },
-  { name: "Park Street Church", coordinates: [42.3605, -71.0579] },
+  { name: "Boston Common", coordinates: [42.35532, -71.063639] }, //works
+  { name: "Massachusetts State House", coordinates: [42.35770, -71.06350] }, //works
+  { name: "Park Street Church", coordinates: [42.35666, -71.06183] }, //works
+  { name: "Granary Burying Ground", coordinates: [42.35719, -71.06125] }, // works
+  { name: "King's Chapel & King's Chapel Burying Ground", coordinates: [42.35831, -71.06000] }, // not
+  { name: "Boston Latin School Site/Benjamin Franklin Statue", coordinates: [42.35784, -71.05977] }, //not
+  { name: "Old Corner Bookstore", coordinates: [42.35745, -71.05835] }, // works
+  { name: "Old South Meeting House", coordinates: [42.35703, -71.05855] }, // works
+  { name: "Old State House", coordinates: [42.35858, -71.05750] }, //works
+  { name: "Boston Massacre Site", coordinates: [42.35858, -71.05728] }, //not
+  { name: "Faneuil Hall", coordinates: [42.36002, -71.05595] }, //works
+  { name: "Paul Revere House", coordinates: [42.36372, -71.05355] }, //not
+  { name: "Old North Church", coordinates: [42.36637, -71.05460] }, //not
+  { name: "USS Constitution", coordinates: [42.37290, -71.05740] }, //works
+  { name: "Bunker Hill Monument", coordinates: [42.37620, -71.06075] }, //not
+  { name: "Copp's Hill Burying Ground", coordinates: [42.36694, -71.05615] },// not
 
 ];
+
 
 
 
