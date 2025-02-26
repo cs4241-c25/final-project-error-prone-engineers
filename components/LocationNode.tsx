@@ -5,11 +5,11 @@ const LocationNode = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <div className="relative flex justify-center items-center min-h-screen">
+        <div style={{ pointerEvents: "auto" }}>
             <button
+
                 onClick={() => setIsOpen(true)}
                 className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg">
-
             </button>
 
 
@@ -18,6 +18,7 @@ const LocationNode = () => {
 
 
                     <button
+
                         onClick={() => setIsOpen(false)}
                         className="absolute top-2 right-2 text-gray-600 hover:text-gray-900 text-xl"
                     >X

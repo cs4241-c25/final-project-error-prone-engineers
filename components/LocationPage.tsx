@@ -26,12 +26,10 @@ const nodeImageMap: Record<string, string> = {
     "Old South Meeting House": "/location_images/Old South Meeting House.jpg",
     "Old State House": "/location_images/Old State House.jpg",
     "Boston Massacre Site": "/location_images/Boston Massacre Site.jpg",
-    "Faneuil Hall": "/location_images/Faneuil Hall.jpg",
-    "Paul Revere House": "/location_images/Paul Revere House.jpg",
-    "Old North Church": "/location_images/Old North Church.jpg",
-    "Copp's Hill Burying Ground": "/location_images/Copp's Hill Burying Ground.jpg",
+    "Paul Revere House": "/location_images/Old North Churc.jpg",
+    "Old North Church": "/location_images/Old North Church",
     "USS Constitution": "/location_images/USS Constitution.jpg",
-    "Bunker Hill Monument": "/location_images/Bunker Hill Monument.jpg"
+    "Faneuil Hall": "/location_images/Faneuil Hall.jpg"
 
 };
 
@@ -41,7 +39,7 @@ const LocationPage = () => {
 
     useEffect(() => {
         async function fetchNodeData() {
-            const data = await getNodeInformation("Faneuil Hall");
+            const data = await getNodeInformation("USS Constitution");
             console.log("Fetched Node Data:", data);
             if (data?.error) {
                 setError(data.error);
@@ -55,7 +53,7 @@ const LocationPage = () => {
     const imageSrc = nodeInfo ? nodeImageMap[nodeInfo.name] || "/location_images/default.jpg" : "";
 
     return (
-        <div className="bg-white shadow-lg flex justify-center rounded-2xl p-6 w-full max-w-3xl border-4 border-[#0a2463]">
+        <div style={{zIndex: 200}} className="bg-white shadow-lg flex justify-center rounded-2xl p-6 w-full max-w-3xl border-4 border-[#0a2463]">
             {error ? (
                 <p className="text-red-500 flex justify-center">{error}</p>
             ) : nodeInfo ? (
