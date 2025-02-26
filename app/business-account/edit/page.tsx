@@ -1,4 +1,5 @@
 'use client';
+
 import { useRouter } from "next/navigation";
 import {useEffect, useState} from 'react';
 import axios from 'axios';
@@ -6,8 +7,10 @@ import { useSearchParams } from 'next/navigation';
 import validator from 'validator';
 import { BusinessAccount, BusinessType, getEnumKeys } from "@/types/BusinessAccount";
 import {useSession} from "next-auth/react";
+import { Suspense } from "react";
 
-const editBusinessAccount = () => {
+const EditBusinessAccount = () => {
+
     const router = useRouter();
     const { data: session, status } = useSession();
     const loadingSession: boolean = status === "loading";
@@ -189,5 +192,11 @@ const editBusinessAccount = () => {
     );
 }
 
-export default editBusinessAccount;
 
+export default function EditBusinessAccountPage() {
+    return (
+        <Suspense fallback={<p>Loading...</p>}>
+            <EditBusinessAccount />
+        </Suspense>
+    );
+}
