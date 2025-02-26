@@ -3,12 +3,8 @@ import { getNodeInformation } from "../app/api/get_nodes/route";
 import Image from "next/image";
 
 const splitStringAtNearestSpace = (str: string) => {
-    if (!str) return ["", ""]; // Handle empty string case
-
     const middle = Math.floor(str.length / 2);
     let splitIndex = str.lastIndexOf(" ", middle);
-
-    // If no space is found, fall back to the middle
     if (splitIndex === -1) splitIndex = middle;
 
     return [str.slice(0, splitIndex), str.slice(splitIndex + 1)];
@@ -33,13 +29,13 @@ const nodeImageMap: Record<string, string> = {
 
 };
 
-const LocationPage = () => {
+const LocationPage = ({ locationName }: { locationName: string }) => {
     const [nodeInfo, setNodeInfo] = useState<{ name: string; description: string } | null>(null);
     const [error, setError] = useState("");
 
     useEffect(() => {
         async function fetchNodeData() {
-            const data = await getNodeInformation("USS Constitution");
+            const data = await getNodeInformation(locationName);  {/* Use locationName as dynamic value */}
             console.log("Fetched Node Data:", data);
             if (data?.error) {
                 setError(data.error);
@@ -48,17 +44,17 @@ const LocationPage = () => {
             }
         }
         fetchNodeData();
-    }, []);
+    }, [locationName]);  {/* Dependency array to refetch when locationName changes */}
 
     const imageSrc = nodeInfo ? nodeImageMap[nodeInfo.name] || "/location_images/default.jpg" : "";
 
     return (
-        <div style={{zIndex: 200}} className="bg-white shadow-lg flex justify-center rounded-2xl p-6 w-full max-w-3xl border-4 border-[#0a2463]">
+        <div style={{zIndex: 200}} >
             {error ? (
                 <p className="text-red-500 flex justify-center">{error}</p>
             ) : nodeInfo ? (
                 <div className="w-full">
-                    <div className="bg-[#0a2463] rounded-md">
+                    <div className="bg-[#0a2463] rounded-md text-center">
                         <h1 className="text-4xl font-cinzel font-bold flex justify-center text-white mb-4">
                             {nodeInfo.name}
                         </h1>

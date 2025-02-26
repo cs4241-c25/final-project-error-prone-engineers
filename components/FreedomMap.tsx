@@ -10,6 +10,27 @@ import LocationNode from "./LocationNode";
 import LocationPage from "./LocationPage"
 import ReactDOMServer from "react-dom/server";
 import ReactDOM from "react-dom/client";
+import styles from "../PopupStyles.module.css";
+
+const locations = [
+  { name: "Boston Common", coordinates: [42.3554693, -71.0663677] },
+  { name: "Massachusetts State House", coordinates: [42.3601, -71.0589] },
+  { name: "Park Street Church", coordinates: [42.3604, -71.0583] },
+  { name: "Granary Burying Ground", coordinates: [42.3600, -71.0620] },
+  { name: "King's Chapel & King's Chapel Burying Ground", coordinates: [42.3588, -71.0616] },
+  { name: "Boston Latin School Site/Benjamin Franklin Statue", coordinates: [42.3611, -71.0656] },
+  { name: "Old Corner Bookstore", coordinates: [42.3608, -71.0581] },
+  { name: "Old South Meeting House", coordinates: [42.3571312, -71.0587301] },
+  { name: "Old State House", coordinates: [42.3603, -71.0577] },
+  { name: "Boston Massacre Site", coordinates: [42.3600, -71.0574] },
+  { name: "Paul Revere House", coordinates: [42.3634, -71.0549] },
+  { name: "Old North Church", coordinates: [42.3645, -71.0544] },
+  { name: "USS Constitution", coordinates: [42.3754, -71.0291] },
+  { name: "Faneuil Hall", coordinates: [42.3601, -71.0572] },
+  { name: "Bunker Hill", coordinates: [42.3605, -71.0579] },
+  { name: "Park Street Church", coordinates: [42.3605, -71.0579] },
+
+];
 
 
 
@@ -67,22 +88,38 @@ const FreedomMap: ({geoJsonData}: { geoJsonData: any }) => JSX.Element = ({ geoJ
     //   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, Tiles courtesy of <a href="http://www.thunderforest.com/" target="_blank">Thunderforest</a>', // Add appropriate attribution
     // }).addTo(map);
 
-    const myIcon = L.divIcon({
-      html: ReactDOMServer.renderToString(<LocationNode />),
-      className: "custom-icon",
-      iconSize: [50, 50],
-      iconAnchor: [25, 25], });
+    locations.forEach(({ name, coordinates }) => {
+      const myIcon = L.divIcon({
+        html: ReactDOMServer.renderToString(<LocationNode />),
+        className: "custom-icon",
+        iconSize: [50, 50],
+        iconAnchor: [25, 25],
+      });
 
-    const marker = L.marker([42.399381, -71.047814], {
-      icon: myIcon,
-      interactive: true,
-    }).addTo(map);
+      const marker = L.marker(coordinates, {
+        icon: myIcon,
+        interactive: true,
+      }).addTo(map);
 
-    marker.bindPopup(() => {
-      const container = document.createElement("div");
-      const root = ReactDOM.createRoot(container);
-      root.render(<LocationPage />); // Properly mounts the component
-      return container;
+      marker.bindPopup(() => {
+        const container = document.createElement("div");
+
+        // Add Tailwind classes for the outer popup container
+        container.className = "bg-white flex justify-center rounded-2xl p-1 w-[300px] max-w-[90vw]";
+
+        // Render the LocationPage with the corresponding location name dynamically
+        const root = ReactDOM.createRoot(container);
+        root.render(<LocationPage locationName={name} />);  {/* Dynamic location name */}
+
+        setTimeout(() => {
+          const popupWrapper = container.closest('.leaflet-popup-content-wrapper');
+          if (popupWrapper) {
+            popupWrapper.classList.add("border-4", "border-[#0a2463]", "rounded-2xl");
+          }
+        }, 0);
+
+        return container;
+      });
     });
 
     const customIcon = L.icon(iconOptions);
