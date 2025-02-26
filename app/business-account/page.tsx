@@ -40,18 +40,18 @@ const businessAccount = () => {
 
     const tableRow = (business: BusinessAccount) => {
         return (
-            <tr key={business._id}>
-                <td className='border border-white p-1'>{business.businessName}</td>
-                <td className='border border-white p-1'>{business.businessType}</td>
-                <td className='border border-white p-1'>{business.address}</td>
-                <td className='border border-white p-1'>{business.ownerName}</td>
-                <td className='border border-white p-1'>{business.businessEmail}</td>
-                <td className='border border-white p-1'>{business.phoneNumber}</td>
+            <tr key={business._id} className='text-blue-900'>
+                <td className='border border-blue-900 p-1 bg-[#DCEDFF]'>{business.businessName}</td>
+                <td className='border border-blue-900 p-1 bg-[#DCEDFF]'>{business.businessType}</td>
+                <td className='border border-blue-900 p-1 bg-[#DCEDFF]'>{business.address}</td>
+                <td className='border border-blue-900 p-1 bg-[#DCEDFF]'>{business.ownerName}</td>
+                <td className='border border-blue-900 p-1 bg-[#DCEDFF]'>{business.businessEmail}</td>
+                <td className='border border-blue-900 p-1 bg-[#DCEDFF]'>{business.phoneNumber}</td>
                 <td className='justify-center text-center'>
-                    <button className='ml-2 bg-blue-900 px-1 rounded-sm hover:bg-blue-700 transition'><Link href={{pathname: "/business-account/edit", query: {_id: business._id}}}>Edit</Link></button>
+                    <button className='text-white ml-2 bg-blue-900 px-1 rounded-sm hover:bg-blue-700 transition'><Link href={{pathname: "/business-account/edit", query: {_id: business._id}}}>Edit</Link></button>
                 </td>
                 <td className='justify-center text-center'>
-                    <button className='ml-2 bg-blue-900 px-1 rounded-sm hover:bg-blue-700 transition' onClick={() => deleteAccount(business)}>Delete</button>
+                    <button className='text-white ml-2 bg-blue-900 px-1 rounded-sm hover:bg-blue-700 transition' onClick={() => deleteAccount(business)}>Delete</button>
                 </td>
             </tr>
         );
