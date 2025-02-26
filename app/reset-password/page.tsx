@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import axios from "axios";
 
 const ResetPassword = () => {
@@ -81,4 +81,10 @@ const ResetPassword = () => {
     );
 };
 
-export default ResetPassword;
+export default function ResetPasswordPage() {
+    return (
+        <Suspense fallback={<p>Loading...</p>}>
+            <ResetPassword />
+        </Suspense>
+    );
+}
