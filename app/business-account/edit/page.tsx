@@ -1,5 +1,5 @@
 'use client';
-
+import { useRouter } from "next/navigation";
 import {useEffect, useState} from 'react';
 import axios from 'axios';
 import { useSearchParams } from 'next/navigation';
@@ -8,7 +8,7 @@ import { BusinessAccount, BusinessType, getEnumKeys } from "@/types/BusinessAcco
 import {useSession} from "next-auth/react";
 
 const editBusinessAccount = () => {
-
+    const router = useRouter();
     const { data: session, status } = useSession();
     const loadingSession: boolean = status === "loading";
 
@@ -85,6 +85,7 @@ const editBusinessAccount = () => {
             };
             const response = await axios.put('/api/business_account', formData);
             console.log(response);
+            router.push('/business-account');
         }
     }
 
