@@ -4,8 +4,12 @@ import { useState } from 'react';
 import axios from 'axios';
 import validator from 'validator';
 import { BusinessAccount, BusinessType, getEnumKeys } from "@/types/BusinessAccount";
+import {useSession} from "next-auth/react";
 
 const createBusinessAccount = () => {
+
+    const { data: session, status } = useSession();
+    const loading: boolean = status === "loading";
 
     const [ownerName, setOwnerName] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
@@ -51,13 +55,21 @@ const createBusinessAccount = () => {
     async function submit() {
         if (validateForm()) {
             const formData: BusinessAccount = {
-                ownerName: ownerName, phoneNumber: phoneNumber,
-                email: email, businessName: businessName, businessType: businessType, address: address,
-                description: description, accessibility: accessibility, publicRestroom: publicRestroom
+                email: session?.user?.email ?? "", ownerName: ownerName, phoneNumber: phoneNumber,
+                businessEmail: email, businessName: businessName, businessType: businessType.valueOf(),
+                address: address, description: description, accessibility: accessibility, publicRestroom: publicRestroom
             };
             const response = await axios.post('/api/business_account', formData);
             console.log(response);
         }
+    }
+
+    if (!loading && !session) {
+        // TODO: redirect to homepage instead
+        return <div><p>Please log in</p></div>;
+    }
+    else if (loading) {
+        return <div><p>Loading...</p></div>;
     }
 
     return (
@@ -96,7 +108,7 @@ const createBusinessAccount = () => {
                         <label className="text-blue-900 font-garamond text-l font-semibold mb-1">Business Type:</label>
                         <select id="businessType" name="businessType" value={businessType}
                             className="w-full p-3 rounded-full font-garamond bg-[#2F1000] bg-opacity-50 text-white focus:outline-none mb-1 h-auto"
-                            onChange={(e) => setBusinessType(BusinessType[e.target.value as keyof typeof BusinessType])}>
+                            onChange={(e) => setBusinessType(e.target.value as BusinessType)}>
                             {getEnumKeys(BusinessType).map((key, index) => (
                                 <option key={index} value={BusinessType[key]}>{BusinessType[key]}</option>
                             ))}
@@ -135,9 +147,9 @@ const createBusinessAccount = () => {
                                 onChange={(e) => setPublicRestroom(e.target.checked)} />
                         </p>
                     </div>
-                    
+
                 </div>
-                
+
                 <div className='flex flex-col items-center'>
                     <label className="text-blue-900 font-garamond text-l font-semibold mb-1 justify-center">Business Description:</label>
                     <textarea rows={5} id="description" name="description" value={description} placeholder="Business Description"
