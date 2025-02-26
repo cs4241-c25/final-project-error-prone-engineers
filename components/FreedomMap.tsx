@@ -13,13 +13,14 @@ L.Icon.Default.mergeOptions({
 
 interface MapProps {
   geoJsonData: FeatureCollection | null;
+  geoJsonDataRestrooms: FeatureCollection | null;
 }
 
-const FreedomMap: React.FC<MapProps> = ({ geoJsonData }) => {
+const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) => {
   const mapRef = useRef<L.Map | null>(null);
 
   useEffect(() => {
-    if (!geoJsonData || mapRef.current || typeof window === "undefined") return;
+    if (!geoJsonData || !geoJsonDataRestrooms || mapRef.current || typeof window === "undefined") return;
 
     // Set map to fill screen
     const mapContainer = document.getElementById("map");
@@ -50,18 +51,24 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData }) => {
     }).addTo(map);
 
     // Add GeoJSON data with markers
-    L.geoJSON(geoJsonData, {
+    const pathLayer = L.geoJSON(geoJsonData, {
       style: () => ({
         color: "#D00000",
         weight: 6,
       }),
-      pointToLayer: (feature, latlng) => {
-        return L.marker(latlng);
-      },
+      pointToLayer: (feature, latlng) => L.marker(latlng),
+    }).addTo(map);
+
+    const restroomLayer = L.geoJSON(geoJsonDataRestrooms, {
+      style: () => ({
+        color: "#0A2463",
+        weight: 4,
+      }),
+      pointToLayer: (feature, latlng) => L.marker(latlng),
     }).addTo(map);
 
     // Fit map to bounds
-    const bounds = L.geoJSON(geoJsonData).getBounds();
+    const bounds = L.featureGroup([pathLayer, restroomLayer]).getBounds();
     if (bounds.isValid()) {
       map.fitBounds(bounds);
     } else {
@@ -75,7 +82,7 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData }) => {
       map.remove();
       mapRef.current = null;
     };
-  }, [geoJsonData]);
+  }, [geoJsonData, geoJsonDataRestrooms]);
 
   return <div id="map" style={{}}></div>;
 };
