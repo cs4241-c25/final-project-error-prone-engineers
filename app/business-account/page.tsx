@@ -40,37 +40,45 @@ const businessAccount = () => {
 
     const tableRow = (business: BusinessAccount) => {
         return (
-            <tr key={business._id}>
-                <td>{business.businessName}</td>
-                <td>{business.businessType}</td>
-                <td>{business.address}</td>
-                <td>{business.ownerName}</td>
-                <td>{business.businessEmail}</td>
-                <td>{business.phoneNumber}</td>
-                <td><button><Link href={{pathname: "/business-account/edit", query: {_id: business._id}}}>Edit</Link></button></td>
-                <td><button onClick={() => deleteAccount(business)}>Delete</button></td>
+            <tr key={business._id} className='text-blue-900'>
+                <td className='border border-blue-900 p-1 bg-[#DCEDFF]'>{business.businessName}</td>
+                <td className='border border-blue-900 p-1 bg-[#DCEDFF]'>{business.businessType}</td>
+                <td className='border border-blue-900 p-1 bg-[#DCEDFF]'>{business.address}</td>
+                <td className='border border-blue-900 p-1 bg-[#DCEDFF]'>{business.ownerName}</td>
+                <td className='border border-blue-900 p-1 bg-[#DCEDFF]'>{business.businessEmail}</td>
+                <td className='border border-blue-900 p-1 bg-[#DCEDFF]'>{business.phoneNumber}</td>
+                <td className='justify-center text-center'>
+                    <button className='text-white ml-2 bg-blue-900 px-1 rounded-sm hover:bg-blue-700 transition'><Link href={{pathname: "/business-account/edit", query: {_id: business._id}}}>Edit</Link></button>
+                </td>
+                <td className='justify-center text-center'>
+                    <button className='text-white ml-2 bg-blue-900 px-1 rounded-sm hover:bg-blue-700 transition' onClick={() => deleteAccount(business)}>Delete</button>
+                </td>
             </tr>
         );
     }
 
     return (
-        <table>
-            <thead>
-            <tr>
-                <td>Business Name</td>
-                <td>Business Type</td>
-                <td>Address</td>
-                <td>Owner Name</td>
-                <td>Email</td>
-                <td>Phone Number</td>
-                <td></td>
-                <td></td>
-            </tr>
-            </thead>
-            <tbody>
-            {businessAccounts.map((account) => tableRow(account))}
-            </tbody>
-        </table>
+        <div className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center bg-[url('/freedomtrail_medallion.jpg')] ">
+            <div className="bg-[#DCEDFF] bg-opacity-20 backdrop-blur-lg p-4 rounded-3xl w-3/5 h-4/5">
+                <table className='font-garamond'>
+                    <thead className='text-center text-xl font-bold'>
+                        <tr>
+                            <td className='border border-white bg-blue-900 p-2'>Business Name</td>
+                            <td className='border border-white bg-blue-900 p-2'>Business Type</td>
+                            <td className='border border-white bg-blue-900 p-2'>Address</td>
+                            <td className='border border-white bg-blue-900 p-2'>Owner Name</td>
+                            <td className='border border-white bg-blue-900 p-2'>Email</td>
+                            <td className='border border-white bg-blue-900 p-2'>Phone Number</td>
+                            <td className='p-2'></td>
+                            <td className='p-2'></td>
+                        </tr>
+                    </thead>
+                    <tbody className='text-lg font-semibold'>
+                        {businessAccounts.map((account) => tableRow(account))}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     );
 }
 
