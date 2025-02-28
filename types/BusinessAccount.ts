@@ -6,10 +6,20 @@ export type BusinessAccount = {
     businessEmail: string;
     businessName: string;
     businessType: string;
-    address: string;
+    addressLine1: string;
+    addressLine2?: string;
+    addressCity: string;
+    addressState: string;
+    addressZip: string;
     description: string;
     accessibility: boolean;
     publicRestroom: boolean;
+}
+
+export function address(account: BusinessAccount): string {
+    const existingLine2: boolean = account.addressLine2 !== undefined && account.addressLine2.length > 0
+    return account.addressLine1 + ", " + (existingLine2 ? account.addressLine2 + ", " : "") + account.addressCity
+        + " " + account.addressState + " " + account.addressZip;
 }
 
 export enum BusinessType {

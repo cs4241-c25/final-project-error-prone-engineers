@@ -4,6 +4,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import validator from 'validator';
 import { BusinessAccount, BusinessType, getEnumKeys } from "@/types/BusinessAccount";
+import { bostonZipCodes} from "@/types/Location";
 import {useSession} from "next-auth/react";
 
 const createBusinessAccount = () => {
@@ -16,7 +17,11 @@ const createBusinessAccount = () => {
     const [email, setEmail] = useState("");
     const [businessName, setBusinessName] = useState("");
     const [businessType, setBusinessType] = useState(BusinessType.OTHER);
-    const [address, setAddress] = useState("");
+    const [addressStreet, setAddressStreet] = useState("");
+    const [addressApt, setAddressApt] = useState("");
+    const [addressCity, setAddressCity] = useState("Boston");
+    const [addressState, setAddressState] = useState("MA");
+    const [addressZip, setAddressZip] = useState("01209");
     const [description, setDescription] = useState("");
     const [accessibility, setAccessibility] = useState(false);
     const [publicRestroom, setPublicRestroom] = useState(false);
@@ -41,10 +46,18 @@ const createBusinessAccount = () => {
         else if (!businessName) {
             setError("Business name is required");
         }
-        else if (!address) {
+        else if (!addressStreet || !addressCity || !addressState || !addressZip) {
             setError("Address is required");
         }
-        // TODO: validate address (multiple text boxes for address input?)
+        else if (!/^[0-9]+\s[a-zA-Z\s]+$/.test(addressStreet)) {
+            setError("Street address is not valid");
+        }
+        else if (addressState !== "MA") {
+            setError("State must be 'MA'")
+        }
+        else if (!bostonZipCodes.includes(addressZip)) {
+            setError("Zip code must be in Boston")
+        }
         else {
             setError("");
             return true;
@@ -57,7 +70,9 @@ const createBusinessAccount = () => {
             const formData: BusinessAccount = {
                 email: session?.user?.email ?? "", ownerName: ownerName, phoneNumber: phoneNumber,
                 businessEmail: email, businessName: businessName, businessType: businessType.valueOf(),
-                address: address, description: description, accessibility: accessibility, publicRestroom: publicRestroom
+                addressLine1: addressStreet, addressLine2: addressApt, addressCity: addressCity,
+                addressState: addressState, addressZip: addressZip, description: description,
+                accessibility: accessibility, publicRestroom: publicRestroom
             };
             const response = await axios.post('/api/business_account', formData);
             console.log(response);
@@ -66,8 +81,7 @@ const createBusinessAccount = () => {
     }
 
     if (!loading && !session) {
-        // TODO: redirect to homepage instead
-        return <div><p>Please log in</p></div>;
+        router.push('/');
     }
     else if (loading) {
         return <div><p>Loading...</p></div>;
@@ -115,31 +129,31 @@ const createBusinessAccount = () => {
                             ))}
                         </select>
                         <label className="text-blue-900 font-garamond text-l font-semibold mb-1">Street Address:</label>
-                        <input type="text" id="address" name="address" value={address} placeholder="Address"
+                        <input type="text" id="addressStreet" name="addressStreet" value={addressStreet} placeholder="Street Address"
                             className="w-full p-3 rounded-full font-garamond bg-[#2F1000] bg-opacity-50 text-white focus:outline-none mb-1 h-auto"
-                            onChange={(e) => setAddress(e.target.value)} /><br/>
+                            onChange={(e) => setAddressStreet(e.target.value)} /><br/>
                         <label className="text-blue-900 font-garamond text-l font-semibold mb-1">Apt # or Suite:</label>
-                        <input type="text" id="address" name="address" value={address} placeholder="Address"
+                        <input type="text" id="addressApt" name="addressApt" value={addressApt} placeholder="Apt # or Suite"
                             className="w-full p-3 rounded-full font-garamond bg-[#2F1000] bg-opacity-50 text-white focus:outline-none mb-1 h-auto"
-                            onChange={(e) => setAddress(e.target.value)} /><br/>
+                            onChange={(e) => setAddressApt(e.target.value)} /><br/>
                         <div className='flex flex-row'>
                             <div className='flex flex-col mr-1'>
                                 <label className="text-blue-900 font-garamond text-l font-semibold mb-1">City:</label>
-                                <input type="text" id="address" name="address" value={address} placeholder="Address"
+                                <input type="text" id="addressCity" name="addressCity" value={addressCity} placeholder="City"
                                     className="w-full p-3 rounded-full font-garamond bg-[#2F1000] bg-opacity-50 text-white focus:outline-none mb-1 h-auto"
-                                    onChange={(e) => setAddress(e.target.value)} /><br/>
+                                    onChange={(e) => setAddressCity(e.target.value)} /><br/>
                             </div>
                             <div className='flex flex-col mr-1'>
                                 <label className="text-blue-900 font-garamond text-l font-semibold mb-1">State:</label>
-                                <input type="text" id="address" name="address" value={address} placeholder="Address"
+                                <input type="text" id="addressState" name="addressState" value={addressState} placeholder="State"
                                     className="w-full p-3 rounded-full font-garamond bg-[#2F1000] bg-opacity-50 text-white focus:outline-none mb-1 h-auto"
-                                    onChange={(e) => setAddress(e.target.value)} /><br/>
+                                    onChange={(e) => setAddressState(e.target.value)} /><br/>
                             </div>
                             <div className='flex flex-col'>
-                                <label className="text-blue-900 font-garamond text-l font-semibold mb-1">Zip:</label>
-                                <input type="text" id="address" name="address" value={address} placeholder="Address"
+                                <label className="text-blue-900 font-garamond text-l font-semibold mb-1">Zip Code:</label>
+                                <input type="text" id="addressZip" name="addressZip" value={addressZip} placeholder="Zip Code"
                                     className="w-full p-3 rounded-full font-garamond bg-[#2F1000] bg-opacity-50 text-white focus:outline-none mb-1 h-auto"
-                                    onChange={(e) => setAddress(e.target.value)} /><br/>
+                                    onChange={(e) => setAddressZip(e.target.value)} /><br/>
                             </div>
                         </div>
                         <p className="text-blue-900 font-garamond text-l font-semibold mb-1 mt-5">Public Restroom?
