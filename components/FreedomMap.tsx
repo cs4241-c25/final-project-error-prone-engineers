@@ -87,11 +87,11 @@ const FreedomMap: ({geoJsonData}: { geoJsonData: any }) => JSX.Element = ({ geoJ
         className: "custom-icon",
         iconSize: [50, 50],
         iconAnchor: [25, 25],
-        popupAnchor: [-16, -8],
+        popupAnchor: [-16, 0],
       });
 
       //Plot marker
-      const marker = L.marker(coordinates, {
+      const marker = L.marker([coordinates[0], coordinates[1]] as [number, number], {
         icon: myIcon,
         interactive: true,
       }).addTo(map);

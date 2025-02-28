@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { getNodeInformation } from "../app/api/get_nodes/route";
 import Image from "next/image";
+import axios from "axios";
 
 const splitStringAtNearestSpace = (str: string) => {
     const middle = Math.floor(str.length / 2);
@@ -9,6 +9,17 @@ const splitStringAtNearestSpace = (str: string) => {
 
     return [str.slice(0, splitIndex), str.slice(splitIndex + 1)];
 };
+
+async function getNodeInformation(nodeName: string): Promise<{ name: string; description: string } | null> {
+    try {
+        // Make sure the endpoint matches your route structure
+        const response = await axios.get(`/api/nodes?name=${encodeURIComponent(nodeName)}`);
+        return response.data; // Ensure this matches the expected shape { name: string; description: string }
+    } catch (error: any) {
+        console.error("Error fetching node:", error.response?.data || error.message);
+        return null; // Return null in case of an error
+    }
+}
 
 // Map node names to image paths
 const nodeImageMap: Record<string, string> = {
@@ -28,8 +39,6 @@ const nodeImageMap: Record<string, string> = {
     "Faneuil Hall": "/location_images/Faneuil Hall.jpg",
     "Bunker Hill Monument": "/location_images/Bunker Hill Monument.jpg",
     "Copp's Hill Burying Ground": "/location_images/Copp's Hill Burying Ground.jpg"
-
-
 };
 
 const LocationPage = ({ locationName }: { locationName: string }) => {
@@ -38,21 +47,21 @@ const LocationPage = ({ locationName }: { locationName: string }) => {
 
     useEffect(() => {
         async function fetchNodeData() {
-            const data = await getNodeInformation(locationName);  {/* Use locationName as dynamic value */}
+            const data = await getNodeInformation(locationName);
             console.log("Fetched Node Data:", data);
-            if (data?.error) {
-                setError(data.error);
+            if (data === null) {
+                setError("Failed to fetch node information.");
             } else {
                 setNodeInfo(data);
             }
         }
         fetchNodeData();
-    }, [locationName]);  {/* Dependency array to refetch when locationName changes */}
+    }, [locationName]);
 
-    const imageSrc = nodeInfo ? nodeImageMap[nodeInfo.name] || "/location_images/default.jpg" : "";
+    const imageSrc = nodeInfo ? nodeImageMap[nodeInfo.name] || "/location_images/BostonCommon.jpg" : "";
 
     return (
-        <div style={{zIndex: 200}} >
+        <div style={{ zIndex: 200 }}>
             {error ? (
                 <p className="text-red-500 flex justify-center">{error}</p>
             ) : nodeInfo ? (
@@ -68,8 +77,9 @@ const LocationPage = ({ locationName }: { locationName: string }) => {
                         width={1000}
                         height={1000}
                         className="rounded-md flex justify-center object-cover w-full h-full"
+                        loading="lazy" // Lazy load for better performance
                     />
-                    <div className="grid grid-cols-2 gap-4 mt-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                         {nodeInfo.description ? (
                             splitStringAtNearestSpace(nodeInfo.description).map((part, index) => (
                                 <p key={index} className="text-black">

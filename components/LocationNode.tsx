@@ -23,7 +23,7 @@ const LocationNode = () => {
                             X
                         </button>
 
-                        <LocationPage />
+                        <LocationPage locationName={"Boston Common"}/>
                     </div>
                 </div>
             )}
