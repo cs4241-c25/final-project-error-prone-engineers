@@ -2,7 +2,10 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import axios from "axios";
 
-const splitStringAtNearestSpace = (str: string) => {
+const splitStringAtNearestSpace = (str: string, split: boolean) => {
+    if(!split) {
+        return [str];
+    }
     const middle = Math.floor(str.length / 2);
     let splitIndex = str.lastIndexOf(" ", middle);
     if (splitIndex === -1) splitIndex = middle;
@@ -44,6 +47,7 @@ const nodeImageMap: Record<string, string> = {
 const LocationPage = ({ locationName }: { locationName: string }) => {
     const [nodeInfo, setNodeInfo] = useState<{ name: string; description: string } | null>(null);
     const [error, setError] = useState("");
+    const [split, setSplit] = useState(false);
 
     useEffect(() => {
         async function fetchNodeData() {
@@ -56,6 +60,17 @@ const LocationPage = ({ locationName }: { locationName: string }) => {
             }
         }
         fetchNodeData();
+
+
+        //decide whether to split the string
+        const handleResize = () => {
+            setSplit(window.innerWidth >= 640);
+        };
+
+        handleResize();
+        window.addEventListener("resize", handleResize);
+
+        return () => window.removeEventListener("resize", handleResize);
     }, [locationName]);
 
     const imageSrc = nodeInfo ? nodeImageMap[nodeInfo.name] || "/location_images/BostonCommon.jpg" : "";
@@ -81,7 +96,7 @@ const LocationPage = ({ locationName }: { locationName: string }) => {
                     />
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                         {nodeInfo.description ? (
-                            splitStringAtNearestSpace(nodeInfo.description).map((part, index) => (
+                            splitStringAtNearestSpace(nodeInfo.description, split).map((part, index) => (
                                 <p key={index} className="text-black">
                                     {part}
                                 </p>
