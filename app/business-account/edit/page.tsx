@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from "next/navigation";
 import {useEffect, useState} from 'react';
 import axios from 'axios';
 import { useSearchParams } from 'next/navigation';
@@ -10,6 +11,7 @@ import { Suspense } from "react";
 
 const EditBusinessAccount = () => {
 
+    const router = useRouter();
     const { data: session, status } = useSession();
     const loadingSession: boolean = status === "loading";
 
@@ -86,6 +88,7 @@ const EditBusinessAccount = () => {
             };
             const response = await axios.put('/api/business_account', formData);
             console.log(response);
+            router.push('/business-account');
         }
     }
 
@@ -100,7 +103,7 @@ const EditBusinessAccount = () => {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center bg-[url('/freedomtrail_medallion.jpg')] ">
             <div className="bg-[#DCEDFF] bg-opacity-20 backdrop-blur-lg p-4 rounded-3xl w-3/5 h-4/5">
-                <h1 className='text-center text-blue-900 font-extrabold text-4xl font-garamond'>Add Your Business</h1>
+                <h1 className='text-center text-blue-900 font-extrabold text-4xl font-garamond'>Edit Your Business</h1>
                 <div className='flex flex-row items-center justify-center'>
                     {/* left div */}
                     <div className='flex flex-col ml-2 mr-5 w-1/2'>
@@ -116,6 +119,10 @@ const EditBusinessAccount = () => {
                         <input type="text" id="email" name="email" value={email} placeholder="Email"
                                className="w-full p-3 rounded-full font-garamond bg-[#2F1000] bg-opacity-50 text-white focus:outline-none mb-1 h-auto"
                                onChange={(e) => setEmail(e.target.value)} /><br/>
+                        <label className="text-blue-900 font-garamond text-l font-semibold mb-1 justify-start">Business Name:</label>
+                        <input type="text" id="businessName" name="businessName" value={businessName} placeholder="Business name"
+                               className="w-full p-3 rounded-full font-garamond bg-[#2F1000] bg-opacity-50 text-white focus:outline-none mb-1 h-auto"
+                               onChange={(e) => setBusinessName(e.target.value)} /><br/>
                         <div className='flex justify-end'>
                             <p className="text-blue-900 font-garamond text-l font-semibold mb-1 justify-end mt-5">Wheelchair Accessible?
                                 <input type="checkbox" id="accessibility" name="accessibility" checked={accessibility}
@@ -126,10 +133,6 @@ const EditBusinessAccount = () => {
                     </div>
                     {/* right div */}
                     <div className='flex flex-col ml-5 mr-2 w-1/2'>
-                        <label className="text-blue-900 font-garamond text-l font-semibold mb-1 justify-start">Business Name:</label>
-                        <input type="text" id="businessName" name="businessName" value={businessName} placeholder="Business name"
-                               className="w-full p-3 rounded-full font-garamond bg-[#2F1000] bg-opacity-50 text-white focus:outline-none mb-1 h-auto"
-                               onChange={(e) => setBusinessName(e.target.value)} /><br/>
                         <label className="text-blue-900 font-garamond text-l font-semibold mb-1">Business Type:</label>
                         <select id="businessType" name="businessType" value={businessType}
                                 className="w-full p-3 rounded-full font-garamond bg-[#2F1000] bg-opacity-50 text-white focus:outline-none mb-1 h-auto"
@@ -138,10 +141,34 @@ const EditBusinessAccount = () => {
                                 <option key={index} value={BusinessType[key]}>{BusinessType[key]}</option>
                             ))}
                         </select>
-                        <label className="text-blue-900 font-garamond text-l font-semibold mb-1">Business Address:</label>
+                        <label className="text-blue-900 font-garamond text-l font-semibold mb-1">Street Address:</label>
                         <input type="text" id="address" name="address" value={address} placeholder="Address"
-                               className="w-full p-3 rounded-full font-garamond bg-[#2F1000] bg-opacity-50 text-white focus:outline-none mb-1 h-auto"
-                               onChange={(e) => setAddress(e.target.value)} /><br/>
+                            className="w-full p-3 rounded-full font-garamond bg-[#2F1000] bg-opacity-50 text-white focus:outline-none mb-1 h-auto"
+                            onChange={(e) => setAddress(e.target.value)} /><br/>
+                        <label className="text-blue-900 font-garamond text-l font-semibold mb-1">Apt # or Suite:</label>
+                        <input type="text" id="address" name="address" value={address} placeholder="Address"
+                            className="w-full p-3 rounded-full font-garamond bg-[#2F1000] bg-opacity-50 text-white focus:outline-none mb-1 h-auto"
+                            onChange={(e) => setAddress(e.target.value)} /><br/>
+                        <div className='flex flex-row'>
+                            <div className='flex flex-col mr-1'>
+                                <label className="text-blue-900 font-garamond text-l font-semibold mb-1">City:</label>
+                                <input type="text" id="address" name="address" value={address} placeholder="Address"
+                                    className="w-full p-3 rounded-full font-garamond bg-[#2F1000] bg-opacity-50 text-white focus:outline-none mb-1 h-auto"
+                                    onChange={(e) => setAddress(e.target.value)} /><br/>
+                            </div>
+                            <div className='flex flex-col mr-1'>
+                                <label className="text-blue-900 font-garamond text-l font-semibold mb-1">State:</label>
+                                <input type="text" id="address" name="address" value={address} placeholder="Address"
+                                    className="w-full p-3 rounded-full font-garamond bg-[#2F1000] bg-opacity-50 text-white focus:outline-none mb-1 h-auto"
+                                    onChange={(e) => setAddress(e.target.value)} /><br/>
+                            </div>
+                            <div className='flex flex-col'>
+                                <label className="text-blue-900 font-garamond text-l font-semibold mb-1">Zip:</label>
+                                <input type="text" id="address" name="address" value={address} placeholder="Address"
+                                    className="w-full p-3 rounded-full font-garamond bg-[#2F1000] bg-opacity-50 text-white focus:outline-none mb-1 h-auto"
+                                    onChange={(e) => setAddress(e.target.value)} /><br/>
+                            </div>
+                        </div>
                         <p className="text-blue-900 font-garamond text-l font-semibold mb-1 mt-5">Public Restroom?
                             <input type="checkbox" id="publicRestroom" name="publicRestroom" checked={publicRestroom}
                                    className="p-3 rounded-full bg-[#2F1000] bg-opacity-50 text-white focus:outline-none mb-1 h-auto ml-5"
