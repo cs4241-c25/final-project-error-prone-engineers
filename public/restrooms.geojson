@@ -1,0 +1,19 @@
+{
+"type": "FeatureCollection",
+"name": "Restrooms",
+"features": [
+{ "type": "Feature", "properties": { "Name": "Boston Common Visitor Information Center" }, "geometry": { "type": "Point", "coordinates": [ -71.063895, 42.355463 ] } },
+{ "type": "Feature", "properties": { "Name": "Boston Common Frog Pond" }, "geometry": { "type": "Point", "coordinates": [ -71.065514, 42.356113 ] } },
+{ "type": "Feature", "properties": { "Name": "Massachusetts State House" }, "geometry": { "type": "Point", "coordinates": [ -71.063803, 42.35876 ] } },
+{ "type": "Feature", "properties": { "Name": "Park Street Church" }, "geometry": { "type": "Point", "coordinates": [ -71.062021, 42.356852 ] } },
+{ "type": "Feature", "properties": { "Name": "Boston City Hall" }, "geometry": { "type": "Point", "coordinates": [ -71.057993, 42.360406 ] } },
+{ "type": "Feature", "properties": { "Name": "Faneuil Hall Marketplace" }, "geometry": { "type": "Point", "coordinates": [ -71.05446, 42.359799 ] } },
+{ "type": "Feature", "properties": { "Name": "Long Wharf North, Christopher Columbus Park" }, "geometry": { "type": "Point", "coordinates": [ -71.049843, 42.359951 ] } },
+{ "type": "Feature", "properties": { "Name": "Central Wharf at New England Aquarium" }, "geometry": { "type": "Point", "coordinates": [ -71.051776, 42.35961 ] } },
+{ "type": "Feature", "properties": { "Name": "Old North Church" }, "geometry": { "type": "Point", "coordinates": [ -71.054466, 42.366338 ] } },
+{ "type": "Feature", "properties": { "Name": "Commercial Street at Popuolo Park, North End" }, "geometry": { "type": "Point", "coordinates": [ -71.053636, 42.359861 ] } },
+{ "type": "Feature", "properties": { "Name": "Charlestown Navy Yard Visitor Center" }, "geometry": { "type": "Point", "coordinates": [ -71.056931, 42.373062 ] } },
+{ "type": "Feature", "properties": { "Name": "Charlestown Shipyard Park, Constitution Pier" }, "geometry": { "type": "Point", "coordinates": [ -71.051931, 42.373415 ] } },
+{ "type": "Feature", "properties": { "Name": "Bunker Hill Monument & Museum " }, "geometry": { "type": "Point", "coordinates": [ -71.061423, 42.375597 ] } }
+]
+}
