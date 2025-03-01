@@ -17,7 +17,7 @@ export async function connectDB(collectionName: string) {
             const client = new MongoClient(MONGO_URI);
             await client.connect();
             cachedClient = client;
-            console.log("Connected to MongoDB");
+            // console.log("Connected to MongoDB");
             cachedDb = client.db(DB_NAME);
             return cachedDb;
         })();
@@ -29,7 +29,7 @@ export async function connectDB(collectionName: string) {
 
 async function closeDB() {
     if (cachedClient) {
-        console.log("Database closed");
+        // console.log("Database closed");
         await cachedClient.close();
         cachedClient = null;
         cachedDb = null;
