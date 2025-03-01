@@ -29,7 +29,6 @@ export async function connectDB(collectionName: string) {
 
 async function closeDB() {
     if (cachedClient) {
-        // console.log("Database closed");
         await cachedClient.close();
         cachedClient = null;
         cachedDb = null;
