@@ -76,6 +76,7 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) =
   const [isTracking, setIsTracking] = useState(false);
   const [userPosition, setUserPosition] = useState<L.LatLng | null>(null);
   const [userMarker, setUserMarker] = useState<L.Marker | null>(null);
+  const markerRef = useRef<L.Marker | null>(null);
 
   const toggleTracking = () => {
     setIsTracking((prev) => !prev);
@@ -209,11 +210,13 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) =
         const lng = position.coords.longitude;
         const newPosition = new L.LatLng(lat, lng);
 
-        if (!userMarker) {
-          const marker = L.marker(newPosition, { icon: locationIcon }).addTo(mapRef.current);
-          setUserMarker(marker);
+        if (!markerRef.current) {
+          markerRef.current = L.marker(newPosition, { icon: locationIcon }).addTo(
+            mapRef.current
+          );
         } else {
-          userMarker.setLatLng(newPosition);
+          // update curr position
+          markerRef.current.setLatLng(newPosition);
         }
 
         mapRef.current.setView(newPosition, 15);
@@ -240,6 +243,11 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) =
     return () => {
       if (watchPosition) {
         navigator.geolocation.clearWatch(watchPosition);
+      }
+      // remove marker when tracking stops
+      if (markerRef.current && mapRef.current){
+        mapRef.current.removeLayer(markerRef.current);
+        markerRef.current = null;
       }
     };
   }, [isTracking]);
