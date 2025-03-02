@@ -1,17 +1,6 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
-import { MongoClient } from "mongodb";
-
-const dbconnect = new MongoClient(process.env.MONGO_URI!);
-let userCollection: any = null;
-
-async function connectDB() {
-    if (!userCollection) {
-        await dbconnect.connect();
-        const db = dbconnect.db("freedom-trail");
-        userCollection = db.collection("users");
-    }
-}
+import {connectDB} from "@/lib/database";
 
 export async function POST(req: Request) {
     try {
@@ -23,7 +12,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ message: "Recipient email is required" }, { status: 400 });
         }
 
-        await connectDB();
+        let userCollection = await connectDB("users");
         const user = await userCollection.findOne({ email });
         if (!user) {
             return NextResponse.json({ error: "Email does not exist in database" }, { status: 404 });
