@@ -286,13 +286,13 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) =
 
   return (
     <div className="flex flex-col h-screen">
-      <div id="map" className="flex-grow relative z-20" style={{}}></div>
       <button
         onClick={toggleTracking}
-        className="bg-blue-900 text-white font-bold font-garamond py-1 w-full hover:bg-blue-700" 
+        className="bg-blue-900 text-white font-bold font-garamond py-1 w-full hover:bg-blue-700 mb-auto" 
       >
         {isTracking ? 'Stop Tracking' : 'Start Tracking'}
       </button>
+      <div id="map" className="flex-grow relative z-20" style={{}}></div>
     </div>
   );
   // return <div id="map" style={{}}></div>;
