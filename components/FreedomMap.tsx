@@ -222,7 +222,6 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) =
       (error) => {
         console.error('Error getting location:', error);
 
-        // Handle specific error codes:
         switch (error.code) {
           case error.PERMISSION_DENIED:
             console.error("User denied the request for Geolocation.");
@@ -247,25 +246,39 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) =
 
   const checkProgress = () => {
     if (!geoJsonData || !userPosition) return;
-
-    const pathCoords = geoJsonData.features[0]?.geometry?.coordinates;
-    if (!pathCoords) return;
-
-    let closestPoint = null;
-    let minDistance = Infinity;
-
-    pathCoords.forEach(([lat, lng]) => {
-      const pathPoint = new L.LatLng(lat, lng);
-      const distance = userPosition.distanceTo(pathPoint);
-
-      if (distance < minDistance) {
-        minDistance = distance;
-        closestPoint = pathPoint;
+  
+    const geometry = geoJsonData.features[0]?.geometry;
+    if (!geometry) return;
+  
+    if (geometry.type === "LineString" || geometry.type === "Polygon") {
+      const pathCoords = geometry.coordinates as [number, number][];
+      if (!pathCoords) return;
+  
+      let closestPoint = null;
+      let minDistance = Infinity;
+  
+      pathCoords.forEach(([lng, lat]) => {
+        const pathPoint = new L.LatLng(lat, lng);
+        const distance = userPosition.distanceTo(pathPoint);
+  
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestPoint = pathPoint;
+        }
+      });
+  
+      if (minDistance < 50) {
+        console.log("User is near the path!");
       }
-    });
-
-    if (minDistance < 50) {
-      console.log('User is near the path!');
+    } else if (geometry.type === "Point") {
+        const pointCoords = geometry.coordinates as [number,number];
+        const pointLatLng = new L.LatLng(pointCoords[1], pointCoords[0]);
+        const distance = userPosition.distanceTo(pointLatLng);
+        if(distance < 50){
+            console.log("user is near the point");
+        }
+    } else {
+      console.warn("Unsupported geometry type for progress check.");
     }
   };
 
