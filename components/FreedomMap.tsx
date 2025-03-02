@@ -233,9 +233,6 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) =
           case error.TIMEOUT:
             console.error("The request to get user location timed out.");
             break;
-          case error.UNKNOWN_ERROR:
-            console.error("An unknown error occurred.");
-            break;
         }
       },
       { enableHighAccuracy: true, maximumAge: 10000, timeout: 10000 }
