@@ -95,23 +95,23 @@ const Login = () => {
                   <img src="google.png" alt="Google Logo" className="w-6 h-6 mr-2"/>
                   Sign in with Google
               </button>
+            
+                      {/* Forgot Password */}
+            <p className="text-center text-blue-900 font-garamond text-xl font-semibold mt-4">
+                <a href="/forgot-password" className="underline">Forgot your password?</a>
+            </p>
 
+            {/* Navigate to register page */}
+            <div className="text-center">
+                <button
+                onClick={handleRegisterNavigation}
+                className="my-5 h-7 lg:w-1/3 px-2 text-blue-900 rounded-full text-lg font-semibold font-garamond bg-[#dcedff] hover:bg-[#b7d3f0] transition text-center justify-center">
+                    Or Register
+                </button>   
+            </div>
 
           </form>
 
-          {/* Forgot Password */}
-          <p className="text-center text-blue-900 font-garamond text-xl font-semibold mt-4">
-              <a href="/forgot-password" className="underline">Forgot your password?</a>
-          </p>
-
-          {/* Navigate to register page */}
-          <div className="text-center">
-            <button
-              onClick={handleRegisterNavigation}
-              className="my-5 h-7 lg:w-1/3 px-2 text-blue-900 rounded-full text-lg font-semibold font-garamond bg-[#dcedff] hover:bg-[#b7d3f0] transition text-center justify-center">
-                Or Register
-            </button>   
-          </div>
       </div>
     </div>
     );
