@@ -7,7 +7,11 @@ import LocationNode from "./LocationNode";
 import LocationPage from "./LocationPage"
 import ReactDOMServer from "react-dom/server";
 import ReactDOM from "react-dom/client";
-
+import {createBadgeObject, getBadges} from "@/lib/badges";
+import {getServerSession} from "next-auth";
+import {authOptions} from "@/lib/auth";
+import {NextResponse} from "next/server";
+import {useSession} from "next-auth/react";
 
 // Define absolute paths for Leaflet marker icons
 L.Icon.Default.mergeOptions({
@@ -77,6 +81,7 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) =
   const [userPosition, setUserPosition] = useState<L.LatLng | null>(null);
   const [userMarker, setUserMarker] = useState<L.Marker | null>(null);
   const markerRef = useRef<L.Marker | null>(null);
+  const { data: session } = useSession();
 
   const toggleTracking = () => {
     setIsTracking((prev) => !prev);
@@ -208,7 +213,8 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) =
         if (!mapRef.current) return;
         const lat = position.coords.latitude;
         const lng = position.coords.longitude;
-        const newPosition = new L.LatLng(lat, lng);
+        // const newPosition = new L.LatLng(lat, lng);
+        let newPosition = new L.LatLng(lat, lng);
 
         if (!markerRef.current) {
           markerRef.current = L.marker(newPosition, { icon: locationIcon }).addTo(
@@ -221,6 +227,26 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) =
 
         mapRef.current.setView(newPosition, 15);
         setUserPosition(newPosition);
+
+
+        //for testing reasons
+        // const testLat = 42.35532;  // Boston Common latitude
+        // const testLng = -71.063639; // Boston Common longitude
+        // newPosition = new L.LatLng(testLat, testLng);
+        // getBadges()
+
+
+        if (session) {
+          locations.forEach(({ name, coordinates }) => {
+            const locationPoint = new L.LatLng(coordinates[0], coordinates[1]);
+            const distance = newPosition.distanceTo(locationPoint);
+
+            if (distance < 9.14) {
+              createBadgeObject(name);
+            }
+          });
+        }
+
       },
       (error) => {
         console.error('Error getting location:', error);
