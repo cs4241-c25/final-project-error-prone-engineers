@@ -60,9 +60,9 @@ const businessAccount = () => {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center bg-[url('/freedomtrail_medallion.jpg')] ">
-            <div className="bg-[#DCEDFF] bg-opacity-20 backdrop-blur-lg p-4 rounded-3xl w-3/5 h-4/5">
-                <button className='text-white ml-2 bg-blue-900 px-1 rounded-sm hover:bg-blue-700 transition'
-                        onClick={() => router.push('/business-account/create')}>Create New</button>
+            <div className="bg-white p-4 rounded-3xl w-3/5 h-4/5">
+                <button className='text-white ml-2 bg-blue-900 px-2 text-xl rounded-md hover:bg-blue-700 transition font-garamond'
+                        onClick={() => router.push('/business-account/create')}>Create New Business</button>
                 {/* ^ I hate this button I hate it I hate it I hate it */}
                 <table className='font-garamond'>
                     <thead className='text-center text-xl font-bold'>

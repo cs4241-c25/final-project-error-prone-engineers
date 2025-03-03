@@ -89,8 +89,8 @@ const createBusinessAccount = () => {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center bg-[url('/freedomtrail_medallion.jpg')] ">
-            <div className="bg-[#DCEDFF] bg-opacity-20 backdrop-blur-lg p-4 rounded-3xl w-3/5 h-4/5">
-                <h1 className='text-center text-blue-900 font-extrabold text-4xl font-garamond'>Add Your Business</h1>
+            <div className="bg-white p-4 rounded-3xl w-3/5 h-4/5">
+                <h1 className="bg-blue-900 p-2 rounded-md text-6xl font-bold text-center text-white mb-6 font-cinzel_decorative">Add Your Business</h1>
                 <div className='flex flex-row items-center justify-center'>
                     {/* left div */}
                     <div className='flex flex-col ml-2 mr-5 w-1/2'>
