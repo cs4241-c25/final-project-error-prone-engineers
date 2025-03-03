@@ -4,6 +4,7 @@ import { Geist, Geist_Mono, Cormorant_Garamond, Girassol, Cinzel_Decorative } fr
 import "./globals.css";
 import ClientSessionWrapper from "./clientsessionwrapper";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -47,6 +48,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <ClientSessionWrapper>
             {children}
             <Analytics />
+            <SpeedInsights />
         </ClientSessionWrapper>
         </body>
         </html>
