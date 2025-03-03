@@ -1,7 +1,7 @@
 "use client";
 import Banner from '@/components/Banner';
 import React from 'react';
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 
 const ProfilePage: React.FC = () => {
     const { data: session } = useSession();
@@ -17,7 +17,7 @@ const ProfilePage: React.FC = () => {
                     <img src='/user.png' alt='user image'/>
 
                     {/* Logout button */}
-                    <button className='bg-[#DCEDFF] text-[#0A2463] font-garamond text-xl rounded-full p-2 mt-4'>Logout</button>
+                    <button onClick={() => signOut()} className='bg-[#DCEDFF] text-[#0A2463] font-garamond text-xl rounded-full p-2 mt-4'>Logout</button>
                 </div>
                 
                 {/* Right Side */}
