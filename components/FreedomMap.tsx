@@ -230,10 +230,10 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) =
 
 
         //for testing reasons
-        const testLat = 42.35532;  // Boston Common latitude
-        const testLng = -71.063639; // Boston Common longitude
-        newPosition = new L.LatLng(testLat, testLng);
-        getBadges()
+        // const testLat = 42.35532;  // Boston Common latitude
+        // const testLng = -71.063639; // Boston Common longitude
+        // newPosition = new L.LatLng(testLat, testLng);
+        // getBadges()
 
 
         if (session) {
