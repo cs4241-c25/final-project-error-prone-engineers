@@ -4,7 +4,7 @@ import {connectDB} from "@/lib/database";
 
 export async function POST(req: Request) {
     try {
-        let userCollection = await connectDB("user");
+        let userCollection = await connectDB("users");
 
         // Parse JSON body
         const { email, password } = await req.json();
