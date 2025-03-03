@@ -96,11 +96,11 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) =
     //   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, Tiles courtesy of <a href="http://www.thunderforest.com/" target="_blank">Thunderforest</a>', // Add appropriate attribution
     // }).addTo(map);
 
-
+    //This adds the location markers
     locations.forEach(({ name, coordinates }) => {
       const myIcon = L.divIcon({
         html: ReactDOMServer.renderToString(<LocationNode />),
-        className: "custom-icon",
+        className: "custom-icon transition-transform duration-200",
         iconSize: [50, 50],
         iconAnchor: [25, 25],
         popupAnchor: [-16, 0],
@@ -112,6 +112,7 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) =
         interactive: true,
       }).addTo(map);
 
+
       //Add popup
       marker.bindPopup(() => {
         const container = document.createElement("div");
@@ -122,11 +123,21 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) =
         root.render(<LocationPage locationName={name} />); //Pass name
 
         setTimeout(() => {
+          var latLng = marker.getLatLng();
+          var zoom = map.getZoom();
+          var mapHeight = map.getSize().y;
+          var pixelOffset = mapHeight * 0.3;
+          var latLngOffset = map.containerPointToLatLng(map.latLngToContainerPoint(latLng).subtract([0, pixelOffset]));
+
+          map.setView(latLngOffset, zoom, { animate: true });
+
+
           const popupWrapper = container.closest('.leaflet-popup-content-wrapper'); //Located in PopupStyles.module.css
           if (popupWrapper) {
             //Border Styling
             popupWrapper.classList.add("border-4", "border-[#0a2463]", "rounded-2xl");
           }
+
         }, 0);
 
         return container;

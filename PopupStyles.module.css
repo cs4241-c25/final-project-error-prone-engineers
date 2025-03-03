@@ -10,3 +10,11 @@
 .leaflet-popup-tip {
     border: 2px solid #0a2463; /* Border for the small popup arrow */
 }
+
+.custom-icon {
+    transition: filter 0.3s ease, transform 0.2s ease;
+}
+
+.custom-icon:hover div {
+    filter: brightness(1.2);
+}

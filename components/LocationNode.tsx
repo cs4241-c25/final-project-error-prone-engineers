@@ -9,7 +9,7 @@ const LocationNode = () => {
             <button
 
                 onClick={() => setIsOpen(true)}
-                className="bg-[#EFA906] text-white font-bold py-3 px-3 rounded-full shadow-lg">
+                className="shadow-md bg-[#EFA906] text-white font-bold py-3 px-3 rounded-full shadow-lg">
             </button>
 
 
