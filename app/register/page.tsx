@@ -44,8 +44,8 @@ const Register = () => {
     return (
       //absolute inset-0 bg-black opacity-50 
       <div className="flex items-center justify-center min-h-screen bg-cover bg-center bg-[url('/freedomtrail_medallion.jpg')] " > 
-      <div className="bg-[#DCEDFF] bg-opacity-20 backdrop-blur-lg p-8 rounded-3xl max-w-full lg:w-2/5 sm:w-4/5 sm:h-4/5 justify-center items-center ">
-        <h2 className="text-6xl font-bold text-center text-blue-900 mb-6 font-garamond">Register</h2>
+      <div className="bg-white p-5 rounded-3xl max-w-full lg:w-2/5 sm:w-4/5 sm:h-4/5 justify-center items-center ">
+        <h2 className="bg-blue-900 p-2 rounded-md text-6xl font-bold text-center text-white mb-6 font-cinzel_decorative">Register</h2>
         
         <form onSubmit={handleRegister} className="flex flex-col">
             <label className="text-blue-900 font-garamond text-4xl font-extrabold mb-2">Email:</label>
