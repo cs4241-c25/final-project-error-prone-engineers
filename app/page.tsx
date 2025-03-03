@@ -71,7 +71,7 @@ export default function Home() {
   }
 
   return (
-    <div className='flex flex-col'>
+    <div className='flex flex-col h-screen overflow-hidden sm:h-screen sm:overflow-hidden'>
       <Banner />
       <DynamicFreedomMap geoJsonData={geoJsonData} geoJsonDataRestrooms={geoJsonDataRestrooms} />
     </div>
