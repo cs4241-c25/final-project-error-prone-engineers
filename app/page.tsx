@@ -15,10 +15,12 @@ const DynamicFreedomMap = dynamic(() => import('../components/FreedomMap'), {
 });
 interface PageProps {
   geoJsonData: FeatureCollection | null;
+  geoJsonDataRestrooms: FeatureCollection | null;
 }
 
 export default function Home() {
   const [geoJsonData, setGeoJsonData] = useState<FeatureCollection | null>(null);
+  const [geoJsonDataRestrooms, setGeoJsonDataRestrooms] = useState<FeatureCollection | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   // Testing code to ensure user logs in
@@ -44,6 +46,20 @@ export default function Home() {
         console.error("Error loading GeoJSON:", err);
         setError(err.message);
       });
+      fetch('/restrooms.geojson')
+      .then(res => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data: FeatureCollection) => {
+        setGeoJsonDataRestrooms(data);
+      })
+      .catch(err => {
+        console.error("Error loading GeoJSON restrooms:", err);
+        setError(err.message);
+      });
   }, []);
 
   if (error) {
@@ -55,9 +71,9 @@ export default function Home() {
   }
 
   return (
-    <div className='flex flex-col'>
+    <div className='flex flex-col h-screen overflow-hidden sm:h-screen sm:overflow-hidden'>
       <Banner />
-      <DynamicFreedomMap geoJsonData={geoJsonData} />
+      <DynamicFreedomMap geoJsonData={geoJsonData} geoJsonDataRestrooms={geoJsonDataRestrooms} />
     </div>
   );
 }

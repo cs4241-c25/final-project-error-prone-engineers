@@ -1,13 +1,25 @@
 export type BusinessAccount = {
+    _id?: string;
+    email?: string;
     ownerName: string;
     phoneNumber: string;
-    email: string;
+    businessEmail: string;
     businessName: string;
-    businessType: BusinessType;
-    address: string;
+    businessType: string;
+    addressLine1: string;
+    addressLine2?: string;
+    addressCity: string;
+    addressState: string;
+    addressZip: string;
     description: string;
     accessibility: boolean;
     publicRestroom: boolean;
+}
+
+export function address(account: BusinessAccount): string {
+    const existingLine2: boolean = account.addressLine2 !== undefined && account.addressLine2.length > 0
+    return account.addressLine1 + ", " + (existingLine2 ? account.addressLine2 + ", " : "") + account.addressCity
+        + " " + account.addressState + " " + account.addressZip;
 }
 
 export enum BusinessType {

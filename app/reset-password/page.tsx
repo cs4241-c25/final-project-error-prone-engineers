@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import axios from "axios";
 
 const ResetPassword = () => {
@@ -38,8 +38,8 @@ const ResetPassword = () => {
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-cover bg-center bg-[url('/freedomtrail_medallion.jpg')]">
-            <div className="bg-[#DCEDFF] bg-opacity-20 backdrop-blur-lg p-8 rounded-3xl w-96">
-                <h2 className="text-4xl font-bold text-center text-blue-900 mb-6 font-garamond">
+            <div className="bg-white p-5 rounded-3xl max-w-full lg:w-2/5 sm:w-4/5 sm:h-4/5 justify-center items-center">
+                <h2 className="bg-blue-900 p-2 rounded-md text-6xl font-bold text-center text-white mb-6 font-cinzel_decorative">
                     Reset Password
                 </h2>
 
@@ -81,4 +81,10 @@ const ResetPassword = () => {
     );
 };
 
-export default ResetPassword;
+export default function ResetPasswordPage() {
+    return (
+        <Suspense fallback={<p>Loading...</p>}>
+            <ResetPassword />
+        </Suspense>
+    );
+}

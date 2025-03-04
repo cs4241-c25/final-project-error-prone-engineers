@@ -35,8 +35,8 @@ const Forgot_Password = () => {
     return (
         //absolute inset-0 bg-black opacity-50
         <div className="flex items-center justify-center min-h-screen bg-cover bg-center bg-[url('/freedomtrail_medallion.jpg')] " >
-            <div className="bg-[#DCEDFF] bg-opacity-20 backdrop-blur-lg p-8 rounded-3xl w-96 ">
-                <h2 className="text-4xl font-bold text-center text-blue-900 mb-6 font-garamond">Request Password Reset Link</h2>
+            <div className="bg-white p-5 rounded-3xl w-96 ">
+                <h2 className="text-4xl rounded-md bg-blue-900 p-2 font-bold text-center text-white mb-6 font-cinzel_decorative">Request Password Reset Link</h2>
 
                 <form onSubmit={handlePasswordReset} className="flex flex-col">
                     <label className="text-blue-900 font-garamond text-2xl font-extrabold mb-2">Email:</label>
