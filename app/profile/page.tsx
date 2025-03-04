@@ -2,6 +2,7 @@
 import Banner from '@/components/Banner';
 import React from 'react';
 import { useSession, signOut } from "next-auth/react";
+import Badge from '@/components/Badge';
 
 const ProfilePage: React.FC = () => {
     const { data: session } = useSession();
@@ -54,7 +55,25 @@ const ProfilePage: React.FC = () => {
                         <hr className='border-[#0A2463]'></hr>
 
                         {/* Badge section */}
-                        <div>Bottom</div>
+                        <h2 className="text-xl  font-bold text-left text-blue-900  font-garamond mt-2 ml-2">Badges</h2>
+
+                        <div className='flex overflow-x-auto whitespace-nowrap justify-start px-2 gap-4'>
+                            <Badge 
+                                imageSrc='badge1.png'
+                                title='Badge 1'>
+                            </Badge>
+
+                            <Badge 
+                                imageSrc='badge2.png'
+                                title='Badge 2'>
+                            </Badge>
+
+                            <Badge 
+                                imageSrc='badge3.png'
+                                title='Badge 3'>
+                            </Badge>
+                        
+                        </div>
                 
                     </div>
                     
