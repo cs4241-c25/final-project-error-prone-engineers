@@ -110,6 +110,7 @@ const Login = () => {
               className="ml-56 h-7 w-28 mt-4  text-blue-900 rounded-full text-lg font-semibold font-garamond bg-[#dcedff] hover:bg-[#b7d3f0] transition">
           Or Register
         </button>
+        </form>
       </div>
     </div>
     </div>

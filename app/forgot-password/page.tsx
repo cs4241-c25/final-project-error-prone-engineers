@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import axios from "axios";
+import Banner from "@/components/Banner";
 
 
 const Forgot_Password = () => {
@@ -34,6 +35,8 @@ const Forgot_Password = () => {
 
     return (
         //absolute inset-0 bg-black opacity-50
+        <div>
+            <Banner></Banner>
         <div className="flex items-center justify-center min-h-screen bg-cover bg-center bg-[url('/freedomtrail_medallion.jpg')] " >
             <div className="bg-white p-5 rounded-3xl w-96 ">
                 <h2 className="text-4xl rounded-md bg-blue-900 p-2 font-bold text-center text-white mb-6 font-cinzel_decorative">Request Password Reset Link</h2>
@@ -58,6 +61,7 @@ const Forgot_Password = () => {
                     </button>
                 </form>
             </div>
+        </div>
         </div>
     );
 };

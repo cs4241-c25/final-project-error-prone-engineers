@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState, Suspense } from "react";
 import axios from "axios";
+import Banner from "@/components/Banner";
 
 const ResetPassword = () => {
     const router = useRouter();
@@ -37,6 +38,8 @@ const ResetPassword = () => {
     }
 
     return (
+        <div>
+            <Banner></Banner>
         <div className="flex items-center justify-center min-h-screen bg-cover bg-center bg-[url('/freedomtrail_medallion.jpg')]">
             <div className="bg-white p-5 rounded-3xl max-w-full lg:w-2/5 sm:w-4/5 sm:h-4/5 justify-center items-center">
                 <h2 className="bg-blue-900 p-2 rounded-md text-6xl font-bold text-center text-white mb-6 font-cinzel_decorative">
@@ -78,6 +81,7 @@ const ResetPassword = () => {
                 </form>
             </div>
         </div>
+    </div>
     );
 };
 

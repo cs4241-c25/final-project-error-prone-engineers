@@ -11,7 +11,7 @@ const Banner = () => {
           <Menu />
         </div>
         <Link href={'/'}>
-        <h1 className='font-extrabold text-3xl md:text-6xl font-cinzel_decorative mx-auto tracking-widest'>Boston Freedom Trail</h1>
+        <h1 className='font-extrabold text-3xl md:text-6xl ml-52 font-cinzel_decorative mx-auto tracking-widest'>Boston Freedom Trail</h1>
         </Link>
         <div className='flex-grow-0 ml-40'>
           <LoginButton/>
