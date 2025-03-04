@@ -1,11 +1,21 @@
 "use client";
 import Banner from '@/components/Banner';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { useSession, signOut } from "next-auth/react";
 import Badge from '@/components/Badge';
+import { getBadges } from '@/lib/badges';
 
 const ProfilePage: React.FC = () => {
     const { data: session } = useSession();
+    const [badges, setBadges] = useState<any[]>([]);
+
+    useEffect(() => {
+        async function fetchBadges() {
+            const badgeData = await getBadges();
+            setBadges(badgeData);
+        }
+        fetchBadges();
+    }, []);
     return (
         <div>
             <Banner></Banner>
@@ -55,26 +65,18 @@ const ProfilePage: React.FC = () => {
                         <hr className='border-[#0A2463]'></hr>
 
                         {/* Badge section */}
-                        <h2 className="text-xl  font-bold text-left text-blue-900  font-garamond mt-2 ml-2">Badges</h2>
+                        <h2 className="text-xl font-bold text-left text-blue-900 font-garamond mt-2 ml-2">Badges</h2>
 
                         <div className='flex overflow-x-auto whitespace-nowrap justify-start px-2 gap-4'>
-                            <Badge 
-                                imageSrc='badge1.png'
-                                title='Badge 1'>
-                            </Badge>
-
-                            <Badge 
-                                imageSrc='badge2.png'
-                                title='Badge 2'>
-                            </Badge>
-
-                            <Badge 
-                                imageSrc='badge3.png'
-                                title='Badge 3'>
-                            </Badge>
-                        
+                            {badges.length > 0 ? (
+                                badges.map((badge, index) => (
+                                    <Badge key={index} imageSrc={badge.image} title={badge.name} />
+                                ))
+                            ) : (
+                                <p className="text-blue-900 text-xl ml-2">No badges earned yet.</p>
+                            )}
                         </div>
-                
+
                     </div>
                     
                 </div>
