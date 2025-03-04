@@ -53,10 +53,10 @@ const Login = () => {
     <div>
         <Banner></Banner>
       <div className="flex items-center justify-center min-h-screen bg-cover bg-center bg-[url('/freedomtrail_medallion.jpg')] lg:h-screen lg:overflow-hidden lg:w-screen sm:h-screen sm:overflow-hidden sm:w-screen" >
-      <div className="bg-white p-5 rounded-3xl max-w-full lg:w-2/5 sm:w-4/5 sm:h-4/5 justify-center items-center">
+          <div className="bg-white p-5 rounded-3xl max-w-full lg:w-2/5 sm:w-4/5 min-h-fit justify-center items-center">
         <h2 className="bg-blue-900 p-2 rounded-md text-6xl font-bold text-center text-white mb-6 font-cinzel_decorative">Sign in</h2>
 
-            <form onSubmit={handleLogin} className="flex flex-col">
+          <form onSubmit={handleLogin} className="flex flex-col h-fit">
                 <label className="text-blue-900 font-garamond text-4xl font-extrabold mb-2">Email:</label>
                 <input
                     type="email"
@@ -105,11 +105,11 @@ const Login = () => {
             </p>
 
           {/* Navigate to register page */}
-          <button
-              onClick={handleRegisterNavigation}
-              className="ml-56 h-7 w-28 mt-4  text-blue-900 rounded-full text-lg font-semibold font-garamond bg-[#dcedff] hover:bg-[#b7d3f0] transition">
-          Or Register
-        </button>
+                <button
+                    onClick={handleRegisterNavigation}
+                className="mt-5 mb-2 h-7 w-fit px-6 mx-auto text-blue-900 rounded-full text-lg font-semibold font-garamond bg-[#dcedff] hover:bg-[#b7d3f0] transition">
+                    Or Register
+                </button>
         </form>
       </div>
     </div>
