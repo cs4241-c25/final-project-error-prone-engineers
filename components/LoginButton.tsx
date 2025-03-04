@@ -1,13 +1,22 @@
 'use client';
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 const LoginButton = () => {
   const router = useRouter();
+  const { data: session } = useSession();
 
   // Handle the click functionality for the login button
   const handleLoginClick = () => {
-    // Redirect to the login page
-    router.push('/login');
+    // Check if the user is logged in
+    if (session) {
+      // Navigate to the the profile page
+      router.push('/profile');
+    }
+    else {
+      // Navigate to the login page
+      router.push('/login');
+    }
   };
 
   return (
