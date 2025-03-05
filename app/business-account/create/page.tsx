@@ -3,7 +3,15 @@ import { useRouter } from "next/navigation";
 import { useState } from 'react';
 import axios from 'axios';
 import validator from 'validator';
-import { BusinessAccount, BusinessType, getEnumKeys } from "@/types/BusinessAccount";
+import {
+    address,
+    AddressParts,
+    BusinessAccount,
+    BusinessType,
+    Node,
+    getEnumKeys,
+    formatPhoneNumber
+} from "@/types/BusinessAccount";
 import { bostonZipCodes} from "@/types/Location";
 import {useSession} from "next-auth/react";
 
@@ -67,16 +75,28 @@ const createBusinessAccount = () => {
 
     async function submit() {
         if (validateForm()) {
+            const addressP: AddressParts = {
+                line1: addressStreet, line2: addressApt, city: addressCity,
+                state: addressState, country: "United States", zip: addressZip
+            };
+
+            const node: Node = {
+                name: businessName, type: businessType.valueOf(), description: description, address: address(addressP),
+                latitude: 0, longitude: 0, accessibility: accessibility, publicRestroom: publicRestroom
+            };
+
             const formData: BusinessAccount = {
                 email: session?.user?.email ?? "", ownerName: ownerName, phoneNumber: phoneNumber,
-                businessEmail: email, businessName: businessName, businessType: businessType.valueOf(),
-                addressLine1: addressStreet, addressLine2: addressApt, addressCity: addressCity,
-                addressState: addressState, addressZip: addressZip, description: description,
-                accessibility: accessibility, publicRestroom: publicRestroom
+                businessEmail: email, node: node, addressParts: addressP
             };
             const response = await axios.post('/api/business_account', formData);
             console.log(response);
-            router.push('/business-account');
+            if (response.status === 200) {
+                router.push('/business-account');
+            }
+            else {
+                setError("There was an error while submitting your business account");
+            }
         }
     }
 
@@ -101,7 +121,7 @@ const createBusinessAccount = () => {
                         <label className="text-blue-900 font-garamond text-l font-semibold mb-1">Phone Number:</label>
                         <input type="text" id="phoneNumber" name="phoneNumber" value={phoneNumber} placeholder="Phone number"
                             className="w-full p-3 rounded-full font-garamond bg-[#2F1000] bg-opacity-50 text-white focus:outline-none mb-1 h-auto"
-                            onChange={(e) => setPhoneNumber(e.target.value)} /><br/>
+                            onChange={(e) => setPhoneNumber(formatPhoneNumber(e.target.value))} /><br/>
                         <label className="text-blue-900 font-garamond text-l font-semibold mb-1">Business Email:</label>
                         <input type="text" id="email" name="email" value={email} placeholder="Email"
                             className="w-full p-3 rounded-full font-garamond bg-[#2F1000] bg-opacity-50 text-white focus:outline-none mb-1 h-auto"
