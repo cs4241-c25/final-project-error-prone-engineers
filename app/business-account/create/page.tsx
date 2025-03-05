@@ -14,6 +14,7 @@ import {
 } from "@/types/BusinessAccount";
 import { bostonZipCodes} from "@/types/Location";
 import {useSession} from "next-auth/react";
+import Banner from "@/components/Banner";
 
 const createBusinessAccount = () => {
     const router = useRouter();
