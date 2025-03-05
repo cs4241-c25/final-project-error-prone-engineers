@@ -1,27 +1,10 @@
 import { NextResponse } from "next/server";
-import { MongoClient } from "mongodb";
+import { connectDB } from "@/lib/database";
 
-const dbconnect = new MongoClient(process.env.MONGO_URI!);
-let nodeCollection: any = null;
-
-async function connectDB() {
-    if (!nodeCollection) {
-        try {
-            await dbconnect.connect();
-            const db = dbconnect.db("freedom-trail");
-            nodeCollection = db.collection("nodes");
-
-
-        } catch (error) {
-            console.error("Database connection error:", error);
-            throw new Error("Database connection failed.");
-        }
-    }
-}
 
 export async function GET(req: Request) {
     try {
-        await connectDB();
+        let nodeCollection = await connectDB("nodes");
 
         const { searchParams } = new URL(req.url);
         const nodeName = searchParams.get("name");

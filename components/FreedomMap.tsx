@@ -1,5 +1,5 @@
 'use client';
-import {JSX, useEffect, useRef} from 'react';
+import {JSX, useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { FeatureCollection } from 'geojson';
@@ -10,6 +10,11 @@ import ReactDOM from "react-dom/client";
 import Image from "next/image";
 
 
+import {createBadgeObject, getBadges} from "@/lib/badges";
+import {getServerSession} from "next-auth";
+import {authOptions} from "@/lib/auth";
+import {NextResponse} from "next/server";
+import {useSession} from "next-auth/react";
 
 // Define absolute paths for Leaflet marker icons
 L.Icon.Default.mergeOptions({
@@ -32,6 +37,20 @@ const restroomIcon = L.divIcon({
   popupAnchor: [0, -32],
 });
 
+const locationIcon = L.divIcon({
+  className: "custom-restroom-icon",
+  html: `
+    <div style="width: 32px; height: 32px;">
+      <svg width="41" height="41" viewBox="0 0 41 41" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1.5" y="1.5" width="38" height="38" rx="19" fill="white"/>
+        <rect x="1.5" y="1.5" width="38" height="38" rx="19" stroke="#D00000" stroke-width="3"/>
+        <path d="M23.5917 17.5833H30.7083V14.9583H25.4292L22.5125 10.1021C22.075 9.37292 21.2875 8.87709 20.3833 8.87709C20.1208 8.87709 19.8875 8.92084 19.6542 8.99376L11.75 11.4583V19.0417H14.375V13.6896L17.4521 12.7271L11.75 35.0833H14.375L18.5604 23.2563L21.9583 27.7917V35.0833H24.5833V25.7354L20.9521 19.1146L22.0167 14.9292M23.4167 8.54167C24.875 8.54167 26.0417 7.37501 26.0417 5.91667C26.0417 4.45834 24.875 3.29167 23.4167 3.29167C21.9583 3.29167 20.7917 4.45834 20.7917 5.91667C20.7917 7.37501 21.9583 8.54167 23.4167 8.54167Z" fill="#D00000"/>
+      </svg>
+    </div>`,
+  iconSize: [35, 35],
+  iconAnchor: [16, 35],
+  popupAnchor: [0, -35],
+});
 
 interface MapProps {
   geoJsonData: FeatureCollection | null;
@@ -59,23 +78,26 @@ const locations = [
 
 ];
 
-
-
 const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) => {
   const mapRef = useRef<L.Map | null>(null);
+  const [isTracking, setIsTracking] = useState(false);
+  const [userPosition, setUserPosition] = useState<L.LatLng | null>(null);
+  const [userMarker, setUserMarker] = useState<L.Marker | null>(null);
+  const markerRef = useRef<L.Marker | null>(null);
+  const { data: session } = useSession();
 
+  const toggleTracking = () => {
+    setIsTracking((prev) => !prev);
+  };
 
 
   useEffect(() => {
-
-
-
     if (!geoJsonData || !geoJsonDataRestrooms || mapRef.current || typeof window === "undefined") return;
 
     // Set map to fill screen
     const mapContainer = document.getElementById("map");
     if (mapContainer) {
-      mapContainer.style.height = "100vh";
+      // mapContainer.style.height = "100vh";
       mapContainer.style.width = "100vw";
     }
 
@@ -84,15 +106,15 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) =
       zoom: 13,
     });
 
-    const overlay = document.createElement("div");
-    overlay.style.position = "absolute";
-    overlay.style.top = "0";
-    overlay.style.left = "0";
-    overlay.style.width = "100%";
-    overlay.style.height = "100%";
-    overlay.style.backgroundColor = "rgba(0, 0, 0, 0.4)";
-    overlay.style.zIndex = "100";
-    mapContainer?.appendChild(overlay);
+    // const overlay = document.createElement("div");
+    // overlay.style.position = "absolute";
+    // overlay.style.top = "0";
+    // overlay.style.left = "0";
+    // overlay.style.width = "100%";
+    // overlay.style.height = "100%";
+    // overlay.style.backgroundColor = "rgba(0, 0, 0, 0.4)";
+    // overlay.style.zIndex = "100";
+    // mapContainer?.appendChild(overlay);
 
     // Load base map layer
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -105,7 +127,7 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) =
     //   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, Tiles courtesy of <a href="http://www.thunderforest.com/" target="_blank">Thunderforest</a>', // Add appropriate attribution
     // }).addTo(map);
 
-    //This adds the location markers
+
     locations.forEach(({ name, coordinates }) => {
       const myIcon = L.divIcon({
         html: ReactDOMServer.renderToString(<Image
@@ -122,14 +144,11 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) =
         popupAnchor: [-36, 0],
       });
 
-
-
       //Plot marker
       const marker = L.marker([coordinates[0], coordinates[1]] as [number, number], {
         icon: myIcon,
         interactive: true,
       }).addTo(map);
-
 
       //Add popup
       marker.bindPopup(() => {
@@ -156,7 +175,6 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) =
             //Border Styling
             popupWrapper.classList.add("border-4", "border-[#0a2463]", "rounded-2xl", "max-w-[90vw]", "w-[400px]");
           }
-
         }, 0);
 
         return container;
@@ -202,7 +220,146 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) =
     };
   }, [geoJsonData, geoJsonDataRestrooms]);
 
-  return <div id="map" style={{}}></div>;
+  useEffect(() => {
+    if (!isTracking || !mapRef.current) return;
+
+    if (!navigator.geolocation) {
+      console.error("Geolocation is not supported by this browser.");
+      return;
+    }
+
+    const watchPosition = navigator.geolocation.watchPosition(
+      (position) => {
+        if (!mapRef.current) return;
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        // const newPosition = new L.LatLng(lat, lng);
+        let newPosition = new L.LatLng(lat, lng);
+
+        if (!markerRef.current) {
+          markerRef.current = L.marker(newPosition, { icon: locationIcon }).addTo(
+            mapRef.current
+          );
+        } else {
+          // update curr position
+          markerRef.current.setLatLng(newPosition);
+        }
+
+        mapRef.current.setView(newPosition, 15);
+        setUserPosition(newPosition);
+
+
+        //for testing reasons
+        // const testLat = 42.35532;  // Boston Common latitude
+        // const testLng = -71.063639; // Boston Common longitude
+        // newPosition = new L.LatLng(testLat, testLng);
+        // getBadges()
+
+
+        if (session) {
+          locations.forEach(({ name, coordinates }) => {
+            const locationPoint = new L.LatLng(coordinates[0], coordinates[1]);
+            const distance = newPosition.distanceTo(locationPoint);
+
+            if (distance < 9.14) {
+              createBadgeObject(name);
+            }
+          });
+        }
+
+      },
+      (error) => {
+        console.error('Error getting location:', error);
+
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            console.error("User denied the request for Geolocation.");
+            break;
+          case error.POSITION_UNAVAILABLE:
+            console.error("Location information is unavailable.");
+            break;
+          case error.TIMEOUT:
+            console.error("The request to get user location timed out.");
+            break;
+        }
+      },
+      { enableHighAccuracy: true, maximumAge: 10000, timeout: 10000 }
+    );
+
+    return () => {
+      if (watchPosition) {
+        navigator.geolocation.clearWatch(watchPosition);
+      }
+      // remove marker when tracking stops
+      if (markerRef.current && mapRef.current){
+        mapRef.current.removeLayer(markerRef.current);
+        markerRef.current = null;
+      }
+    };
+  }, [isTracking]);
+
+  const checkProgress = () => {
+    if (!geoJsonData || !userPosition) return;
+
+    const geometry = geoJsonData.features[0]?.geometry;
+    if (!geometry) return;
+
+    if (geometry.type === "LineString" || geometry.type === "Polygon") {
+      const pathCoords = geometry.coordinates as [number, number][];
+      if (!pathCoords) return;
+
+      let closestPoint = null;
+      let minDistance = Infinity;
+
+      pathCoords.forEach(([lng, lat]) => {
+        const pathPoint = new L.LatLng(lat, lng);
+        const distance = userPosition.distanceTo(pathPoint);
+
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestPoint = pathPoint;
+        }
+      });
+
+      if (minDistance < 50) {
+        console.log("User is near the path!");
+      }
+    } else if (geometry.type === "Point") {
+        const pointCoords = geometry.coordinates as [number,number];
+        const pointLatLng = new L.LatLng(pointCoords[1], pointCoords[0]);
+        const distance = userPosition.distanceTo(pointLatLng);
+        if(distance < 50){
+            console.log("user is near the point");
+        }
+    } else {
+      console.warn("Unsupported geometry type for progress check.");
+    }
+  };
+
+  useEffect(() => {
+    if (isTracking) {
+      checkProgress();
+    } else {
+      // i want to return to the geojson path
+      if (geoJsonData && mapRef.current) {
+        const pathBounds = L.geoJSON(geoJsonData).getBounds();
+        mapRef.current.fitBounds(pathBounds);
+      }
+    }
+  }, [userPosition, isTracking]);
+
+  return (
+    <div className="flex flex-col h-screen">
+      <button
+        onClick={toggleTracking}
+        className="bg-blue-900 text-white font-bold font-garamond py-1 w-full hover:bg-blue-700 mb-auto"
+      >
+        {isTracking ? 'Stop Tracking' : 'Start Tracking'}
+      </button>
+      <div id="map" className="flex-grow relative z-20" style={{}}></div>
+    </div>
+  );
+  // return <div id="map" style={{}}></div>;
 };
 
 export default FreedomMap;

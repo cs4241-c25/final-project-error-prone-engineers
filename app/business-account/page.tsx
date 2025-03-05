@@ -1,13 +1,15 @@
 'use client';
 
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { BusinessAccount } from "@/types/BusinessAccount";
+import { BusinessAccount, address } from "@/types/BusinessAccount";
 import {useSession} from "next-auth/react";
 import Link from "next/link";
 
 const businessAccount = () => {
 
+    const router = useRouter();
     const { data: session, status } = useSession();
     const loadingSession: boolean = status === "loading";
 
@@ -26,8 +28,7 @@ const businessAccount = () => {
     }, [loadingSession, reload])
 
     if (!loadingSession && !session) {
-        // TODO: redirect to homepage instead
-        return <div><p>Please log in</p></div>;
+        router.push('/');
     }
     else if (loadingSession) {
         return <div><p>Loading...</p></div>;
@@ -43,7 +44,7 @@ const businessAccount = () => {
             <tr key={business._id} className='text-blue-900'>
                 <td className='border border-blue-900 p-1 bg-[#DCEDFF]'>{business.businessName}</td>
                 <td className='border border-blue-900 p-1 bg-[#DCEDFF]'>{business.businessType}</td>
-                <td className='border border-blue-900 p-1 bg-[#DCEDFF]'>{business.address}</td>
+                <td className='border border-blue-900 p-1 bg-[#DCEDFF]'>{address(business)}</td>
                 <td className='border border-blue-900 p-1 bg-[#DCEDFF]'>{business.ownerName}</td>
                 <td className='border border-blue-900 p-1 bg-[#DCEDFF]'>{business.businessEmail}</td>
                 <td className='border border-blue-900 p-1 bg-[#DCEDFF]'>{business.phoneNumber}</td>
@@ -59,7 +60,10 @@ const businessAccount = () => {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center bg-[url('/freedomtrail_medallion.jpg')] ">
-            <div className="bg-[#DCEDFF] bg-opacity-20 backdrop-blur-lg p-4 rounded-3xl w-3/5 h-4/5">
+            <div className="bg-white p-4 rounded-3xl w-3/5 h-4/5">
+                <button className='text-white ml-2 bg-blue-900 px-2 text-xl rounded-md hover:bg-blue-700 transition font-garamond'
+                        onClick={() => router.push('/business-account/create')}>Create New Business</button>
+                {/* ^ I hate this button I hate it I hate it I hate it */}
                 <table className='font-garamond'>
                     <thead className='text-center text-xl font-bold'>
                         <tr>

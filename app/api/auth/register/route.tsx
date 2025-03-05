@@ -1,14 +1,10 @@
-import { MongoClient } from "mongodb";
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
-
-const client = new MongoClient(process.env.MONGO_URI!);
-const clientPromise = client.connect();
+import {connectDB} from "@/lib/database";
 
 export async function POST(req: Request) {
     try {
-        await clientPromise;
-        const db = client.db("freedom-trail");
+        let userCollection = await connectDB("users");
 
         // Parse JSON body
         const { email, password } = await req.json();
@@ -18,7 +14,7 @@ export async function POST(req: Request) {
         }
 
         // Check if user already exists
-        const existingUser = await db.collection("users").findOne({ email });
+        const existingUser = await userCollection.findOne({ email });
 
         if (existingUser) {
             return NextResponse.json({ error: "User already exists" }, { status: 400 });
@@ -27,7 +23,7 @@ export async function POST(req: Request) {
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-        const result = await db.collection("users").insertOne({
+        const result = await userCollection.insertOne({
             email,
             password: hashedPassword,
             createdAt: new Date(),

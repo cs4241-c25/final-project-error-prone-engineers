@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import axios from "axios";
+import Banner from "@/components/Banner";
 
 const Register = () => {
     // Initialize the username and password state as blank
@@ -43,9 +44,11 @@ const Register = () => {
 
     return (
       //absolute inset-0 bg-black opacity-50 
+    <div>
+        <Banner></Banner>
       <div className="flex items-center justify-center min-h-screen bg-cover bg-center bg-[url('/freedomtrail_medallion.jpg')] " > 
-      <div className="bg-[#DCEDFF] bg-opacity-20 backdrop-blur-lg p-8 rounded-3xl w-2/5 ">
-        <h2 className="text-6xl font-bold text-center text-blue-900 mb-6 font-garamond">Register</h2>
+      <div className="bg-white p-5 rounded-3xl max-w-full lg:w-2/5 sm:w-4/5 sm:h-4/5 justify-center items-center ">
+        <h2 className="bg-blue-900 p-2 rounded-md text-6xl font-bold text-center text-white mb-6 font-cinzel_decorative">Register</h2>
         
         <form onSubmit={handleRegister} className="flex flex-col">
             <label className="text-blue-900 font-garamond text-4xl font-extrabold mb-2">Email:</label>
@@ -58,40 +61,45 @@ const Register = () => {
                 required
             />
 
-            <label className="text-blue-900 text-4xl font-garamond font-extrabold mb-2">Password:</label>
-            <input
-                type="password"
-                placeholder=""
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-3 rounded-full bg-[#2F1000] bg-opacity-50 text-white focus:outline-none mb-6"
-                required
-            />
+                <label className="text-blue-900 text-4xl font-garamond font-extrabold mb-2">Password:</label>
+                <input
+                    type="password"
+                    placeholder=""
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full p-3 rounded-full bg-[#2F1000] bg-opacity-50 text-white focus:outline-none mb-6"
+                    required
+                />
 
-            {/* Error Message */}
-            {error && (
-                <p className="text-red-500 font-semibold text-lg mb-4 text-center">
-                    {error}
-                </p>
-            )}
+                {/* Error Message */}
+                {error && (
+                    <p className="text-red-500 font-semibold text-lg mb-4 text-center">
+                        {error}
+                    </p>
+                )}
 
-            {/* Register Button */}
-            <button type="submit" className="bg-blue-900 text-2xl mb-4 text-white p-2 rounded-full  font-semibold font-garamond hover:bg-blue-800 transition">
-                Start your tour
-            </button>
+                {/* Register Button */}
+                <button type="submit" className="bg-blue-900 text-2xl mb-4 text-white p-2 rounded-full  font-semibold font-garamond hover:bg-blue-800 transition">
+                    Start your tour
+                </button>
 
-            <hr className="mb-4"></hr>
+                <hr className="mb-4"></hr>
 
             {/* Navigate to login page */}
-            <button
-            onClick={handleLoginNavigation}
-            className="ml-56 h-7 w-28 mt-2  text-blue-900 rounded-full text-lg font-semibold font-garamond bg-[#dcedff] hover:bg-[#b7d3f0] transition">
-            Or Login
-            </button>
+            <div className="text-center">
+                <button
+                    onClick={handleLoginNavigation}
+                    className="mt-5 h-7 lg:w-1/3 px-2 text-blue-900 rounded-full text-lg font-semibold font-garamond bg-[#dcedff] hover:bg-[#b7d3f0] transition">
+                        Or Login
+                </button>
+            </div>
+
         </form>
 
-      </div>
-    </div>
+        </div>
+        </div>
+        </div>
+    
     );
 };
 
