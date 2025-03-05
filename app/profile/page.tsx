@@ -15,48 +15,48 @@ const ProfilePage: React.FC = () => {
             const badgeData = await getBadges();
             setBadges(badgeData);
         }
-        fetchBadges();
+        fetchBadges().then();
     }, []);
     return (
-        <div>
+        <div className='flex flex-col min-h-screen'>
             <Banner />
-            <div className="flex items-center justify-center min-h-screen bg-cover bg-center bg-[url('/freedomtrail_medallion.jpg')]" >
-                <div className="bg-[#FFFFFF] p-0 rounded-3xl w-2/5 flex h-auto mb-36">
+            <div className="flex flex-grow items-center justify-center bg-cover bg-center bg-[url('/freedomtrail_medallion.jpg')] w-screen">
+                <div className="bg-white p-5 rounded-3xl max-w-full lg:w-4/5 sm:w-4/5 h-auto flex flex-row justify-center items-stretch">
 
                     {/* Left Side */}
-                    <div className='bg-[#0A2463] justify-items-center rounded-3xl w-1/5 p-4'>
+                    <div className='bg-[#0A2463] justify-items-center rounded-3xl lg:w-1/5 p-4 flex-grow'>
                         <img src='/user.png' alt='User image' />
-                        <button onClick={() => signOut()} className='bg-[#DCEDFF] text-[#0A2463] font-garamond text-xl rounded-full p-2 mt-4'>
+                        <button onClick={() => signOut()} className='bg-[#DCEDFF] text-[#0A2463] font-garamond lg:text-xl text-xs text-center justify-center rounded-full px-2 mt-4 w-full hover:bg-[#5CABFF]'>
                             Logout
                         </button>
                     </div>
 
                     {/* Right Side */}
-                    <div className='bg-[#ffffff] w-4/5'>
-                        <div className='flex-col'>
+                    <div className='bg-white w-4/5 ml-5 h-full'>
+                        <div className='flex-col h-full justify-center py-[1%]'>
                             {/* User Info */}
-                            <h2 className="text-4xl font-bold text-left text-blue-900 mb-6 font-garamond mt-14 ml-2">
+                            <h2 className="lg:text-4xl sm:text-lg break-all text-wrap font-bold text-left text-blue-900 font-cinzel_decorative ml-2 w-4/5">
                                 {session?.user?.name}
                             </h2>
-                            <hr className='border-[#0A2463]' />
+                            <hr className='border-[#0A2463] my-5' />
 
                             <div className='flex'>
                                 <div>
-                                    <h2 className="text-xl font-bold text-right text-blue-900 mb-6 font-garamond mt-2 ml-2">Username:</h2>
-                                    <h2 className="text-xl font-bold text-right text-blue-900 mb-6 font-garamond mt-2 ml-2">Email:</h2>
+                                    <h2 className="lg:text-xl font-bold text-right text-blue-900 mb-6 font-garamond mt-2 ml-2">Username:</h2>
+                                    <h2 className="lg:text-xl font-bold text-right text-blue-900 mb-6 font-garamond mt-2 ml-2">Email:</h2>
                                 </div>
 
                                 <div>
-                                    <h2 className="text-xl font-bold text-left text-blue-900 mb-6 font-garamond mt-2 ml-2">{session?.user?.name}</h2>
-                                    <h2 className="text-xl font-bold text-left text-blue-900 mb-6 font-garamond mt-2 ml-2">{session?.user?.email}</h2>
+                                    <h2 className="lg:text-xl break-all font-bold text-left text-blue-900 mb-6 font-garamond mt-2 ml-2">{session?.user?.name}</h2>
+                                    <h2 className="lg:text-xl break-all font-bold text-left text-blue-900 mb-6 font-garamond mt-2 ml-2">{session?.user?.email}</h2>
                                 </div>
                             </div>
 
-                            <hr className='border-[#0A2463]' />
+                            <hr className='border-[#0A2463] my-5' />
 
                             {/* Badge Section with Horizontal Scrolling & Clickable Modal */}
                             <div className="flex flex-col">
-                                <h2 className="text-xl font-bold text-left text-blue-900 font-garamond mt-2 ml-2">Badges</h2>
+                                <h2 className="text-xl font-bold text-left text-blue-900 font-garamond mt-2 lg:mb-3 ml-2">Badges</h2>
 
                                 {/* If there are no badges, show a message */}
                                 {badges.length === 0 ? (
@@ -65,7 +65,7 @@ const ProfilePage: React.FC = () => {
                                     </p>
                                 ) : (
                                     /* Horizontal Scrollable Badge Container */
-                                    <div className="overflow-x-auto whitespace-nowrap flex gap-6 pb-2 px-2">
+                                    <div className="overflow-x-auto whitespace-nowrap flex gap-6 pb-2 px-2 mt-2">
                                         {badges.map((badge, index) => (
                                             <div
                                                 key={index}
@@ -90,13 +90,13 @@ const ProfilePage: React.FC = () => {
             {selectedBadge && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
                      onClick={() => setSelectedBadge(null)}>
-                    <div className="bg-white text-black p-6 rounded-lg max-w-md">
-                        <h2 className="text-xl font-bold">{selectedBadge.badgeName}</h2>
-                        <p className="mt-2">{selectedBadge.description}</p>
-                        <button className="mt-4 bg-red-500 text-white px-4 py-2 rounded"
+                    <div className="bg-white p-4 rounded-lg max-w-md relative">
+                        <button className="text-gray-600 hover:underline text-xs absolute top-1 right-1"
                                 onClick={() => setSelectedBadge(null)}>
-                            Close
+                            ✕
                         </button>
+                        <h2 className="text-xl text-center bg-blue-900 text-white font-cinzel_decorative font-bold w-full p-2 rounded-md">{selectedBadge.badgeName}</h2>
+                        <p className="mt-2 text-blue-900 font-garamond font-semibold text-xl">{selectedBadge.description}</p>
                     </div>
                 </div>
             )}
