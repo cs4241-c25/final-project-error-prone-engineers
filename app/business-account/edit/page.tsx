@@ -27,6 +27,7 @@ const EditBusinessAccount = () => {
     const searchParams = useSearchParams();
     const _id: string = searchParams.get('_id')!;
 
+    const [nodeId, setNodeId] = useState("");
     const [ownerName, setOwnerName] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [email, setEmail] = useState("");
@@ -61,6 +62,7 @@ const EditBusinessAccount = () => {
                 setDescription(business.node!.description);
                 setAccessibility(business.node!.accessibility! ?? false);
                 setPublicRestroom(business.node!.publicRestroom! ?? false);
+                setNodeId(business.node!._id!);
             }
         }
         loadAccount().then();
@@ -112,8 +114,8 @@ const EditBusinessAccount = () => {
             };
 
             const node: Node = {
-                name: businessName, type: businessType.valueOf(), description: description, address: address(addressP),
-                latitude: 0, longitude: 0, accessibility: accessibility, publicRestroom: publicRestroom
+                _id: nodeId, name: businessName, type: businessType.valueOf(), description: description,
+                address: address(addressP), latitude: 0, longitude: 0, accessibility: accessibility, publicRestroom: publicRestroom
             };
 
             const formData: BusinessAccount = {
