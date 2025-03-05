@@ -130,54 +130,73 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) =
 
     locations.forEach(({ name, coordinates }) => {
       const myIcon = L.divIcon({
-        html: ReactDOMServer.renderToString(<Image
-            src={"/location_images/freedom_trail.png"}
-            alt={"Trail marker"}
-            width={100}
-            height={100}
-            className="rounded-md object-cover w-full h-full hover:scale-110 hover:cursor-pointer transition-transform duration-200 ease-in-out brightness-122 shadow-md"
-            loading="lazy"
-        />),
+        html: ReactDOMServer.renderToString(
+            <Image
+                src={"/freedom_trail.png"}
+                alt={"Trail marker"}
+                width={100}
+                height={100}
+                className="rounded-md object-cover w-full h-full hover:scale-110 hover:cursor-pointer transition-transform duration-200 ease-in-out brightness-122 shadow-md"
+                loading="lazy"
+            />
+        ),
         className: "shadow-md",
         iconSize: [30, 30],
         iconAnchor: [25, 25],
-        popupAnchor: [-36, 0],
+        popupAnchor: [-16, 0],
       });
 
-      //Plot marker
+      // Plot marker
       const marker = L.marker([coordinates[0], coordinates[1]] as [number, number], {
         icon: myIcon,
         interactive: true,
       }).addTo(map);
 
-      //Add popup
-      marker.bindPopup(() => {
-        const container = document.createElement("div");
+      // Create Popup Content
+      const container = document.createElement("div");
+      container.className =
+          "bg-white flex flex-col justify-start rounded-2xl p-2 w-[375px] max-w-[80vw]  h-[60vh] max-h-[500px] overflow-y-auto";
 
+      const root = ReactDOM.createRoot(container);
+      root.render(<LocationPage locationName={name} />);
 
-        container.className = "bg-white flex justify-center rounded-2xl p-1 w-[350px] max-w-[90vw]";
-        const root = ReactDOM.createRoot(container);
-        root.render(<LocationPage locationName={name} />); //Pass name
+      // Bind Popup with Scrollable Content
+      marker.bindPopup(container);
 
+      // Adjust Popup Position & Styling
+      marker.on("popupopen", () => {
         setTimeout(() => {
+          const latLng = marker.getLatLng();
+          const zoom = map.getZoom();
+          const mapHeight = map.getSize().y;
 
-          //Auto center on opening
-          var latLng = marker.getLatLng();
-          var zoom = map.getZoom();
-          var mapHeight = map.getSize().y;
-          var pixelOffset = mapHeight * 0.35;
-          var latLngOffset = map.containerPointToLatLng(map.latLngToContainerPoint(latLng).subtract([0, pixelOffset]));
+          // Adjust offset for mobile devices
+          const isMobile = window.innerWidth < 768;
+          const pixelOffset = isMobile ? mapHeight * 0.3 : mapHeight * 0.4;
+
+          const latLngOffset = map.containerPointToLatLng(
+              map.latLngToContainerPoint(latLng).subtract([0, pixelOffset])
+          );
           map.setView(latLngOffset, zoom, { animate: true });
 
-
-          const popupWrapper = container.closest('.leaflet-popup-content-wrapper'); //Located in PopupStyles.module.css
+          // Add border styling to the popup
+          const popupWrapper = container.closest(".leaflet-popup-content-wrapper");
           if (popupWrapper) {
-            //Border Styling
-            popupWrapper.classList.add("border-4", "border-[#0a2463]", "rounded-2xl", "max-w-[90vw]", "w-[400px]");
+            popupWrapper.classList.add(
+                "border-4",
+                "border-[#0a2463]",
+                "rounded-2xl",
+                "max-w-[90vw]",
+                "w-[425px]"
+            );
           }
-        }, 0);
+          //Hides popup tip
+          const popupTip = document.querySelector(".leaflet-popup-tip");
+          if (popupTip) {
+            popupTip.classList.add("hidden");
+          }
 
-        return container;
+        }, 0);
       });
     });
 

@@ -40,7 +40,7 @@ const nodeImageMap: Record<string, string> = {
     "Old North Church": "/location_images/Old North Church.jpg",
     "USS Constitution": "/location_images/USS Constitution.jpg",
     "Faneuil Hall": "/location_images/Faneuil Hall.jpg",
-    "Bunker Hill Monument": "/location_images/Bunker Hill Monument.jpg",
+    "Bunker Hill Monument": "/location_images/Bunker Hill-Monument.jpg",
     "Copp's Hill Burying Ground": "/location_images/Copp's Hill Burying Ground.jpg"
 };
 
