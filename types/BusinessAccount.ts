@@ -4,22 +4,43 @@ export type BusinessAccount = {
     ownerName: string;
     phoneNumber: string;
     businessEmail: string;
-    businessName: string;
-    businessType: string;
-    addressLine1: string;
-    addressLine2?: string;
-    addressCity: string;
-    addressState: string;
-    addressZip: string;
-    description: string;
-    accessibility: boolean;
-    publicRestroom: boolean;
+    node?: Node;
+    addressParts: AddressParts;
 }
 
-export function address(account: BusinessAccount): string {
-    const existingLine2: boolean = account.addressLine2 !== undefined && account.addressLine2.length > 0
-    return account.addressLine1 + ", " + (existingLine2 ? account.addressLine2 + ", " : "") + account.addressCity
-        + " " + account.addressState + " " + account.addressZip;
+export type Node = {
+    _id?: string;
+    name: string;
+    type: string;
+    description: string;
+    address: string;
+    latitude: number;
+    longitude: number;
+    accessibility?: boolean;
+    publicRestroom?: boolean;
+}
+
+export type AddressParts = {
+    line1: string;
+    line2: string;
+    city: string;
+    state: string;
+    country: string;
+    zip: string;
+}
+
+export function address(a: AddressParts): string {
+    const existingLine2: boolean = a.line2 !== undefined && a.line2.length > 0;
+    return a.line1 + ", " + (existingLine2 ? a.line2 + ", " : "") + a.city + " " + a.state + " " + a.zip;
+}
+
+export function formatPhoneNumber(phoneNumberString: string): string {
+    let cleaned: string = ('' + phoneNumberString).replace(/\D/g, '');
+    let match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
+    if (match) {
+        return '(' + match[1] + ') ' + match[2] + '-' + match[3];
+    }
+    return phoneNumberString;
 }
 
 export enum BusinessType {
@@ -33,9 +54,7 @@ export enum BusinessType {
     OTHER = "Other"
 }
 
-export function getEnumKeys<
-    T extends string,
-    TEnumValue extends string | number,
->(enumVariable: { [key in T]: TEnumValue }) {
+export function getEnumKeys<T extends string, TEnumValue extends string | number>
+(enumVariable: { [key in T]: TEnumValue }): T[] {
     return Object.keys(enumVariable) as Array<T>;
 }
