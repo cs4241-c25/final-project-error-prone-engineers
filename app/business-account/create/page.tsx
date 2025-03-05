@@ -177,6 +177,7 @@ const createBusinessAccount = () => {
                 </div>
             </div>
         </div>
+    
     );
 }
 
