@@ -7,6 +7,8 @@ import LocationNode from "./LocationNode";
 import LocationPage from "./LocationPage"
 import ReactDOMServer from "react-dom/server";
 import ReactDOM from "react-dom/client";
+import Image from "next/image";
+
 
 
 // Define absolute paths for Leaflet marker icons
@@ -57,10 +59,17 @@ const locations = [
 
 ];
 
+
+
 const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) => {
   const mapRef = useRef<L.Map | null>(null);
 
+
+
   useEffect(() => {
+
+
+
     if (!geoJsonData || !geoJsonDataRestrooms || mapRef.current || typeof window === "undefined") return;
 
     // Set map to fill screen
@@ -99,12 +108,21 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) =
     //This adds the location markers
     locations.forEach(({ name, coordinates }) => {
       const myIcon = L.divIcon({
-        html: ReactDOMServer.renderToString(<LocationNode />),
-        className: "custom-icon transition-transform duration-200",
-        iconSize: [50, 50],
+        html: ReactDOMServer.renderToString(<Image
+            src={"/location_images/freedom_trail.png"}
+            alt={"Trail marker"}
+            width={100}
+            height={100}
+            className="rounded-md flex justify-center object-cover w-full h-full"
+            loading="lazy"
+        />),
+        className: "shadow-md",
+        iconSize: [30, 30],
         iconAnchor: [25, 25],
-        popupAnchor: [-16, 0],
+        popupAnchor: [-36, 0],
       });
+
+
 
       //Plot marker
       const marker = L.marker([coordinates[0], coordinates[1]] as [number, number], {
@@ -117,25 +135,26 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) =
       marker.bindPopup(() => {
         const container = document.createElement("div");
 
-        //Styling for outer container.
-        container.className = "bg-white flex justify-center rounded-2xl p-1 w-[300px] max-w-[90vw]";
+
+        container.className = "bg-white flex justify-center rounded-2xl p-1 w-[350px] max-w-[90vw]";
         const root = ReactDOM.createRoot(container);
         root.render(<LocationPage locationName={name} />); //Pass name
 
         setTimeout(() => {
+
+          //Auto center on opening
           var latLng = marker.getLatLng();
           var zoom = map.getZoom();
           var mapHeight = map.getSize().y;
-          var pixelOffset = mapHeight * 0.3;
+          var pixelOffset = mapHeight * 0.35;
           var latLngOffset = map.containerPointToLatLng(map.latLngToContainerPoint(latLng).subtract([0, pixelOffset]));
-
           map.setView(latLngOffset, zoom, { animate: true });
 
 
           const popupWrapper = container.closest('.leaflet-popup-content-wrapper'); //Located in PopupStyles.module.css
           if (popupWrapper) {
             //Border Styling
-            popupWrapper.classList.add("border-4", "border-[#0a2463]", "rounded-2xl");
+            popupWrapper.classList.add("border-4", "border-[#0a2463]", "rounded-2xl", "max-w-[90vw]", "w-[400px]");
           }
 
         }, 0);
