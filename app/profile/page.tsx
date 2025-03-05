@@ -20,11 +20,11 @@ const ProfilePage: React.FC = () => {
     return (
         <div className='flex flex-col min-h-screen'>
             <Banner />
-            <div className="flex flex-grow items-start justify-center bg-cover bg-center bg-[url('/freedomtrail_medallion.jpg')] w-screen">
-                <div className="mt-6 bg-white p-5 rounded-3xl max-w-full lg:w-4/5 sm:w-4/5 h-auto flex flex-row justify-center items-stretch">
+            <div className="flex flex-grow items-center justify-center bg-cover bg-center bg-[url('/freedomtrail_medallion.jpg')] w-screen">
+                <div className="bg-white p-5 rounded-3xl max-w-full lg:w-4/5 sm:w-4/5 h-auto flex flex-row justify-center items-stretch">
 
                     {/* Left Side */}
-                    <div className="bg-[#0A2463] justify-items-center rounded-3xl lg:w-1/5 p-4 flex-grow">
+                    <div className='bg-[#0A2463] justify-items-center rounded-3xl lg:w-1/5 p-4 flex-grow'>
                         <img src='/user.png' alt='User image' />
                         <button onClick={() => signOut()} className='bg-[#DCEDFF] text-[#0A2463] font-garamond lg:text-xl text-xs text-center justify-center rounded-full px-2 mt-4 w-full hover:bg-[#5CABFF]'>
                             Logout
