@@ -82,7 +82,7 @@ const LocationPage = ({ locationName }: { locationName: string }) => {
             ) : nodeInfo ? (
                 <div className="w-full">
                     <div className="bg-[#0a2463] rounded-md text-center">
-                        <h1 className="text-4xl p-1 font-cinzel font-bold flex justify-center text-white mb-2">
+                        <h1 className="text-3xl p-1 font-cinzel font-bold flex justify-center text-white mb-2">
                             {nodeInfo.name}
                         </h1>
                     </div>
