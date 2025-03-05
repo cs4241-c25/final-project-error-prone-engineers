@@ -26,7 +26,7 @@ async function getNodeInformation(nodeName: string): Promise<{ name: string; des
 
 // Map node names to image paths
 const nodeImageMap: Record<string, string> = {
-    "Boston Common": "/location_images/BostonCommon.jpg",
+    "Boston Common": "/location_images/Boston Common.jpg",
     "Massachusetts State House": "/location_images/Massachusetts State House.jpg",
     "Park Street Church": "/location_images/Park Street Church.jpg",
     "Granary Burying Ground": "/location_images/Granary Burying Ground.jpg",
@@ -40,7 +40,7 @@ const nodeImageMap: Record<string, string> = {
     "Old North Church": "/location_images/Old North Church.jpg",
     "USS Constitution": "/location_images/USS Constitution.jpg",
     "Faneuil Hall": "/location_images/Faneuil Hall.jpg",
-    "Bunker Hill Monument": "/location_images/Bunker Hill Monument.jpg",
+    "Bunker Hill Monument": "/location_images/Bunker Hill-Monument.jpg",
     "Copp's Hill Burying Ground": "/location_images/Copp's Hill Burying Ground.jpg"
 };
 
@@ -73,16 +73,16 @@ const LocationPage = ({ locationName }: { locationName: string }) => {
         return () => window.removeEventListener("resize", handleResize);
     }, [locationName]);
 
-    const imageSrc = nodeInfo ? nodeImageMap[nodeInfo.name] || "/location_images/BostonCommon.jpg" : "";
+    const imageSrc = nodeInfo ? nodeImageMap[nodeInfo.name] || "/location_images/Boston Common.jpg" : "";
 
     return (
-        <div style={{ zIndex: 200 }}>
+        <div className="max-h-[80vh] max-w-[90vh]" style={{ zIndex: 200 }}>
             {error ? (
                 <p className="text-red-500 flex justify-center">{error}</p>
             ) : nodeInfo ? (
                 <div className="w-full">
                     <div className="bg-[#0a2463] rounded-md text-center">
-                        <h1 className="text-4xl p-1 font-cinzel font-bold flex justify-center text-white mb-4">
+                        <h1 className="text-4xl p-1 font-cinzel font-bold flex justify-center text-white mb-2">
                             {nodeInfo.name}
                         </h1>
                     </div>
@@ -94,7 +94,7 @@ const LocationPage = ({ locationName }: { locationName: string }) => {
                         className="rounded-md flex justify-center object-cover w-full h-full"
                         loading="lazy" // Lazy load for better performance
                     />
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
                         {nodeInfo.description ? (
                             splitStringAtNearestSpace(nodeInfo.description, split).map((part, index) => (
                                 <p key={index} className="text-black">

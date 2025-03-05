@@ -7,6 +7,9 @@ import LocationNode from "./LocationNode";
 import LocationPage from "./LocationPage"
 import ReactDOMServer from "react-dom/server";
 import ReactDOM from "react-dom/client";
+import Image from "next/image";
+
+
 import {createBadgeObject, getBadges} from "@/lib/badges";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/lib/auth";
@@ -127,37 +130,73 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) =
 
     locations.forEach(({ name, coordinates }) => {
       const myIcon = L.divIcon({
-        html: ReactDOMServer.renderToString(<LocationNode />),
-        className: "custom-icon",
-        iconSize: [50, 50],
+        html: ReactDOMServer.renderToString(
+            <Image
+                src={"/freedom_trail.png"}
+                alt={"Trail marker"}
+                width={100}
+                height={100}
+                className="rounded-md object-cover w-full h-full hover:scale-110 hover:cursor-pointer transition-transform duration-200 ease-in-out shadow-md"
+                loading="lazy"
+            />
+        ),
+        className: "shadow-md",
+        iconSize: [30, 30],
         iconAnchor: [25, 25],
         popupAnchor: [-16, 0],
       });
 
-      //Plot marker
+      // Plot marker
       const marker = L.marker([coordinates[0], coordinates[1]] as [number, number], {
         icon: myIcon,
         interactive: true,
       }).addTo(map);
 
-      //Add popup
-      marker.bindPopup(() => {
-        const container = document.createElement("div");
+      // Create Popup Content
+      const container = document.createElement("div");
+      container.className =
+          "bg-white flex flex-col justify-start rounded-2xl p-2 w-[375px] max-w-[80vw]  h-[60vh] max-h-[500px] overflow-y-auto";
 
-        //Styling for outer container.
-        container.className = "bg-white flex justify-center rounded-2xl p-1 w-[300px] max-w-[90vw]";
-        const root = ReactDOM.createRoot(container);
-        root.render(<LocationPage locationName={name} />); //Pass name
+      const root = ReactDOM.createRoot(container);
+      root.render(<LocationPage locationName={name} />);
 
+      // Bind Popup with Scrollable Content
+      marker.bindPopup(container);
+
+      // Adjust Popup Position & Styling
+      marker.on("popupopen", () => {
         setTimeout(() => {
-          const popupWrapper = container.closest('.leaflet-popup-content-wrapper'); //Located in PopupStyles.module.css
-          if (popupWrapper) {
-            //Border Styling
-            popupWrapper.classList.add("border-4", "border-[#0a2463]", "rounded-2xl");
-          }
-        }, 0);
+          const latLng = marker.getLatLng();
+          const zoom = map.getZoom();
+          const mapHeight = map.getSize().y;
 
-        return container;
+          // Adjust offset for mobile devices
+          const isMobile = window.innerWidth < 768;
+          const pixelOffset = isMobile ? mapHeight * 0.3 : mapHeight * 0.4;
+
+          const latLngOffset = map.containerPointToLatLng(
+              map.latLngToContainerPoint(latLng).subtract([0, pixelOffset])
+          );
+          map.setView(latLngOffset, zoom, { animate: true });
+
+          // Add border styling to the popup
+          const popupWrapper = container.closest(".leaflet-popup-content-wrapper");
+          if (popupWrapper) {
+            popupWrapper.classList.add(
+                "border-4",
+                "border-[#0a2463]",
+                "rounded-2xl",
+                "max-w-[90vw]",
+                "w-[425px]"
+            );
+          }
+          //Hides popup tip
+          const popupTip = document.querySelector(".leaflet-popup-tip");
+          if (popupTip) {
+            popupTip.classList.add("hidden");
+          }
+
+        }, 0);
       });
     });
 
@@ -280,27 +319,27 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) =
 
   const checkProgress = () => {
     if (!geoJsonData || !userPosition) return;
-  
+
     const geometry = geoJsonData.features[0]?.geometry;
     if (!geometry) return;
-  
+
     if (geometry.type === "LineString" || geometry.type === "Polygon") {
       const pathCoords = geometry.coordinates as [number, number][];
       if (!pathCoords) return;
-  
+
       let closestPoint = null;
       let minDistance = Infinity;
-  
+
       pathCoords.forEach(([lng, lat]) => {
         const pathPoint = new L.LatLng(lat, lng);
         const distance = userPosition.distanceTo(pathPoint);
-  
+
         if (distance < minDistance) {
           minDistance = distance;
           closestPoint = pathPoint;
         }
       });
-  
+
       if (minDistance < 50) {
         console.log("User is near the path!");
       }
@@ -324,7 +363,7 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) =
       if (geoJsonData && mapRef.current) {
         const pathBounds = L.geoJSON(geoJsonData).getBounds();
         mapRef.current.fitBounds(pathBounds);
-      }  
+      }
     }
   }, [userPosition, isTracking]);
 
@@ -332,7 +371,7 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) =
     <div className="flex flex-col h-screen">
       <button
         onClick={toggleTracking}
-        className="bg-blue-900 text-white font-bold font-garamond py-1 w-full hover:bg-blue-700 mb-auto" 
+        className="bg-blue-900 text-white font-bold font-garamond py-1 w-full hover:bg-blue-700 mb-auto"
       >
         {isTracking ? 'Stop Tracking' : 'Start Tracking'}
       </button>
