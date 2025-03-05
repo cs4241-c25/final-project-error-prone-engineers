@@ -136,7 +136,7 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) =
                 alt={"Trail marker"}
                 width={100}
                 height={100}
-                className="rounded-md object-cover w-full h-full hover:scale-110 hover:cursor-pointer transition-transform duration-200 ease-in-out brightness-122 shadow-md"
+                className="rounded-md object-cover w-full h-full hover:scale-110 hover:cursor-pointer transition-transform duration-200 ease-in-out shadow-md"
                 loading="lazy"
             />
         ),
