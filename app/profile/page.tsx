@@ -15,7 +15,7 @@ const ProfilePage: React.FC = () => {
             const badgeData = await getBadges();
             setBadges(badgeData);
         }
-        fetchBadges();
+        fetchBadges().then();
     }, []);
     return (
         <div className='flex flex-col min-h-screen'>
