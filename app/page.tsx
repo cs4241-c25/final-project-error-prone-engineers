@@ -1,8 +1,10 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
+import axios from 'axios';
 import { FeatureCollection } from 'geojson';
 import Map from '../components/FreedomMap';
+import { Node } from '@/types/BusinessAccount';
 import Banner from '../components/Banner';
 import Head from 'next/head';
 import { useSession } from "next-auth/react";
@@ -16,12 +18,14 @@ const DynamicFreedomMap = dynamic(() => import('../components/FreedomMap'), {
 interface PageProps {
   geoJsonData: FeatureCollection | null;
   geoJsonDataRestrooms: FeatureCollection | null;
+  nodes: Node[];
 }
 
 export default function Home() {
   const [geoJsonData, setGeoJsonData] = useState<FeatureCollection | null>(null);
   const [geoJsonDataRestrooms, setGeoJsonDataRestrooms] = useState<FeatureCollection | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [nodes, setNodes] = useState<Node[]>([]);
 
   // Testing code to ensure user logs in
   const { data: session } = useSession();
@@ -62,6 +66,17 @@ export default function Home() {
       });
   }, []);
 
+  useEffect(() => {
+    async function fetchNodes() {
+      const response = await axios.get('/api/nodes');
+      const nodes: [Node] = response.data;
+      console.log("HELLO");
+      console.log(nodes);
+      setNodes(nodes);
+    }
+    fetchNodes().then();
+  }, []);
+
   if (error) {
     return <div>Error: {error}</div>;
   }
@@ -73,7 +88,7 @@ export default function Home() {
   return (
     <div className='flex flex-col h-screen overflow-hidden sm:h-screen sm:overflow-hidden'>
       <Banner />
-      <DynamicFreedomMap geoJsonData={geoJsonData} geoJsonDataRestrooms={geoJsonDataRestrooms} />
+      <DynamicFreedomMap geoJsonData={geoJsonData} geoJsonDataRestrooms={geoJsonDataRestrooms} nodes={nodes}/>
     </div>
   );
 }

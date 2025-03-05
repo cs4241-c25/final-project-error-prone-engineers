@@ -6,6 +6,7 @@ import { FeatureCollection } from 'geojson';
 import LocationNode from "./LocationNode";
 import LocationPage from "./LocationPage"
 import ReactDOMServer from "react-dom/server";
+import { Node } from '@/types/BusinessAccount';
 import ReactDOM from "react-dom/client";
 import {createBadgeObject, getBadges} from "@/lib/badges";
 import {getServerSession} from "next-auth";
@@ -34,6 +35,23 @@ const restroomIcon = L.divIcon({
   popupAnchor: [0, -32],
 });
 
+const businessIcon = L.divIcon({
+  //KATY FIX
+  className: "custom-restroom-icon",
+  html: `
+    <div style="width: 32px; height: 32px;">
+      <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="30" height="30" fill="#0A2463"/>
+        <path d="M15 12.5C17.7614 12.5 20 10.2614 20 7.5C20 4.73858 17.7614 2.5 15 2.5C12.2386 2.5 10 4.73858 10 7.5C10 10.2614 12.2386 12.5 15 12.5Z" fill="#C1D5F6" stroke="#C1D5F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M26.25 27.5C26.25 21.2869 21.2131 16.25 15 16.25C8.78688 16.25 3.75 21.2869 3.75 27.5" stroke="#C1D5F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M15 27.5L17.5 24.375L15 16.25L12.5 24.375L15 27.5Z" fill="#C1D5F6" stroke="#C1D5F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>`,
+  iconSize: [32, 32],
+  iconAnchor: [16, 32],
+  popupAnchor: [0, -32],
+});
+
 const locationIcon = L.divIcon({
   className: "custom-restroom-icon",
   html: `
@@ -52,6 +70,7 @@ const locationIcon = L.divIcon({
 interface MapProps {
   geoJsonData: FeatureCollection | null;
   geoJsonDataRestrooms: FeatureCollection | null;
+  nodes: Node[];
 }
 
 //Associates name with gps location
@@ -75,7 +94,7 @@ const locations = [
 
 ];
 
-const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) => {
+const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, nodes }) => {
   const mapRef = useRef<L.Map | null>(null);
   const [isTracking, setIsTracking] = useState(false);
   const [userPosition, setUserPosition] = useState<L.LatLng | null>(null);
@@ -123,6 +142,8 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) =
     // L.tileLayer('https://{s}.tile.toner-transparent.com/{z}/{x}/{y}.png', { // Use transparent tiles
     //   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, Tiles courtesy of <a href="http://www.thunderforest.com/" target="_blank">Thunderforest</a>', // Add appropriate attribution
     // }).addTo(map);
+
+
 
 
     locations.forEach(({ name, coordinates }) => {
@@ -194,11 +215,51 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) =
     mapRef.current = map;
     map.invalidateSize();
 
+    nodes.forEach((node) => {
+      //KATY FIX
+      console.log("Node Coordinates:", node.latitude, node.longitude);
+      if (typeof node.latitude === 'number' && typeof node.longitude === 'number') {
+        const marker = L.marker([node.latitude, node.longitude] as [number, number], {
+          icon: businessIcon,
+        })
+        .addTo(mapRef.current!);
+
+        marker.bindPopup(() => {
+          const container = document.createElement("div");
+          container.className = "bg-white flex justify-center rounded-2xl p-1 w-[300px] max-w-[90vw]";
+          const root = ReactDOM.createRoot(container);
+          root.render(
+            <div>
+              <h2>{node.name}</h2>
+              <p>{node.description}</p>
+              <p>Type: {node.type}</p>
+              <p>Address: {node.address}</p>
+              {node.accessibility && <p>Accessibility: Yes</p>}
+              {node.publicRestroom && <p>Public Restroom: Yes</p>}
+              {/* Add other node properties you want to display */}
+            </div>
+          );
+
+          setTimeout(() => {
+            const popupWrapper = container.closest('.leaflet-popup-content-wrapper');
+            if (popupWrapper) {
+              popupWrapper.classList.add("border-4", "border-[#0a2463]", "rounded-2xl");
+            }
+          }, 0);
+
+          return container;
+      });
+      } else {
+        return;
+      }
+      
+    });
+
     return () => {
       map.remove();
       mapRef.current = null;
     };
-  }, [geoJsonData, geoJsonDataRestrooms]);
+  }, [geoJsonData, geoJsonDataRestrooms, nodes]);
 
   useEffect(() => {
     if (!isTracking || !mapRef.current) return;
