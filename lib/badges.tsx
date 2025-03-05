@@ -1,22 +1,22 @@
 import axios from "axios";
 
 const badgeImageMap: Record<string, string> = {
-    "Boston Common": "/badge_images/BostonCommon.jpg",
-    "Massachusetts State House": "/badge_images/Massachusetts State House.jpg",
-    "Park Street Church": "/badge_images/Park Street Church.jpg",
-    "Granary Burying Ground": "/badge_images/Granary Burying Ground.jpg",
-    "King's Chapel & King's Chapel Burying Ground": "/badge_images/King's Chapel.jpg",
-    "Boston Latin School Site/Benjamin Franklin Statue": "/badge_images/Statue of Benjamin Franklin.jpg",
-    "Old Corner Bookstore": "/badge_images/Old Corner Bookstore.jpg",
-    "Old South Meeting House": "/badge_images/Old South Meeting House.jpg",
-    "Old State House": "/badge_images/Old State House.jpg",
-    "Boston Massacre Site": "/badge_images/Boston Massacre Site.jpg",
-    "Paul Revere House": "/badge_images/Paul Revere House.jpg",
-    "Old North Church": "/badge_images/Old North Church.jpg",
-    "USS Constitution": "/badge_images/USS Constitution.jpg",
-    "Faneuil Hall": "/badge_images/Faneuil Hall.jpg",
-    "Bunker Hill Monument": "/badge_images/Bunker Hill Monument.jpg",
-    "Copp's Hill Burying Ground": "/badge_images/Copp's Hill Burying Ground.jpg"
+    "Boston Common": "/badge_images/BostonCommonBadge.png",
+    "Massachusetts State House": "/badge_images/MassachusettsStateHouseBadge.png",
+    "Park Street Church": "/badge_images/ParkStreetChurchBadge.png",
+    "Granary Burying Ground": "/badge_images/GranaryBuryingGroundBadge.png",
+    "King's Chapel & King's Chapel Burying Ground": "/badge_images/KingsChapelBadge.png",
+    "Boston Latin School Site/Benjamin Franklin Statue": "/badge_images/BostonLatinSchoolBenjaminFranklinStatueBadge.png",
+    "Old Corner Bookstore": "/badge_images/OldCornerBookstoreBadge.png",
+    "Old South Meeting House": "/badge_images/OldSouthMeetingHouseBadge.png",
+    "Old State House": "/badge_images/OldStateHouseBadge.png",
+    "Boston Massacre Site": "/badge_images/BostonMassacreSiteBadge.png",
+    "Paul Revere House": "/badge_images/PaulRevereHouseBadge.png",
+    "Old North Church": "/badge_images/OldNorthChurchBadge.png",
+    "USS Constitution": "/badge_images/USSConstitutionBadge.png",
+    "Faneuil Hall": "/badge_images/FaneuilHallBadge.png",
+    "Bunker Hill Monument": "/badge_images/BunkerHillMonumentBadge.png",
+    "Copp's Hill Burying Ground": "/badge_images/CoppsHillBuryingGroundBadge.png"
 };
 
 const badgeDescMap: Record<string, string> = {

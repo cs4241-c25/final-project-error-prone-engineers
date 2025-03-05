@@ -42,9 +42,9 @@ const businessAccount = () => {
     const tableRow = (business: BusinessAccount) => {
         return (
             <tr key={business._id} className='text-blue-900'>
-                <td className='border border-blue-900 p-1 bg-[#DCEDFF]'>{business.businessName}</td>
-                <td className='border border-blue-900 p-1 bg-[#DCEDFF]'>{business.businessType}</td>
-                <td className='border border-blue-900 p-1 bg-[#DCEDFF]'>{address(business)}</td>
+                <td className='border border-blue-900 p-1 bg-[#DCEDFF]'>{business.node!.name}</td>
+                <td className='border border-blue-900 p-1 bg-[#DCEDFF]'>{business.node!.type}</td>
+                <td className='border border-blue-900 p-1 bg-[#DCEDFF]'>{address(business.addressParts)}</td>
                 <td className='border border-blue-900 p-1 bg-[#DCEDFF]'>{business.ownerName}</td>
                 <td className='border border-blue-900 p-1 bg-[#DCEDFF]'>{business.businessEmail}</td>
                 <td className='border border-blue-900 p-1 bg-[#DCEDFF]'>{business.phoneNumber}</td>

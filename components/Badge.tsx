@@ -5,15 +5,14 @@ interface BadgeProps {
     title: string;
 }
 
-const Badge: React.FC<BadgeProps> = ({ imageSrc, title }) => {
+const Badge: React.FC<BadgeProps> = ({ imageSrc }) => {
     return (
-        <div className="h-28 w-20 rounded  shadow-lg bg-[#DCEDFF]">
-            {/* Image of the badge */}
-            <img  src={imageSrc} alt={title} />
-            <div className="px-2 py-1">
-                {/* Name of the badge */}
-                <div className="font-bold  text-lg font-garamond text-[#0A2463]">{title}</div>
-            </div>
+        <div className="h-24 w-24 rounded-xl shadow-md bg-white border border-gray-300 flex items-center justify-center">
+            <img
+                src={imageSrc}
+                alt="Badge"
+                className="h-23 w-23 object-contain"
+            />
         </div>
     );
 };
