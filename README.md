@@ -67,12 +67,10 @@
       and business information. This allowed us to keep everything in persistent storage, so user progress, authentication, 
       and business data remained available across sessions. With MongoDB, and the support it has for Next.js projects
       we could easily retrieve and display this data on the client side, ensuring a smooth experience for users.
-
    5. **Google Maps Geocoding API**
       1. To convert addresses to latitude and longitude coordinates, we used the Google Maps geocoding API in the backend. It
       was needed to be able to convert to coordinates so that business accounts could be created with an address input and
-      then visible on the map, without having to ask business owners to input the latitude and longitude of their location. 
-
+      then visible on the map, without having to ask business owners to input the latitude and longitude of their location.
    6. **Nodemailer with Google Account**
       1. Utilized the Nodemailer library to send password reset links to users. Using Nodemailer, emails are sent from a 
       custom-made Gmail account for the team, freedomtrailapplication@gmail.com. This allows users to securely reset their 
