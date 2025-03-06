@@ -10,7 +10,7 @@
 
 ---
 
-1. <h3>  brief description of what you created, and a link to the project itself (two paragraphs of text) </h3>
+1. <h3>Brief description of what you created, and a link to the project itself (two paragraphs of text)</h3>
 
    - Our team developed a Freedom Trail application to make exploring historic sites more engaging and informative.
      The app serves as a digital guide, helping users navigate the trail while providing detailed historical information
@@ -25,7 +25,7 @@
      offers an interactive way to explore this iconic route.
    - [**Freedom Trail App**](https://freedom-trail-application.vercel.app).
 
-2. <h3> Any additional instructions that might be needed to fully use your project (login information etc.) </h3>
+2. <h3>Any additional instructions that might be needed to fully use your project (login information etc.)</h3>
 
    1. Anyone can sign up for an account using their email, or log in using their Google account.
       However, badges are earned by walking the freedom trail and getting close enough to a landmark.
@@ -68,10 +68,12 @@
       and business data remained available across sessions. With MongoDB, and the support it has for Next.js projects
       we could easily retrieve and display this data on the client side, ensuring a smooth experience for users.
 
-   2. !!! ADD TO THIS LATER
+   5. **Google Maps Geocoding API**
+      1. To convert addresses to latitude and longitude coordinates, we used the Google Maps geocoding API in the backend. It
+      was needed to be able to convert to coordinates so that business accounts could be created with an address input and
+      then visible on the map, without having to ask business owners to input the latitude and longitude of their location. 
 
 - Map stuff
-- Google Maps geocoding API
 
 4. <h3> What challenges you faced in completing the project. </h3>
 
