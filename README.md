@@ -23,7 +23,7 @@
      user progress, badges, businesses, and authentication data, ensuring that all user interactions are saved and accessible
      across sessions. By combining badges to earn, historical insights, and user contributions, our Freedom Trail application
      offers an interactive way to explore this iconic route.
-   - [**Freedom Trail App**](https://freedom-trail-application.vercel.app).
+   - [**Freedom Trail App**](https://freedom-trail-tour.vercel.app).
 
 2. <h3>Any additional instructions that might be needed to fully use your project (login information etc.)</h3>
 
