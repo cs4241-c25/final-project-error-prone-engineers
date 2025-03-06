@@ -6,7 +6,7 @@
 
 #### William Gilmore, Adrian Johnson, Andrew Mesa, Keira Schoolcraft, Katy Stuparu
 
-#### Application Link: https://freedom-trail-application.vercel.app
+#### Application Link: https://freedom-trail-tour.vercel.app
 
 ---
 
