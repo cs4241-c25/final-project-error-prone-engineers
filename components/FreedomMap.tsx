@@ -190,41 +190,41 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, tra
         return container;
       });
 
-      nodes.forEach((node: Node) => {
-        if (node.type === "Official Site") {
-          const myIcon = L.divIcon({
-            html: ReactDOMServer.renderToString(<LocationNode/>),
-            className: "custom-icon",
-            iconSize: [50, 50],
-            iconAnchor: [25, 25],
-            popupAnchor: [-16, 0],
-          });
+    //   nodes.forEach((node: Node) => {
+    //     if (node.type === "Official Site") {
+    //       const myIcon = L.divIcon({
+    //         // html: ReactDOMServer.renderToString(<LocationNode/>),
+    //         // className: "custom-icon",
+    //         // iconSize: [50, 50],
+    //         // iconAnchor: [25, 25],
+    //         // popupAnchor: [-16, 0],
+    //       });
 
-          //Plot marker
-          const marker = L.marker(node.coordinates as [number, number], {
-            icon: myIcon,
-            interactive: true,
-          }).addTo(map);
+    //       //Plot marker
+    //       const marker = L.marker(node.coordinates as [number, number], {
+    //         icon: myIcon,
+    //         interactive: true,
+    //       }).addTo(map);
 
-          //Add popup
-          marker.bindPopup(() => {
-            const container = document.createElement("div");
-            //Styling for outer container.
-            container.className = "bg-white flex justify-center rounded-2xl p-1 w-[300px] max-w-[90vw]";
-            const root = ReactDOM.createRoot(container);
-            root.render(<LocationPage locationName={node.name}/>); //Pass name
-            setTimeout(() => {
-              const popupWrapper = container.closest('.leaflet-popup-content-wrapper'); //Located in PopupStyles.module.css
-              if (popupWrapper) {
-                //Border Styling
-                popupWrapper.classList.add("border-4", "border-[#0a2463]", "rounded-2xl");
-              }
-            }, 0);
+    //       //Add popup
+    //       marker.bindPopup(() => {
+    //         const container = document.createElement("div");
+    //         //Styling for outer container.
+    //         container.className = "bg-white flex justify-center rounded-2xl p-1 w-[300px] max-w-[90vw]";
+    //         const root = ReactDOM.createRoot(container);
+    //         root.render(<LocationPage locationName={node.name}/>); //Pass name
+    //         setTimeout(() => {
+    //           const popupWrapper = container.closest('.leaflet-popup-content-wrapper'); //Located in PopupStyles.module.css
+    //           if (popupWrapper) {
+    //             //Border Styling
+    //             popupWrapper.classList.add("border-4", "border-[#0a2463]", "rounded-2xl");
+    //           }
+    //         }, 0);
   
-            return container;
-          });
-        }
-    });
+    //         return container;
+    //       });
+    //     }
+    // });
 
 
     // Add GeoJSON data with markers
