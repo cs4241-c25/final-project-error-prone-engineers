@@ -3,14 +3,17 @@ import LocationPage from "./LocationPage";
 
 const LocationNode = () => {
     const [isOpen, setIsOpen] = useState(false);
+//bg-gradient-to-r from-red-500 to-yellow-300 hover:from-red-600 hover:to-yellow-200
+// bg-gradient-to-rfrom-blue-950 to-blue-400 hover:from-blue-800 hover:to-blue-50
 
     return (
         <div style={{ pointerEvents: "auto" }}>
             <button
 
                 onClick={() => setIsOpen(true)}
-                className="bg-[#EFA906] text-white font-bold py-3 px-3 rounded-full shadow-lg">
+                className="shadow-md bg-gradient-to-r from-blue-950 to-blue-400 hover:from-blue-800 hover:to-blue-50 text-white font-bold py-3 px-3 rounded-full shadow-md transition-all duration-300">
             </button>
+
 
 
             {isOpen && (

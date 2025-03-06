@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import axios from "axios";
-import Banner from "@/components/Banner";
+import Banner from "@/components/PlainBanner";
 
 
 const Forgot_Password = () => {

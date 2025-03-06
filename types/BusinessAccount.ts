@@ -14,8 +14,7 @@ export type Node = {
     type: string;
     description: string;
     address: string;
-    latitude: number;
-    longitude: number;
+    coordinates: [number, number];
     accessibility?: boolean;
     publicRestroom?: boolean;
 }

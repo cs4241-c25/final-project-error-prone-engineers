@@ -9,18 +9,18 @@ const geocoderClient = new Client({});
 async function addressToLocation(address: string) {
     const res = await geocoderClient.geocode({params:
             {key: process.env.GOOGLE_GEOCODER_KEY ?? "", address: address}});
-    console.log(res.data.results[0].geometry.location);
-    return res.data.results[0].geometry.location;
+    const location = res.data.results[0].geometry.location
+    return [location.lat, location.lng];
 }
 
 export async function POST(request: NextRequest) {
     try {
         const formData: BusinessAccount = await request.json();
-        const location = await addressToLocation(address(formData.addressParts));
+        const location: number[] = await addressToLocation(address(formData.addressParts));
 
         const nodeToInsert = {
             name: formData.node?.name, type: formData.node?.type, description: formData.node?.description,
-            address: address(formData.addressParts), latitude: location.lat, longitude: location.lng,
+            address: address(formData.addressParts), coordinates: location,
             accessibility: formData.node?.accessibility, publicRestroom: formData.node?.publicRestroom
         };
         let nodesCollection = await connectDB("nodes");
@@ -46,12 +46,12 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
     try {
         const formData: BusinessAccount = await request.json();
-        const location = await addressToLocation(address(formData.addressParts));
+        const location: number[] = await addressToLocation(address(formData.addressParts));
 
         let nodesCollection = await connectDB("nodes");
         const nodeResult = await nodesCollection.updateOne({_id: new ObjectId(formData.node!._id)},
             {$set: {name: formData.node?.name, type: formData.node?.type, description: formData.node?.description,
-            address: address(formData.addressParts), latitude: location.lat, longitude: location.lng,
+            address: address(formData.addressParts), coordinates: location,
             accessibility: formData.node?.accessibility, publicRestroom: formData.node?.publicRestroom}});
         console.log(nodeResult);
 

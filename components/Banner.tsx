@@ -3,12 +3,18 @@ import Menu from '../components/HamburgerMenu';
 import LoginButton from '../components/LoginButton';
 import Link from 'next/link';
 
-const Banner = () => {
+interface BannerProps {
+    setTrackingData: (data: string | null) => void;
+    setIsTracking: React.Dispatch<React.SetStateAction<boolean>>;
+    isTracking: boolean;
+}
+
+const Banner: React.FC<BannerProps> = ({ setTrackingData, setIsTracking, isTracking  }) => {
     return (
         <div className='flex items-center justify-between h-auto z-100 bg-[#D00000] p-2 w-full'>
             {/* Left: Menu*/}
             <div className="flex-shrink-0">
-                <Menu />
+                <Menu setTrackingData={setTrackingData} setIsTracking={setIsTracking} isTracking={isTracking} />
             </div>
 
             {/* Center: Title*/}

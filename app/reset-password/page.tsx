@@ -3,8 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState, Suspense } from "react";
 import axios from "axios";
-import Banner from "@/components/Banner";
-
+import Banner from "@/components/PlainBanner";
 const ResetPassword = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
