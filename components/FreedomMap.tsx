@@ -1,5 +1,5 @@
 'use client';
-import {JSX, useEffect, useRef, useState } from 'react';
+import {useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { FeatureCollection } from 'geojson';
@@ -8,10 +8,7 @@ import LocationPage from "./LocationPage"
 import ReactDOMServer from "react-dom/server";
 import { Node } from '@/types/BusinessAccount';
 import ReactDOM from "react-dom/client";
-import {createBadgeObject, getBadges} from "@/lib/badges";
-import {getServerSession} from "next-auth";
-import {authOptions} from "@/lib/auth";
-import {NextResponse} from "next/server";
+import {createBadgeObject} from "@/lib/badges";
 import {useSession} from "next-auth/react";
 
 // Define absolute paths for Leaflet marker icons
@@ -74,25 +71,25 @@ interface MapProps {
 }
 
 //Associates name with gps location
-const locations = [
-    { name: "Boston Common", coordinates: [42.35532, -71.063639] },
-    { name: "Massachusetts State House", coordinates: [42.35770, -71.06350] },
-    { name: "Park Street Church", coordinates: [42.35666, -71.06183] },
-    { name: "Granary Burying Ground", coordinates: [42.35719, -71.06125] },
-    { name: "King's Chapel & King's Chapel Burying Ground", coordinates: [42.35831, -71.06000] },
-    { name: "Boston Latin School Site/Benjamin Franklin Statue", coordinates: [42.35784, -71.05977] },
-    { name: "Old Corner Bookstore", coordinates: [42.35745, -71.05835] },
-    { name: "Old South Meeting House", coordinates: [42.35703, -71.05855] },
-    { name: "Old State House", coordinates: [42.35858, -71.05750] },
-    { name: "Boston Massacre Site", coordinates: [42.35858, -71.05728] },
-    { name: "Faneuil Hall", coordinates: [42.36002, -71.05595] },
-    { name: "Paul Revere House", coordinates: [42.36372, -71.05355] },
-    { name: "Old North Church", coordinates: [42.36637, -71.05460] },
-    { name: "USS Constitution", coordinates: [42.37290, -71.05740] },
-    { name: "Bunker Hill Monument", coordinates: [42.37620, -71.06075] },
-    { name: "Copp's Hill Burying Ground", coordinates: [42.36694, -71.05615] },
-
-];
+// const locations = [
+//     { name: "Boston Common", coordinates: [42.35532, -71.063639] },
+//     { name: "Massachusetts State House", coordinates: [42.35770, -71.06350] },
+//     { name: "Park Street Church", coordinates: [42.35666, -71.06183] },
+//     { name: "Granary Burying Ground", coordinates: [42.35719, -71.06125] },
+//     { name: "King's Chapel & King's Chapel Burying Ground", coordinates: [42.35831, -71.06000] },
+//     { name: "Boston Latin School Site/Benjamin Franklin Statue", coordinates: [42.35784, -71.05977] },
+//     { name: "Old Corner Bookstore", coordinates: [42.35745, -71.05835] },
+//     { name: "Old South Meeting House", coordinates: [42.35703, -71.05855] },
+//     { name: "Old State House", coordinates: [42.35858, -71.05750] },
+//     { name: "Boston Massacre Site", coordinates: [42.35858, -71.05728] },
+//     { name: "Faneuil Hall", coordinates: [42.36002, -71.05595] },
+//     { name: "Paul Revere House", coordinates: [42.36372, -71.05355] },
+//     { name: "Old North Church", coordinates: [42.36637, -71.05460] },
+//     { name: "USS Constitution", coordinates: [42.37290, -71.05740] },
+//     { name: "Bunker Hill Monument", coordinates: [42.37620, -71.06075] },
+//     { name: "Copp's Hill Burying Ground", coordinates: [42.36694, -71.05615] },
+//
+// ];
 
 const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, nodes }) => {
   const mapRef = useRef<L.Map | null>(null);
@@ -143,43 +140,42 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, nod
     //   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, Tiles courtesy of <a href="http://www.thunderforest.com/" target="_blank">Thunderforest</a>', // Add appropriate attribution
     // }).addTo(map);
 
+    nodes.forEach((node: Node) => {
+      if (node.type === "Official Site") {
+        const myIcon = L.divIcon({
+          html: ReactDOMServer.renderToString(<LocationNode/>),
+          className: "custom-icon",
+          iconSize: [50, 50],
+          iconAnchor: [25, 25],
+          popupAnchor: [-16, 0],
+        });
 
+        //Plot marker
+        const marker = L.marker(node.coordinates as [number, number], {
+          icon: myIcon,
+          interactive: true,
+        }).addTo(map);
 
+        //Add popup
+        marker.bindPopup(() => {
+          const container = document.createElement("div");
 
-    locations.forEach(({ name, coordinates }) => {
-      const myIcon = L.divIcon({
-        html: ReactDOMServer.renderToString(<LocationNode />),
-        className: "custom-icon",
-        iconSize: [50, 50],
-        iconAnchor: [25, 25],
-        popupAnchor: [-16, 0],
-      });
+          //Styling for outer container.
+          container.className = "bg-white flex justify-center rounded-2xl p-1 w-[300px] max-w-[90vw]";
+          const root = ReactDOM.createRoot(container);
+          root.render(<LocationPage locationName={node.name}/>); //Pass name
 
-      //Plot marker
-      const marker = L.marker([coordinates[0], coordinates[1]] as [number, number], {
-        icon: myIcon,
-        interactive: true,
-      }).addTo(map);
+          setTimeout(() => {
+            const popupWrapper = container.closest('.leaflet-popup-content-wrapper'); //Located in PopupStyles.module.css
+            if (popupWrapper) {
+              //Border Styling
+              popupWrapper.classList.add("border-4", "border-[#0a2463]", "rounded-2xl");
+            }
+          }, 0);
 
-      //Add popup
-      marker.bindPopup(() => {
-        const container = document.createElement("div");
-
-        //Styling for outer container.
-        container.className = "bg-white flex justify-center rounded-2xl p-1 w-[300px] max-w-[90vw]";
-        const root = ReactDOM.createRoot(container);
-        root.render(<LocationPage locationName={name} />); //Pass name
-
-        setTimeout(() => {
-          const popupWrapper = container.closest('.leaflet-popup-content-wrapper'); //Located in PopupStyles.module.css
-          if (popupWrapper) {
-            //Border Styling
-            popupWrapper.classList.add("border-4", "border-[#0a2463]", "rounded-2xl");
-          }
-        }, 0);
-
-        return container;
-      });
+          return container;
+        });
+      }
     });
 
 
@@ -217,42 +213,43 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, nod
 
     nodes.forEach((node) => {
       //KATY FIX
-      console.log("Node Coordinates:", node.latitude, node.longitude);
-      if (typeof node.latitude === 'number' && typeof node.longitude === 'number') {
-        const marker = L.marker([node.latitude, node.longitude] as [number, number], {
-          icon: businessIcon,
-        })
-        .addTo(mapRef.current!);
+      if (node.type !== "Official Site") {
+        console.log("Node Coordinates:", node.coordinates[0], node.coordinates[1]);
+        if (typeof node.coordinates[0] === 'number' && typeof node.coordinates[1] === 'number') {
+          const marker = L.marker([node.coordinates[0], node.coordinates[1]] as [number, number], {
+            icon: businessIcon,
+          })
+              .addTo(mapRef.current!);
 
-        marker.bindPopup(() => {
-          const container = document.createElement("div");
-          container.className = "bg-white flex justify-center rounded-2xl p-1 w-[300px] max-w-[90vw]";
-          const root = ReactDOM.createRoot(container);
-          root.render(
-            <div>
-              <h2>{node.name}</h2>
-              <p>{node.description}</p>
-              <p>Type: {node.type}</p>
-              <p>Address: {node.address}</p>
-              {node.accessibility && <p>Accessibility: Yes</p>}
-              {node.publicRestroom && <p>Public Restroom: Yes</p>}
-              {/* Add other node properties you want to display */}
-            </div>
-          );
+          marker.bindPopup(() => {
+            const container = document.createElement("div");
+            container.className = "bg-white flex justify-center rounded-2xl p-1 w-[300px] max-w-[90vw]";
+            const root = ReactDOM.createRoot(container);
+            root.render(
+                <div>
+                  <h2>{node.name}</h2>
+                  <p>{node.description}</p>
+                  <p>Type: {node.type}</p>
+                  <p>Address: {node.address}</p>
+                  {node.accessibility && <p>Accessibility: Yes</p>}
+                  {node.publicRestroom && <p>Public Restroom: Yes</p>}
+                  {/* Add other node properties you want to display */}
+                </div>
+            );
 
-          setTimeout(() => {
-            const popupWrapper = container.closest('.leaflet-popup-content-wrapper');
-            if (popupWrapper) {
-              popupWrapper.classList.add("border-4", "border-[#0a2463]", "rounded-2xl");
-            }
-          }, 0);
+            setTimeout(() => {
+              const popupWrapper = container.closest('.leaflet-popup-content-wrapper');
+              if (popupWrapper) {
+                popupWrapper.classList.add("border-4", "border-[#0a2463]", "rounded-2xl");
+              }
+            }, 0);
 
-          return container;
-      });
-      } else {
-        return;
+            return container;
+          });
+        } else {
+          return;
+        }
       }
-      
     });
 
     return () => {
@@ -298,12 +295,14 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, nod
 
 
         if (session) {
-          locations.forEach(({ name, coordinates }) => {
-            const locationPoint = new L.LatLng(coordinates[0], coordinates[1]);
-            const distance = newPosition.distanceTo(locationPoint);
+          nodes.forEach(({ name, coordinates, type }) => {
+            if (type == "Official Site") {
+              const locationPoint = new L.LatLng(coordinates[0], coordinates[1]);
+              const distance = newPosition.distanceTo(locationPoint);
 
-            if (distance < 9.14) {
-              createBadgeObject(name);
+              if (distance < 9.14) {
+                createBadgeObject(name).then();
+              }
             }
           });
         }

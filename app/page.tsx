@@ -69,8 +69,7 @@ export default function Home() {
   useEffect(() => {
     async function fetchNodes() {
       const response = await axios.get('/api/nodes');
-      const nodes: [Node] = response.data;
-      console.log("HELLO");
+      const nodes: Node[] = response.data;
       console.log(nodes);
       setNodes(nodes);
     }
