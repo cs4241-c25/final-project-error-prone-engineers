@@ -393,12 +393,12 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, tra
             const root = ReactDOM.createRoot(container);
             root.render(
                 <div>
-                  <h2>{node.name}</h2>
-                  <p>{node.description}</p>
-                  <p>Type: {node.type}</p>
-                  <p>Address: {node.address}</p>
-                  {node.accessibility && <p>Accessibility: Yes</p>}
-                  {node.publicRestroom && <p>Public Restroom: Yes</p>}
+                  <h2 className='font-cinzel_decorative font-extrabold text-2xl text-center w-full bg-blue-900 p-2 text-white'>{node.name}</h2>
+                  <p className='font-garamond text-md font-semibold'>{node.description}</p>
+                  <p className='font-garamond text-md font-semibold'>Type: {node.type}</p>
+                  <p className='font-garamond text-md font-semibold'>Address: {node.address}</p>
+                  {node.accessibility && <p className='font-garamond text-md font-semibold'>Accessibility: Yes</p>}
+                  {node.publicRestroom && <p className='font-garamond text-md font-semibold'>Public Restroom: Yes</p>}
                   {/* Add other node properties you want to display */}
                 </div>
             );
