@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import  {signIn} from "next-auth/react";
 import Image from "next/image";
-import Banner from "@/components/Banner";
+import Banner from "@/components/PlainBanner";
 
 const Login = () => {
     // Initialize the username and password state as blank

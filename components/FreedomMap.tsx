@@ -8,7 +8,13 @@ import LocationPage from "./LocationPage"
 import ReactDOMServer from "react-dom/server";
 import { Node } from '@/types/BusinessAccount';
 import ReactDOM from "react-dom/client";
-import {createBadgeObject} from "@/lib/badges";
+import Image from "next/image";
+
+
+import {createBadgeObject, getBadges} from "@/lib/badges";
+import {getServerSession} from "next-auth";
+import {authOptions} from "@/lib/auth";
+import {NextResponse} from "next/server";
 import {useSession} from "next-auth/react";
 
 // Define absolute paths for Leaflet marker icons
@@ -67,41 +73,38 @@ const locationIcon = L.divIcon({
 interface MapProps {
   geoJsonData: FeatureCollection | null;
   geoJsonDataRestrooms: FeatureCollection | null;
+  trackingData: string | null;
+  isTracking: boolean;
   nodes: Node[];
 }
 
 //Associates name with gps location
-// const locations = [
-//     { name: "Boston Common", coordinates: [42.35532, -71.063639] },
-//     { name: "Massachusetts State House", coordinates: [42.35770, -71.06350] },
-//     { name: "Park Street Church", coordinates: [42.35666, -71.06183] },
-//     { name: "Granary Burying Ground", coordinates: [42.35719, -71.06125] },
-//     { name: "King's Chapel & King's Chapel Burying Ground", coordinates: [42.35831, -71.06000] },
-//     { name: "Boston Latin School Site/Benjamin Franklin Statue", coordinates: [42.35784, -71.05977] },
-//     { name: "Old Corner Bookstore", coordinates: [42.35745, -71.05835] },
-//     { name: "Old South Meeting House", coordinates: [42.35703, -71.05855] },
-//     { name: "Old State House", coordinates: [42.35858, -71.05750] },
-//     { name: "Boston Massacre Site", coordinates: [42.35858, -71.05728] },
-//     { name: "Faneuil Hall", coordinates: [42.36002, -71.05595] },
-//     { name: "Paul Revere House", coordinates: [42.36372, -71.05355] },
-//     { name: "Old North Church", coordinates: [42.36637, -71.05460] },
-//     { name: "USS Constitution", coordinates: [42.37290, -71.05740] },
-//     { name: "Bunker Hill Monument", coordinates: [42.37620, -71.06075] },
-//     { name: "Copp's Hill Burying Ground", coordinates: [42.36694, -71.05615] },
-//
-// ];
+const locations = [
+    { name: "Boston Common", coordinates: [42.35532, -71.063639] },
+    { name: "Massachusetts State House", coordinates: [42.35770, -71.06350] },
+    { name: "Park Street Church", coordinates: [42.35666, -71.06183] },
+    { name: "Granary Burying Ground", coordinates: [42.35719, -71.06125] },
+    { name: "King's Chapel & King's Chapel Burying Ground", coordinates: [42.35831, -71.06000] },
+    { name: "Boston Latin School Site/Benjamin Franklin Statue", coordinates: [42.35784, -71.05977] },
+    { name: "Old Corner Bookstore", coordinates: [42.35745, -71.05835] },
+    { name: "Old South Meeting House", coordinates: [42.35703, -71.05855] },
+    { name: "Old State House", coordinates: [42.35858, -71.05750] },
+    { name: "Boston Massacre Site", coordinates: [42.35858, -71.05728] },
+    { name: "Faneuil Hall", coordinates: [42.36002, -71.05595] },
+    { name: "Paul Revere House", coordinates: [42.36372, -71.05355] },
+    { name: "Old North Church", coordinates: [42.36637, -71.05460] },
+    { name: "USS Constitution", coordinates: [42.37290, -71.05740] },
+    { name: "Bunker Hill Monument", coordinates: [42.37620, -71.06075] },
+    { name: "Copp's Hill Burying Ground", coordinates: [42.36694, -71.05615] },
 
-const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, nodes }) => {
+];
+
+const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, trackingData, isTracking, nodes }) => {
   const mapRef = useRef<L.Map | null>(null);
-  const [isTracking, setIsTracking] = useState(false);
   const [userPosition, setUserPosition] = useState<L.LatLng | null>(null);
   const [userMarker, setUserMarker] = useState<L.Marker | null>(null);
   const markerRef = useRef<L.Marker | null>(null);
   const { data: session } = useSession();
-
-  const toggleTracking = () => {
-    setIsTracking((prev) => !prev);
-  };
 
 
   useEffect(() => {
@@ -140,42 +143,87 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, nod
     //   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, Tiles courtesy of <a href="http://www.thunderforest.com/" target="_blank">Thunderforest</a>', // Add appropriate attribution
     // }).addTo(map);
 
-    nodes.forEach((node: Node) => {
-      if (node.type === "Official Site") {
-        const myIcon = L.divIcon({
-          html: ReactDOMServer.renderToString(<LocationNode/>),
-          className: "custom-icon",
-          iconSize: [50, 50],
-          iconAnchor: [25, 25],
-          popupAnchor: [-16, 0],
-        });
 
-        //Plot marker
-        const marker = L.marker(node.coordinates as [number, number], {
-          icon: myIcon,
-          interactive: true,
-        }).addTo(map);
+    locations.forEach(({ name, coordinates }) => {
+      const myIcon = L.divIcon({
+        html: ReactDOMServer.renderToString(
+            <Image
+                src={"/freedom_trail.png"}
+                alt={"Trail marker"}
+                width={100}
+                height={100}
+                className="rounded-md object-cover w-full h-full hover:scale-110 hover:cursor-pointer transition-transform duration-200 ease-in-out shadow-md"
+                loading="lazy"
+            />
+        ),
+        className: "shadow-md",
+        iconSize: [30, 30],
+        iconAnchor: [25, 25],
+        popupAnchor: [-16, 0],
+      });
 
-        //Add popup
-        marker.bindPopup(() => {
-          const container = document.createElement("div");
+      // Plot marker
+      const marker = L.marker([coordinates[0], coordinates[1]] as [number, number], {
+        icon: myIcon,
+        interactive: true,
+      }).addTo(map);
 
-          //Styling for outer container.
-          container.className = "bg-white flex justify-center rounded-2xl p-1 w-[300px] max-w-[90vw]";
-          const root = ReactDOM.createRoot(container);
-          root.render(<LocationPage locationName={node.name}/>); //Pass name
+      // Create Popup Content
+      const container = document.createElement("div");
+      container.className =
+          "bg-white flex flex-col justify-start rounded-2xl p-2 w-[375px] max-w-[80vw] h-[60vh] max-h-[500px] overflow-y-auto";
 
-          setTimeout(() => {
-            const popupWrapper = container.closest('.leaflet-popup-content-wrapper'); //Located in PopupStyles.module.css
-            if (popupWrapper) {
-              //Border Styling
-              popupWrapper.classList.add("border-4", "border-[#0a2463]", "rounded-2xl");
-            }
-          }, 0);
+      const root = ReactDOM.createRoot(container);
+      root.render(<LocationPage locationName={name} />);
 
-          return container;
-        });
-      }
+      // Bind Popup with Scrollable Content
+      marker.bindPopup(container);
+
+        setTimeout(() => {
+          const popupWrapper = container.closest('.leaflet-popup-content-wrapper'); //Located in PopupStyles.module.css
+          if (popupWrapper) {
+            //Border Styling
+            popupWrapper.classList.add("border-4", "border-[#0a2463]", "rounded-2xl");
+          }
+        }, 0);
+
+        return container;
+      });
+
+      nodes.forEach((node: Node) => {
+        if (node.type === "Official Site") {
+          const myIcon = L.divIcon({
+            html: ReactDOMServer.renderToString(<LocationNode/>),
+            className: "custom-icon",
+            iconSize: [50, 50],
+            iconAnchor: [25, 25],
+            popupAnchor: [-16, 0],
+          });
+
+          //Plot marker
+          const marker = L.marker(node.coordinates as [number, number], {
+            icon: myIcon,
+            interactive: true,
+          }).addTo(map);
+
+          //Add popup
+          marker.bindPopup(() => {
+            const container = document.createElement("div");
+            //Styling for outer container.
+            container.className = "bg-white flex justify-center rounded-2xl p-1 w-[300px] max-w-[90vw]";
+            const root = ReactDOM.createRoot(container);
+            root.render(<LocationPage locationName={node.name}/>); //Pass name
+            setTimeout(() => {
+              const popupWrapper = container.closest('.leaflet-popup-content-wrapper'); //Located in PopupStyles.module.css
+              if (popupWrapper) {
+                //Border Styling
+                popupWrapper.classList.add("border-4", "border-[#0a2463]", "rounded-2xl");
+              }
+            }, 0);
+  
+            return container;
+          });
+        }
     });
 
 
@@ -340,27 +388,27 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, nod
 
   const checkProgress = () => {
     if (!geoJsonData || !userPosition) return;
-  
+
     const geometry = geoJsonData.features[0]?.geometry;
     if (!geometry) return;
-  
+
     if (geometry.type === "LineString" || geometry.type === "Polygon") {
       const pathCoords = geometry.coordinates as [number, number][];
       if (!pathCoords) return;
-  
+
       let closestPoint = null;
       let minDistance = Infinity;
-  
+
       pathCoords.forEach(([lng, lat]) => {
         const pathPoint = new L.LatLng(lat, lng);
         const distance = userPosition.distanceTo(pathPoint);
-  
+
         if (distance < minDistance) {
           minDistance = distance;
           closestPoint = pathPoint;
         }
       });
-  
+
       if (minDistance < 50) {
         console.log("User is near the path!");
       }
@@ -384,18 +432,12 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, nod
       if (geoJsonData && mapRef.current) {
         const pathBounds = L.geoJSON(geoJsonData).getBounds();
         mapRef.current.fitBounds(pathBounds);
-      }  
+      }
     }
   }, [userPosition, isTracking]);
 
   return (
     <div className="flex flex-col h-screen">
-      <button
-        onClick={toggleTracking}
-        className="bg-blue-900 text-white font-bold font-garamond py-1 w-full hover:bg-blue-700 mb-auto" 
-      >
-        {isTracking ? 'Stop Tracking' : 'Start Tracking'}
-      </button>
       <div id="map" className="flex-grow relative z-20" style={{}}></div>
     </div>
   );

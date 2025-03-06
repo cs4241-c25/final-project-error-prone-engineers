@@ -1,5 +1,5 @@
 "use client";
-import Banner from '@/components/Banner';
+import Banner from "@/components/PlainBanner";
 import React, {useEffect, useState} from 'react';
 import { useSession, signOut } from "next-auth/react";
 import Badge from '@/components/Badge';
@@ -15,16 +15,16 @@ const ProfilePage: React.FC = () => {
             const badgeData = await getBadges();
             setBadges(badgeData);
         }
-        fetchBadges();
+        fetchBadges().then();
     }, []);
     return (
         <div className='flex flex-col min-h-screen'>
-            <Banner />
+            <Banner></Banner>
             <div className="flex flex-grow items-center justify-center bg-cover bg-center bg-[url('/freedomtrail_medallion.jpg')] w-screen">
-                <div className="bg-white p-5 rounded-3xl max-w-full lg:w-4/5 sm:w-4/5 h-[60vh] flex flex-row justify-center items-center">
+                <div className="bg-white p-5 rounded-3xl max-w-full lg:w-4/5 sm:w-4/5 h-auto flex flex-row justify-center items-stretch">
 
                     {/* Left Side */}
-                    <div className='bg-[#0A2463] justify-items-center rounded-3xl lg:w-1/5 p-4 h-full'>
+                    <div className='bg-[#0A2463] justify-items-center rounded-3xl lg:w-1/5 p-4 flex-grow'>
                         <img src='/user.png' alt='User image' />
                         <button onClick={() => signOut()} className='bg-[#DCEDFF] text-[#0A2463] font-garamond lg:text-xl text-xs text-center justify-center rounded-full px-2 mt-4 w-full hover:bg-[#5CABFF]'>
                             Logout
@@ -33,7 +33,7 @@ const ProfilePage: React.FC = () => {
 
                     {/* Right Side */}
                     <div className='bg-white w-4/5 ml-5 h-full'>
-                        <div className='flex-col h-full justify-center py-[5%]'>
+                        <div className='flex-col h-full justify-center py-[1%]'>
                             {/* User Info */}
                             <h2 className="lg:text-4xl sm:text-lg break-all text-wrap font-bold text-left text-blue-900 font-cinzel_decorative ml-2 w-4/5">
                                 {session?.user?.name}
