@@ -254,6 +254,7 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, tra
       const marker = L.marker([coordinates[0], coordinates[1]] as [number, number], {
         icon: myIcon,
         interactive: true,
+        zIndexOffset: 1000,
       }).addTo(map);
 
       // Create Popup Content
