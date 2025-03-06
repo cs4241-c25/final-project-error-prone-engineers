@@ -73,7 +73,7 @@ const restaurantIcon = L.divIcon({
 const fastfoodIcon = L.divIcon({
   className: "custom-fastfood-icon",
   html: `
-    <div style="width: 32px; height: 32px;">
+    <div style="width: 32px; height: 32px; z-index: 5;">
       <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect width="30" height="30" rx="1" fill="#0A2463"/>
         <path d="M1.25 18.75C1.25 16.4792 2.19792 14.6617 4.09375 13.2975C5.98958 11.9333 8.16667 11.2508 10.625 11.25C13.0833 11.2492 15.2604 11.9317 17.1563 13.2975C19.0521 14.6633 20 16.4808 20 18.75H1.25ZM1.25 23.75V21.25H20V23.75H1.25ZM2.5 28.75C2.14583 28.75 1.84917 28.63 1.61 28.39C1.37083 28.15 1.25083 27.8533 1.25 27.5V26.25H20V27.5C20 27.8542 19.88 28.1512 19.64 28.3912C19.4 28.6312 19.1033 28.7508 18.75 28.75H2.5ZM22.5 28.75V18.75C22.5 16.375 21.6875 14.3229 20.0625 12.5937C18.4375 10.8646 16.4479 9.70833 14.0937 9.125L13.75 6.25H20V1.25H22.5V6.25H28.75L26.7188 26.5C26.6562 27.1458 26.3904 27.6825 25.9212 28.11C25.4521 28.5375 24.895 28.7508 24.25 28.75H22.5Z" fill="white"/>
@@ -146,7 +146,7 @@ const hotelIcon = L.divIcon({
 const locationIcon = L.divIcon({
   className: "custom-restroom-icon",
   html: `
-    <div style="width: 32px; height: 32px;">
+    <div style="width: 32px; height: 32px; z-index: 1000;">
       <svg width="41" height="41" viewBox="0 0 41 41" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect x="1.5" y="1.5" width="38" height="38" rx="19" fill="white"/>
         <rect x="1.5" y="1.5" width="38" height="38" rx="19" stroke="#D00000" stroke-width="3"/>

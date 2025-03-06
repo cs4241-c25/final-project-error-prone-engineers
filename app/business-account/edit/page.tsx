@@ -115,7 +115,7 @@ const EditBusinessAccount = () => {
 
             const node: Node = {
                 _id: nodeId, name: businessName, type: businessType.valueOf(), description: description,
-                address: address(addressP), latitude: 0, longitude: 0, accessibility: accessibility, publicRestroom: publicRestroom
+                address: address(addressP), coordinates: [0, 0], accessibility: accessibility, publicRestroom: publicRestroom
             };
 
             const formData: BusinessAccount = {

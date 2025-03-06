@@ -83,7 +83,7 @@ const createBusinessAccount = () => {
 
             const node: Node = {
                 name: businessName, type: businessType.valueOf(), description: description, address: address(addressP),
-                latitude: 0, longitude: 0, accessibility: accessibility, publicRestroom: publicRestroom
+                coordinates: [0, 0], accessibility: accessibility, publicRestroom: publicRestroom
             };
 
             const formData: BusinessAccount = {
