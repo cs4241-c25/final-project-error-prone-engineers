@@ -1,14 +1,16 @@
 'use client';
 
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BusinessAccount, address } from "@/types/BusinessAccount";
 import {useSession} from "next-auth/react";
 import Link from "next/link";
-import Banner from "@/components/Banner";
+import Banner from "@/components/PlainBanner";
 
 const businessAccount = () => {
+    const [isTracking, setIsTracking] = useState<boolean>(false);
+    const [trackingData, setTrackingData] = useState<string | null>(null);
 
     const router = useRouter();
     const { data: session, status } = useSession();
