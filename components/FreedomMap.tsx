@@ -158,7 +158,7 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, tra
       // Create Popup Content
       const container = document.createElement("div");
       container.className =
-          "bg-white flex flex-col justify-start rounded-2xl p-2 w-[375px] max-w-[80vw]  h-[60vh] max-h-[500px] overflow-y-auto";
+          "bg-white flex flex-col justify-start rounded-2xl p-2 w-[375px] max-w-[80vw] h-[60vh] max-h-[500px] overflow-y-auto";
 
       const root = ReactDOM.createRoot(container);
       root.render(<LocationPage locationName={name} />);
