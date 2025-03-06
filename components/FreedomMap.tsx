@@ -201,6 +201,17 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, tra
 
         }, 0);
       });
+
+      marker.on("popupclose", () => {
+        setTimeout(() => {
+          if (map) {
+            const center = map.getCenter();
+            map.setView(center, map.getZoom(), { animate: false });
+          }
+        }, 0);
+      });
+
+
     });
 
 
