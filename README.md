@@ -41,6 +41,7 @@
       app in that orientation provides best experience.
 
 3. <h3>An outline of the technologies you used and how you used them.</h3>
+
    1. **NextJS framework with Tailwind CSS**
       1. Our team built the project using Next.js, taking advantage of its flexible routing, API routes, and many 
       different libraries and features such as NextAuth, user sessions, and analytics. 
