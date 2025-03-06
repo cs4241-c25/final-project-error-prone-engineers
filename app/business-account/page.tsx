@@ -6,6 +6,7 @@ import axios from 'axios';
 import { BusinessAccount, address } from "@/types/BusinessAccount";
 import {useSession} from "next-auth/react";
 import Link from "next/link";
+import Banner from "@/components/Banner";
 
 const businessAccount = () => {
 
@@ -59,6 +60,8 @@ const businessAccount = () => {
     }
 
     return (
+        <div>
+            <Banner></Banner>
         <div className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center bg-[url('/freedomtrail_medallion.jpg')] ">
             <div className="bg-white p-4 rounded-3xl w-3/5 h-4/5">
                 <button className='text-white ml-2 bg-blue-900 px-2 text-xl rounded-md hover:bg-blue-700 transition font-garamond'
@@ -82,6 +85,7 @@ const businessAccount = () => {
                     </tbody>
                 </table>
             </div>
+        </div>
         </div>
     );
 }
