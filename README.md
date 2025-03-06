@@ -73,8 +73,11 @@
       was needed to be able to convert to coordinates so that business accounts could be created with an address input and
       then visible on the map, without having to ask business owners to input the latitude and longitude of their location. 
 
-- Map stuff
-
+   6. **Nodemailer with Google Account**
+      1. Utilized the Nodemailer library to send password reset links to users. Using Nodemailer, emails are sent from a 
+      custom-made Gmail account for the team, freedomtrailapplication@gmail.com. This allows users to securely reset their 
+      passwords by adding an extra layer of security, ensuring that password reset links are sent only to the requesting user.
+ 
 4. <h3> What challenges you faced in completing the project. </h3>
 
    1. For our project, each person in our team tried something new. Everyone in our team had a good amount of experience with web application development, either from CS 3733 Software Engineering, summer internships, or personal projects. One way that we challenged ourselves was choosing to use Next and React rather than React and Express. It was difficult at first to understand the difference between client and server files in the Next framework, but once we understood more about how to use Next, it became much easier for us to write our application code. We ended up appreciating some of the cool things built into Next, such as routing from folders.
