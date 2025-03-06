@@ -9,8 +9,6 @@ import Link from "next/link";
 import Banner from "@/components/PlainBanner";
 
 const businessAccount = () => {
-    const [isTracking, setIsTracking] = useState<boolean>(false);
-    const [trackingData, setTrackingData] = useState<string | null>(null);
 
     const router = useRouter();
     const { data: session, status } = useSession();
