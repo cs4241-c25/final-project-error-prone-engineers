@@ -358,19 +358,19 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, tra
 
     const getIconByType = (type: string) => {
       switch (type) {
-        case 'restaurant':
+        case 'Restaurant':
           return restaurantIcon;
-        case 'fastfood':
+        case 'Fast Food':
           return fastfoodIcon;
-        case 'cafe':
+        case 'Cafe':
           return cafeIcon;
-        case 'giftshop':
+        case 'Gift Shop':
           return giftshopIcon;
-        case 'bookstore':
+        case 'Book Store':
           return bookstoreIcon;
-        case 'hotel':
+        case 'Hotel':
           return hotelIcon;
-        case 'restroom':
+        case 'Restroom':
           return restroomIcon;
         default:
           return businessIcon;
