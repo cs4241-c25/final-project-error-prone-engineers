@@ -92,3 +92,5 @@
     - **Katy Stuparu** - Created the frontend forms, backend routes, and database schema for creating, editing, deleting, and viewing business accounts and their corresponding location nodes, including using an address to location geocoding API.
 
 6. <h3> A link to your project video. </h3>
+   
+   - [**Video Link**](https://youtu.be/vE1TZa10x70)  
