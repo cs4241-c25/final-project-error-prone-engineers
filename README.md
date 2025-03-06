@@ -19,7 +19,7 @@
    to the platform. Once logged in, users can submit business listings relevant to trail visitors. The app also features real-time 
    location tracking, enabling users to see their current position and nearby points of interest. We used MongoDB to store 
    user progress, badges, businesses, and authentication data, ensuring that all user interactions are saved and accessible 
-   across sessions. By combining navigation, historical insights, and user contributions, our Freedom Trail application 
+   across sessions. By combining badges to earn, historical insights, and user contributions, our Freedom Trail application 
    offers an interactive way to explore this iconic route. 
    - [**Freedom Trail App**](https://freedom-trail-application.vercel.app).
 
