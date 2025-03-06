@@ -78,17 +78,20 @@ const locations = [
 
 ];
 
-const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) => {
+interface MapProps {
+  geoJsonData: FeatureCollection | null;
+  geoJsonDataRestrooms: FeatureCollection | null;
+  trackingData: string | null;
+  isTracking: boolean;
+}
+
+
+const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, trackingData, isTracking }) => {
   const mapRef = useRef<L.Map | null>(null);
-  const [isTracking, setIsTracking] = useState(false);
   const [userPosition, setUserPosition] = useState<L.LatLng | null>(null);
   const [userMarker, setUserMarker] = useState<L.Marker | null>(null);
   const markerRef = useRef<L.Marker | null>(null);
   const { data: session } = useSession();
-
-  const toggleTracking = () => {
-    setIsTracking((prev) => !prev);
-  };
 
 
   useEffect(() => {
@@ -198,6 +201,17 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) =
 
         }, 0);
       });
+
+      marker.on("popupclose", () => {
+        setTimeout(() => {
+          if (map) {
+            const center = map.getCenter();
+            map.setView(center, map.getZoom(), { animate: false });
+          }
+        }, 0);
+      });
+
+
     });
 
 
@@ -369,12 +383,6 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms }) =
 
   return (
     <div className="flex flex-col h-screen">
-      <button
-        onClick={toggleTracking}
-        className="bg-blue-900 text-white font-bold font-garamond py-1 w-full hover:bg-blue-700 mb-auto"
-      >
-        {isTracking ? 'Stop Tracking' : 'Start Tracking'}
-      </button>
       <div id="map" className="flex-grow relative z-20" style={{}}></div>
     </div>
   );

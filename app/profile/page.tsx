@@ -1,5 +1,5 @@
 "use client";
-import Banner from '@/components/Banner';
+import Banner from "@/components/PlainBanner";
 import React, {useEffect, useState} from 'react';
 import { useSession, signOut } from "next-auth/react";
 import Badge from '@/components/Badge';
@@ -19,7 +19,7 @@ const ProfilePage: React.FC = () => {
     }, []);
     return (
         <div className='flex flex-col min-h-screen'>
-            <Banner />
+            <Banner></Banner>
             <div className="flex flex-grow items-center justify-center bg-cover bg-center bg-[url('/freedomtrail_medallion.jpg')] w-screen">
                 <div className="bg-white p-5 rounded-3xl max-w-full lg:w-4/5 sm:w-4/5 h-auto flex flex-row justify-center items-stretch">
 
