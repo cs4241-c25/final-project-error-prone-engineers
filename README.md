@@ -33,12 +33,11 @@
    2. To view the badges you can log into the account that was used for testing, which has multiple badges associated with it:
       1. **Username:** freedomtrailapplication@gmail.com
       2. **Password:** Mvst1234
-   3. Due to stricter privacy settings in Safari live location tracking may not always work in everyone's safari browser.
-      All other browsers, both mobile and laptop, such as chrome or Microsoft Edge work with the live location tracking.
-      Furthermore, all other functions of the application work in Safari allowing users to still learn about the freedom
-      trail using the app in Safari.
+   3. Live location tracking uses the browser's location so it may not always work if you have has custom or stricter security setting such as in Safari or Firefox.
+      All browsers without these settings, both mobile and laptop, such as chrome or Microsoft Edge work with the live location tracking.
    4. App is designed for both laptops and mobile, but on mobile it's designed for the vertical orientation, so testing the
       app in that orientation provides best experience.
+   5. To add a business you must be logged in already and enter valid information into the business creation portal.
 
 3. <h3>An outline of the technologies you used and how you used them.</h3>
 
@@ -75,6 +74,11 @@
       1. Utilized the Nodemailer library to send password reset links to users. Using Nodemailer, emails are sent from a 
       custom-made Gmail account for the team, freedomtrailapplication@gmail.com. This allows users to securely reset their 
       passwords by adding an extra layer of security, ensuring that password reset links are sent only to the requesting user.
+   7. **Leaflet Map and Tracking**
+      1. To display the official Freedom Trail accurately, we used the publicly published custom google map from the 
+      official Boston Freedom Trail website. After downloading this map, it was converted into a geojson file for use in Leaflet, 
+      which made elements such as popups and location tracking. Location tracking was done using the browser's ability to track 
+      location, and a use effect function that updates the Leaflet marker for the user's location.
  
 4. <h3> What challenges you faced in completing the project. </h3>
 
