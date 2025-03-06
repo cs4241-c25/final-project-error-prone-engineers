@@ -43,10 +43,10 @@ const PopupMenu: React.FC<PopupMenuProps> = ({ isOpen, onClose, setTrackingData,
                         onClick={handleToggleTracking}
                         className="w-full text-left px-4 py-3 bg-gray-100 hover:bg-gray-200 transition"
                     >
-                        <h3 className="text-lg font-bold text-blue-900">
+                        <h3 className="text-xl font-extrabold text-blue-900 font-garamond">
                             {localTrackingState ? "Stop Tracking" : "Start Tracking"}
                         </h3>
-                        <p className="text-sm opacity-80">
+                        <p className="text-md font-bold opacity-80 font-garamond">
                             {localTrackingState ? "Stop tracking your tour" : "Track your tour on the trail"}
                         </p>
                     </button>
@@ -62,8 +62,8 @@ const PopupMenu: React.FC<PopupMenuProps> = ({ isOpen, onClose, setTrackingData,
                         }}
                         className="w-full text-left px-4 py-3 bg-gray-100 hover:bg-gray-200 transition"
                     >
-                        <h3 className="text-lg font-bold text-blue-900">Register Business</h3>
-                        <p className="text-sm opacity-80">Register a business to add to the map</p>
+                        <h3 className="text-xl font-extrabold text-blue-900 font-garamond">Register Business</h3>
+                        <p className="text-md font-bold opacity-80 font-garamond">Register a business to add to the map</p>
                     </button>
 
                 </div>
