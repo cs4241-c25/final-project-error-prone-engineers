@@ -139,7 +139,7 @@ const hotelIcon = L.divIcon({
 const locationIcon = L.divIcon({
   className: "custom-restroom-icon",
   html: `
-    <div style="width: 32px; height: 32px; border-radius: 6px; overflow: hidden; z-index: 1000;">
+    <div style="width: 32px; height: 32px; z-index: 1000;">
       <svg width="41" height="41" viewBox="0 0 41 41" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect x="1.5" y="1.5" width="38" height="38" rx="19" fill="white"/>
         <rect x="1.5" y="1.5" width="38" height="38" rx="19" stroke="#D00000" stroke-width="3"/>
