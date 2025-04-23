@@ -239,6 +239,12 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, tra
         root.render(<LocationPage locationName={name} />);
         marker.bindPopup(container);
 
+        marker.on("popupclose", () => {
+          (document.activeElement as HTMLElement | null)?.blur();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+          document.body.scrollTop = 0;
+        });
+
         setTimeout(() => {
           const popupWrapper = container.closest(".leaflet-popup-content-wrapper");
           if (popupWrapper) {
@@ -247,28 +253,53 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, tra
         }, 0);
       });
 
+      const allLayers: L.Layer[] = [];
+
       const pathLayer = L.geoJSON(geoJsonData, {
         style: () => ({
           color: "#D00000",
           weight: 6,
         }),
-        pointToLayer: (feature, latlng) => L.marker(latlng),
+        pointToLayer: (feature, latlng) => {
+          const marker = L.marker(latlng);
+          allLayers.push(marker);
+          return marker;
+        },
       }).addTo(map);
 
-      const restroomLayer = L.geoJSON(geoJsonDataRestrooms, {
+      L.geoJSON(geoJsonDataRestrooms, {
         style: () => ({
           color: "#0A2463",
           weight: 4,
         }),
-        pointToLayer: (feature, latlng) =>
-            L.marker(latlng, { icon: restroomIcon }).bindPopup(feature.properties?.name || "Restroom"),
+        pointToLayer: (feature, latlng) => {
+          const marker = L.marker(latlng, { icon: restroomIcon });
+
+          const popupContent = document.createElement("div");
+          popupContent.className =
+              "bg-white p-2 rounded-lg text-black font-garamond font-semibold";
+          popupContent.textContent = feature.properties?.name || "Restroom";
+
+          marker.bindPopup(popupContent);
+
+          marker.on("popupclose", () => {
+            (document.activeElement as HTMLElement | null)?.blur();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            document.body.scrollTop = 0;
+          });
+
+          allLayers.push(marker);
+          return marker;
+        },
       }).addTo(map);
 
-      const bounds = L.featureGroup([pathLayer, restroomLayer]).getBounds();
+      // Recalculate bounds from all added layers
+      const bounds = L.featureGroup(allLayers).getBounds();
       if (bounds.isValid()) {
         map.fitBounds(bounds);
       }
 
+      // Always do this after setting up the map
       mapRef.current = map;
       map.invalidateSize();
 
@@ -317,6 +348,11 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, tra
 
           marker.bindPopup(container);
           marker.on("click", () => marker.openPopup());
+          marker.on("popupclose", () => {
+            (document.activeElement as HTMLElement | null)?.blur();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            document.body.scrollTop = 0;
+          });
         }
       });
 
@@ -336,24 +372,20 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, tra
     }
 
     const watchPosition = navigator.geolocation.watchPosition(
-      (position) => {
-        if (!mapRef.current) return;
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-        // const newPosition = new L.LatLng(lat, lng);
-        let newPosition = new L.LatLng(lat, lng);
+        (position) => {
+          if (!mapRef.current) return;
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          const newPosition = new L.LatLng(lat, lng);
 
-        if (!markerRef.current) {
-          markerRef.current = L.marker(newPosition, { icon: locationIcon }).addTo(
-            mapRef.current
-          );
-        } else {
-          // update curr position
-          markerRef.current.setLatLng(newPosition);
-        }
+          if (!markerRef.current) {
+            markerRef.current = L.marker(newPosition, { icon: locationIcon }).addTo(mapRef.current);
+            mapRef.current.setView(newPosition, 15);
+          } else {
+            markerRef.current.setLatLng(newPosition);
+          }
 
-        mapRef.current.setView(newPosition, 15);
-        setUserPosition(newPosition);
+          setUserPosition(newPosition);
 
         //for testing reasons
         // const testLat = 42.35532;  // Boston Common latitude
