@@ -35,8 +35,11 @@ const cinzelDecorative = Cinzel_Decorative({
 });
 
 export const metadata: Metadata = {
-    title: "Freedom Trail App",
+    title: "Freedom Trail Guide",
     description: "Freedom Trail Guide",
+    icons: {
+        icon: "/freedom_trail.png",
+    },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

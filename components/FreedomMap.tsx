@@ -185,251 +185,146 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, tra
   const [userPosition, setUserPosition] = useState<L.LatLng | null>(null);
   const [userMarker, setUserMarker] = useState<L.Marker | null>(null);
   const markerRef = useRef<L.Marker | null>(null);
+  const mapContainerRef = useRef<HTMLDivElement>(null);
   const { data: session } = useSession();
-
 
   useEffect(() => {
     if (!geoJsonData || !geoJsonDataRestrooms || mapRef.current || typeof window === "undefined") return;
 
-    // Set map to fill screen
-    const mapContainer = document.getElementById("map");
-    if (mapContainer) {
-      // mapContainer.style.height = "100vh";
-      mapContainer.style.width = "100vw";
+    if (!mapContainerRef.current) {
+      console.warn("Map container not ready.");
+      return;
     }
 
-    const map = L.map("map", {
-      center: [42.2626, -71.8023],
-      zoom: 13,
-    });
-
-    // const overlay = document.createElement("div");
-    // overlay.style.position = "absolute";
-    // overlay.style.top = "0";
-    // overlay.style.left = "0";
-    // overlay.style.width = "100%";
-    // overlay.style.height = "100%";
-    // overlay.style.backgroundColor = "rgba(0, 0, 0, 0.4)";
-    // overlay.style.zIndex = "100";
-    // mapContainer?.appendChild(overlay);
-
-    // Load base map layer
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution:
-          'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
-    }).addTo(map);
-
-    //this is a transparent (ish) map.
-    // L.tileLayer('https://{s}.tile.toner-transparent.com/{z}/{x}/{y}.png', { // Use transparent tiles
-    //   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, Tiles courtesy of <a href="http://www.thunderforest.com/" target="_blank">Thunderforest</a>', // Add appropriate attribution
-    // }).addTo(map);
-
-
-    locations.forEach(({ name, coordinates }) => {
-      const myIcon = L.divIcon({
-        html: ReactDOMServer.renderToString(
-            <Image
-                src={"/freedom_trail.png"}
-                alt={"Trail marker"}
-                width={100}
-                height={100}
-                className="rounded-md object-cover w-full h-full hover:scale-110 hover:cursor-pointer transition-transform duration-200 ease-in-out shadow-md"
-                loading="lazy"
-            />
-        ),
-        className: "shadow-md",
-        iconSize: [30, 30],
-        iconAnchor: [25, 25],
-        popupAnchor: [-16, 0],
+    requestAnimationFrame(() => {
+      const map = L.map(mapContainerRef.current!, {
+        center: [42.2626, -71.8023],
+        zoom: 13,
       });
 
-      // Plot marker
-      const marker = L.marker([coordinates[0], coordinates[1]] as [number, number], {
-        icon: myIcon,
-        interactive: true,
-        zIndexOffset: 1000,
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution:
+            'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
       }).addTo(map);
 
-      // Create Popup Content
-      const container = document.createElement("div");
-      container.className =
-          "bg-white flex flex-col justify-start rounded-2xl p-2 max-w-[80vw] w-auto h-[60vh] max-h-[500px] overflow-y-auto";
+      locations.forEach(({ name, coordinates }) => {
+        const myIcon = L.divIcon({
+          html: ReactDOMServer.renderToString(
+              <Image
+                  src={"/freedom_trail.png"}
+                  alt={"Trail marker"}
+                  width={100}
+                  height={100}
+                  className="rounded-md object-cover w-full h-full hover:scale-110 hover:cursor-pointer transition-transform duration-200 ease-in-out shadow-md"
+                  loading="lazy"
+              />
+          ),
+          className: "shadow-md",
+          iconSize: [30, 30],
+          iconAnchor: [25, 25],
+          popupAnchor: [-16, 0],
+        });
 
-      const root = ReactDOM.createRoot(container);
-      root.render(<LocationPage locationName={name} />);
+        const marker = L.marker([coordinates[0], coordinates[1]] as [number, number], {
+          icon: myIcon,
+          interactive: true,
+          zIndexOffset: 1000,
+        }).addTo(map);
 
-      // Bind Popup with Scrollable Content
-      marker.bindPopup(container);
+        const container = document.createElement("div");
+        container.className =
+            "bg-white flex flex-col justify-start rounded-2xl p-2 max-w-[80vw] w-auto h-[60vh] max-h-[500px] overflow-y-auto";
+
+        const root = ReactDOM.createRoot(container);
+        root.render(<LocationPage locationName={name} />);
+        marker.bindPopup(container);
 
         setTimeout(() => {
-          const popupWrapper = container.closest('.leaflet-popup-content-wrapper'); //Located in PopupStyles.module.css
+          const popupWrapper = container.closest(".leaflet-popup-content-wrapper");
           if (popupWrapper) {
-            //Border Styling
             popupWrapper.classList.add("border-4", "border-[#0a2463]", "rounded-2xl");
           }
         }, 0);
-
-        return container;
       });
 
-    //   nodes.forEach((node: Node) => {
-    //     if (node.type === "Official Site") {
-    //       const myIcon = L.divIcon({
-    //         html: ReactDOMServer.renderToString(
-    //           <Image
-    //               src={"/freedom_trail.png"}
-    //               alt={"Trail marker"}
-    //               width={100}
-    //               height={100}
-    //               className="rounded-md object-cover w-full h-full hover:scale-110 hover:cursor-pointer transition-transform duration-200 ease-in-out shadow-md"
-    //               loading="lazy"
-    //           />
-    //         ),
-    //         className: "shadow-md",
-    //         iconSize: [30, 30],
-    //         iconAnchor: [25, 25],
-    //         popupAnchor: [-16, 0],
-    //       });
+      const pathLayer = L.geoJSON(geoJsonData, {
+        style: () => ({
+          color: "#D00000",
+          weight: 6,
+        }),
+        pointToLayer: (feature, latlng) => L.marker(latlng),
+      }).addTo(map);
 
-    //       //Plot marker
-    //       const marker = L.marker(node.coordinates as [number, number], {
-    //         icon: myIcon,
-    //         interactive: true,
-    //       }).addTo(map);
+      const restroomLayer = L.geoJSON(geoJsonDataRestrooms, {
+        style: () => ({
+          color: "#0A2463",
+          weight: 4,
+        }),
+        pointToLayer: (feature, latlng) =>
+            L.marker(latlng, { icon: restroomIcon }).bindPopup(feature.properties?.name || "Restroom"),
+      }).addTo(map);
 
-    //       //Add popup
-    //       marker.bindPopup(() => {
-    //         const container = document.createElement("div");
-    //         //Styling for outer container.
-    //         container.className = "bg-white flex justify-center rounded-2xl p-1 w-[300px] max-w-[90vw]";
-    //         const root = ReactDOM.createRoot(container);
-    //         root.render(<LocationPage locationName={node.name}/>); //Pass name
-    //         setTimeout(() => {
-    //           const popupWrapper = container.closest('.leaflet-popup-content-wrapper'); //Located in PopupStyles.module.css
-    //           if (popupWrapper) {
-    //             //Border Styling
-    //             popupWrapper.classList.add("border-4", "border-[#0a2463]", "rounded-2xl");
-    //           }
-    //         }, 0);
-  
-    //         return container;
-    //       });
-    //     }
-    // });
-
-
-    // Add GeoJSON data with markers
-    const pathLayer = L.geoJSON(geoJsonData, {
-      style: () => ({
-        color: "#D00000",
-        weight: 6,
-      }),
-      pointToLayer: (feature, latlng) => L.marker(latlng),
-    }).addTo(map);
-
-    const restroomLayer = L.geoJSON(geoJsonDataRestrooms, {
-      style: () => ({
-        color: "#0A2463",
-        weight: 4,
-      }),
-      pointToLayer: (feature, latlng) => {
-        return L.marker(latlng, { icon: restroomIcon }).bindPopup(
-          feature.properties?.name || "Restroom"
-        );
-      },
-    }).addTo(map);
-
-    // Fit map to bounds
-    const bounds = L.featureGroup([pathLayer, restroomLayer]).getBounds();
-    if (bounds.isValid()) {
-      map.fitBounds(bounds);
-    } else {
-      console.warn("GeoJSON bounds are invalid. Check your GeoJSON data.");
-    }
-
-    mapRef.current = map;
-    map.invalidateSize();
-
-    const getIconByType = (type: string) => {
-      switch (type) {
-        case 'Restaurant':
-          return restaurantIcon;
-        case 'Fast Food':
-          return fastfoodIcon;
-        case 'Cafe':
-          return cafeIcon;
-        case 'Gift Shop':
-          return giftshopIcon;
-        case 'Book Store':
-          return bookstoreIcon;
-        case 'Hotel':
-          return hotelIcon;
-        case 'Restroom':
-          return restroomIcon;
-        default:
-          return businessIcon;
+      const bounds = L.featureGroup([pathLayer, restroomLayer]).getBounds();
+      if (bounds.isValid()) {
+        map.fitBounds(bounds);
       }
-    };
 
-    nodes.forEach((node) => {
-      //KATY FIX
-      if (node.type !== "Official Site") {
-        console.log("Node Coordinates:", node.coordinates[0], node.coordinates[1]);
+      mapRef.current = map;
+      map.invalidateSize();
 
-        if (
+      const getIconByType = (type: string) => {
+        switch (type) {
+          case 'Restaurant': return restaurantIcon;
+          case 'Fast Food': return fastfoodIcon;
+          case 'Cafe': return cafeIcon;
+          case 'Gift Shop': return giftshopIcon;
+          case 'Book Store': return bookstoreIcon;
+          case 'Hotel': return hotelIcon;
+          case 'Restroom': return restroomIcon;
+          default: return businessIcon;
+        }
+      };
+
+      nodes.forEach((node) => {
+        if (node.type !== "Official Site" &&
             typeof node.coordinates[0] === "number" &&
-            typeof node.coordinates[1] === "number"
-        ) {
+            typeof node.coordinates[1] === "number") {
           const marker = L.marker(
-              [node.coordinates[0], node.coordinates[1]] as [number, number],
-              {
-                icon: getIconByType(node.type),
-              }
-          ).addTo(mapRef.current!);
+              [node.coordinates[0], node.coordinates[1]],
+              { icon: getIconByType(node.type) }
+          ).addTo(map);
 
           const container = document.createElement("div");
           container.className =
               "bg-white flex justify-center rounded-2xl p-1 w-[300px] max-w-[90vw]";
-
           const root = ReactDOM.createRoot(container);
           root.render(
               <div>
                 <h2 className="font-cinzel_decorative font-extrabold text-2xl text-center w-full bg-blue-900 p-2 text-white">
                   {node.name}
                 </h2>
-                <p className="font-garamond text-md font-semibold">
-                  {node.description}
-                </p>
-                <p className="font-garamond text-md font-semibold">
-                  Type: {node.type}
-                </p>
-                <p className="font-garamond text-md font-semibold">
-                  Address: {node.address}
-                </p>
+                <p className="font-garamond text-md font-semibold">{node.description}</p>
+                <p className="font-garamond text-md font-semibold">Type: {node.type}</p>
+                <p className="font-garamond text-md font-semibold">Address: {node.address}</p>
                 {node.accessibility && (
-                    <p className="font-garamond text-md font-semibold">
-                      Accessibility: Yes
-                    </p>
+                    <p className="font-garamond text-md font-semibold">Accessibility: Yes</p>
                 )}
                 {node.publicRestroom && (
-                    <p className="font-garamond text-md font-semibold">
-                      Public Restroom: Yes
-                    </p>
+                    <p className="font-garamond text-md font-semibold">Public Restroom: Yes</p>
                 )}
               </div>
           );
 
           marker.bindPopup(container);
           marker.on("click", () => marker.openPopup());
-        } else {
-          return;
         }
-      }
+      });
+
+      return () => {
+        map.remove();
+        mapRef.current = null;
+      };
     });
-    return () => {
-      map.remove();
-      mapRef.current = null;
-    };
   }, [geoJsonData, geoJsonDataRestrooms, nodes]);
 
   useEffect(() => {
@@ -460,13 +355,11 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, tra
         mapRef.current.setView(newPosition, 15);
         setUserPosition(newPosition);
 
-
         //for testing reasons
         // const testLat = 42.35532;  // Boston Common latitude
         // const testLng = -71.063639; // Boston Common longitude
         // newPosition = new L.LatLng(testLat, testLng);
         // getBadges()
-
 
         if (session) {
           nodes.forEach(({ name, coordinates, type }) => {
@@ -562,11 +455,21 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, tra
     }
   }, [userPosition, isTracking]);
 
+  if (!geoJsonData || !geoJsonDataRestrooms || nodes.length === 0) {
+    return (
+        <div className="flex items-center justify-center h-screen">
+          <p className="text-lg font-semibold text-gray-600">Loading map data...</p>
+        </div>
+    );
+  }
+
   return (
-    <div className="flex flex-col h-screen">
-      <div id="map" className="flex-grow relative z-20" style={{}}></div>
-    </div>
+      <div className="flex flex-col h-screen">
+        <div ref={mapContainerRef} className="flex-grow relative z-20" />
+      </div>
   );
+
+
   // return <div id="map" style={{}}></div>;
 };
 
