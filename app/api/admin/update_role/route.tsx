@@ -22,7 +22,6 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "User not found" }, { status: 404 });
         }
 
-        // ✅ Fetch user to get email
         const updatedUser = await userCollection.findOne({ _id: new ObjectId(userId) });
         if (!updatedUser?.email) {
             return NextResponse.json({ error: "User email not found" }, { status: 404 });
