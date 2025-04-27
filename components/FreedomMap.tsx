@@ -205,9 +205,6 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, tra
 
       map.on('click', () => {
         setMarkerPopupOpen(false);
-        setTimeout(() => {
-          map.invalidateSize();
-        }, 100);
       });
 
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
