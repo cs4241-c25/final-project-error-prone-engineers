@@ -187,6 +187,7 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, tra
   const markerRef = useRef<L.Marker | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const { data: session } = useSession();
+  const [markerPopupOpen, setMarkerPopupOpen] = useState(false);
 
   useEffect(() => {
     if (!geoJsonData || !geoJsonDataRestrooms || mapRef.current || typeof window === "undefined") return;
@@ -239,10 +240,18 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, tra
         root.render(<LocationPage locationName={name} />);
         marker.bindPopup(container);
 
+        marker.on("click", () => {
+          marker.openPopup();
+          setMarkerPopupOpen(true);
+        });
+
         marker.on("popupclose", () => {
           (document.activeElement as HTMLElement | null)?.blur();
-          window.scrollTo({ top: 0, behavior: "smooth" });
-          document.body.scrollTop = 0;
+          if (markerPopupOpen) {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            document.body.scrollTop = 0;
+          }
+          setMarkerPopupOpen(false);
         });
 
         setTimeout(() => {
@@ -281,6 +290,11 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, tra
           popupContent.textContent = feature.properties?.name || "Restroom";
 
           marker.bindPopup(popupContent);
+
+          marker.on("click", () => {
+            marker.openPopup();
+            setMarkerPopupOpen(true);
+          });
 
           marker.on("popupclose", () => {
             (document.activeElement as HTMLElement | null)?.blur();
@@ -347,11 +361,18 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, tra
           );
 
           marker.bindPopup(container);
-          marker.on("click", () => marker.openPopup());
+          marker.on("click", () => {
+            marker.openPopup();
+            setMarkerPopupOpen(true);
+          });
+
           marker.on("popupclose", () => {
             (document.activeElement as HTMLElement | null)?.blur();
-            window.scrollTo({ top: 0, behavior: "smooth" });
-            document.body.scrollTop = 0;
+            if (markerPopupOpen) {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+              document.body.scrollTop = 0;
+            }
+            setMarkerPopupOpen(false);
           });
         }
       });

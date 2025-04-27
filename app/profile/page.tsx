@@ -24,7 +24,7 @@ const ProfilePage: React.FC = () => {
                 <div className="bg-white p-5 rounded-3xl max-w-full lg:w-4/5 sm:w-4/5 h-auto flex flex-row justify-center items-stretch">
 
                     {/* Left Side */}
-                    <div className='bg-[#0A2463] justify-items-center rounded-3xl lg:w-1/5 p-4 flex-grow'>
+                    <div className="bg-[#0A2463] justify-items-center rounded-3xl w-[30%] lg:w-1/5 p-4 flex flex-col items-center">
                         <img src='/user.png' alt='User image' />
                         <button onClick={() => signOut()} className='bg-[#DCEDFF] text-[#0A2463] font-garamond lg:text-xl text-xs text-center justify-center rounded-full px-2 mt-4 w-full hover:bg-[#5CABFF]'>
                             Logout
@@ -32,9 +32,9 @@ const ProfilePage: React.FC = () => {
                     </div>
 
                     {/* Right Side */}
-                    <div className='bg-white w-4/5 ml-5 h-full'>
-                        <div className='flex-col h-full justify-center py-[1%]'>
-                            {/* User Info */}
+                    <div className="bg-white w-4/5 ml-5 flex flex-col justify-between h-full">
+                        <div className={`flex-col justify-center py-[1%] ${badges.length > 0 ? 'h-full' : 'h-auto'}`}>
+                        {/* User Info */}
                             <h2 className="lg:text-4xl sm:text-lg break-all text-wrap font-bold text-left text-blue-900 font-cinzel_decorative ml-2 w-4/5">
                                 {session?.user?.name}
                             </h2>
