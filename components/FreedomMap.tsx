@@ -205,6 +205,9 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, tra
 
       map.on('click', () => {
         setMarkerPopupOpen(false);
+        setTimeout(() => {
+          map.invalidateSize();
+        }, 100);
       });
 
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -514,20 +517,17 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, tra
 
   if (!geoJsonData || !geoJsonDataRestrooms || nodes.length === 0) {
     return (
-        <div className="flex items-center justify-center h-screen">
+        <div className="flex items-center justify-center flex-grow">
           <p className="text-lg font-semibold text-gray-600">Loading map data...</p>
         </div>
     );
   }
 
   return (
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col flex-grow">
         <div ref={mapContainerRef} className="flex-grow relative z-20" />
       </div>
   );
-
-
-  // return <div id="map" style={{}}></div>;
 };
 
 export default FreedomMap;
