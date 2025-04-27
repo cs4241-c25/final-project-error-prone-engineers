@@ -92,8 +92,8 @@ export default function Home() {
     }
 
   return (
-      <div className='flex flex-col h-screen overflow-hidden sm:h-screen sm:overflow-hidden'>
-        <Banner setTrackingData={setTrackingData} setIsTracking={setIsTracking} isTracking={isTracking} />
+      <div className="flex flex-col min-h-[100dvh] overflow-hidden">
+      <Banner setTrackingData={setTrackingData} setIsTracking={setIsTracking} isTracking={isTracking} />
         <DynamicFreedomMap
             geoJsonData={geoJsonData}
             geoJsonDataRestrooms={geoJsonDataRestrooms}
