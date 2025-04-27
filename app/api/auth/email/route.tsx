@@ -41,7 +41,7 @@ export async function POST(req: Request) {
                 <p><a href="${process.env.APP_BASE_URL}/reset-password?email=${email}" style="background:blue;color:white;padding:10px 20px;text-decoration:none;border-radius:5px;">Reset Password</a></p>
                 <p>If you did not request this, you can ignore this email.</p>
                 <p>Thank you,</p>
-                <p>The Support Team</p>
+                <p>— The Freedom Trail Tour Support Team</p>
               `,
         };
 

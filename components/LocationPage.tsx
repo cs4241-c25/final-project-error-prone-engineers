@@ -82,7 +82,17 @@ const LocationPage = ({ locationName }: { locationName: string }) => {
             ) : nodeInfo ? (
                 <div className="w-full">
                     <div className="bg-[#0a2463] rounded-md text-center">
-                        <h1 className="text-3xl p-1 font-cinzel font-bold flex justify-center text-white mb-2">
+                        <h1
+                            className={`${
+                                [
+                                    "Massachusetts State House",
+                                    "Boston Latin School Site/Benjamin Franklin Statue",
+                                    "King's Chapel & King's Chapel Burying Ground"
+                                ].includes(nodeInfo.name)
+                                    ? "text-[1.65rem]"
+                                    : "text-3xl"
+                            } p-1 font-cinzel font-bold flex justify-center text-white mb-2 break-words hyphens-none`}
+                        >
                             {nodeInfo.name}
                         </h1>
                     </div>
