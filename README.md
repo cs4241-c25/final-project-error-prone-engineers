@@ -30,14 +30,11 @@
     1. Anyone can sign up for an account using their email, or log in using their Google account.
        However, badges are earned by walking the freedom trail and getting close enough to a landmark.
        Therefore, your account will not have any badges in it if you don't walk the freedom trail
-    2. To view the badges you can log into the account that was used for testing, which has multiple badges associated with it:
-        1. **Username:** freedomtrailapplication@gmail.com
-        2. **Password:** Mvst1234
-    3. Live location tracking uses the browser's location so it may not always work if you have has custom or stricter security setting such as in Safari or Firefox.
+    2. Live location tracking uses the browser's location so it may not always work if you have has custom or stricter security setting such as in Safari or Firefox.
        All browsers without these settings, both mobile and laptop, such as chrome or Microsoft Edge work with the live location tracking.
-    4. App is designed for both laptops and mobile, but on mobile it's designed for the vertical orientation, so testing the
+    3. App is designed for both laptops and mobile, but on mobile it's designed for the vertical orientation, so testing the
        app in that orientation provides best experience.
-    5. To add a business you must be logged in already and enter valid information into the business creation portal.
+    4. To add a business you must be logged into a business account already and enter valid information into the business creation portal.
 
 3. <h3>An outline of the technologies you used and how you used them.</h3>
 
