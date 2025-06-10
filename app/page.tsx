@@ -36,7 +36,7 @@ export default function Home() {
     const [trackingData, setTrackingData] = useState<string | null>(null);
     const [isTracking, setIsTracking] = useState<boolean>(false);
 
-    // ✅ Restore saved tracking state from sessionStorage
+    // Restore saved tracking state from sessionStorage
     useEffect(() => {
         const savedTracking = sessionStorage.getItem('isTracking');
         const savedData = sessionStorage.getItem('trackingData');
@@ -49,7 +49,7 @@ export default function Home() {
         }
     }, []);
 
-    // ✅ Save tracking state to sessionStorage when it changes
+    // Save tracking state to sessionStorage when it changes
     useEffect(() => {
         sessionStorage.setItem('isTracking', isTracking.toString());
     }, [isTracking]);
@@ -60,7 +60,7 @@ export default function Home() {
         }
     }, [trackingData]);
 
-    // 📍 Load business nodes
+    // Load business nodes
     useEffect(() => {
         async function fetchNodes() {
             const response = await axios.get('/api/nodes');
@@ -71,7 +71,7 @@ export default function Home() {
         fetchNodes().then();
     }, []);
 
-    // 🌐 Load geojson data
+    // Load geojson data
     useEffect(() => {
         fetch('/freedom_path.geojson')
             .then(res => {
