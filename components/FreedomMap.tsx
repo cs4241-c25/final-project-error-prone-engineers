@@ -246,6 +246,9 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, tra
 
         marker.on("click", () => {
           marker.openPopup();
+          if (userPosition) {
+            checkBadgesAtLocation(userPosition, session, nodes);
+          }
           setMarkerPopupOpen(true);
         });
 
@@ -297,6 +300,9 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, tra
 
           marker.on("click", () => {
             marker.openPopup();
+            if (userPosition) {
+              checkBadgesAtLocation(userPosition, session, nodes);
+            }
             setMarkerPopupOpen(true);
           });
 
@@ -367,6 +373,9 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, tra
           marker.bindPopup(container);
           marker.on("click", () => {
             marker.openPopup();
+            if (userPosition) {
+              checkBadgesAtLocation(userPosition, session, nodes);
+            }
             setMarkerPopupOpen(true);
           });
 
@@ -389,52 +398,76 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, tra
   }, [geoJsonData, geoJsonDataRestrooms, nodes]);
 
   useEffect(() => {
-    if (!isTracking || !mapRef.current) return;
+    if (!isTracking || !mapRef.current) {
+      // Remove marker when tracking stops
+      if (markerRef.current && mapRef.current) {
+        mapRef.current.removeLayer(markerRef.current);
+        markerRef.current = null;
+      }
+      return;
+    }
 
+    // 1. Show last known position from trackingData if available
+    let initialPositionSet = false;
+    if (trackingData && !userPosition) {
+      try {
+        const { latitude, longitude } = JSON.parse(trackingData);
+        if (typeof latitude === "number" && typeof longitude === "number") {
+          const lastPosition = new L.LatLng(latitude, longitude);
+          if (!markerRef.current) {
+            markerRef.current = L.marker(lastPosition, { icon: locationIcon }).addTo(mapRef.current);
+            mapRef.current.setView(lastPosition, 15);
+          } else {
+            markerRef.current.setLatLng(lastPosition);
+          }
+          setUserPosition(lastPosition);
+          initialPositionSet = true;
+        }
+      } catch (e) {
+        console.error("Failed to parse trackingData:", e);
+      }
+    }
+
+    // 2. Start browser geolocation for live updates
     if (!navigator.geolocation) {
       console.error("Geolocation is not supported by this browser.");
       return;
     }
 
     const watchPosition = navigator.geolocation.watchPosition(
-        (position) => {
-          if (!mapRef.current) return;
-          const lat = position.coords.latitude;
-          const lng = position.coords.longitude;
-          const newPosition = new L.LatLng(lat, lng);
+      (position) => {
+        if (!mapRef.current) return;
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        const newPosition = new L.LatLng(lat, lng);
 
-          if (!markerRef.current) {
-            markerRef.current = L.marker(newPosition, { icon: locationIcon }).addTo(mapRef.current);
-            mapRef.current.setView(newPosition, 15);
-          } else {
-            markerRef.current.setLatLng(newPosition);
-          }
+        if (!markerRef.current) {
+          markerRef.current = L.marker(newPosition, { icon: locationIcon }).addTo(mapRef.current);
+          mapRef.current.setView(newPosition, 15);
+          mapRef.current.setView(newPosition, mapRef.current.getZoom());
+        }
+        setUserPosition(newPosition);
 
-          setUserPosition(newPosition);
-
-        //for testing reasons
-        // const testLat = 42.35532;  // Boston Common latitude
-        // const testLng = -71.063639; // Boston Common longitude
-        // newPosition = new L.LatLng(testLat, testLng);
-        // getBadges()
+        // Optionally, update trackingData in sessionStorage for next reload
+        try {
+          sessionStorage.setItem('trackingData', JSON.stringify({ latitude: lat, longitude: lng }));
+        } catch {}
 
         if (session) {
           nodes.forEach(({ name, coordinates, type }) => {
-            if (type == "Official Site") {
+            if (type === "Official Site") {
               const locationPoint = new L.LatLng(coordinates[0], coordinates[1]);
               const distance = newPosition.distanceTo(locationPoint);
 
-              if (distance < 9.14) {
+              if (distance < 21.34) {
                 createBadgeObject(name).then();
               }
             }
           });
         }
-
       },
       (error) => {
         console.error('Error getting location:', error);
-
         switch (error.code) {
           case error.PERMISSION_DENIED:
             console.error("User denied the request for Geolocation.");
@@ -454,13 +487,13 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, tra
       if (watchPosition) {
         navigator.geolocation.clearWatch(watchPosition);
       }
-      // remove marker when tracking stops
-      if (markerRef.current && mapRef.current){
+      if (markerRef.current && mapRef.current) {
         mapRef.current.removeLayer(markerRef.current);
         markerRef.current = null;
       }
     };
-  }, [isTracking]);
+    // Add trackingData and userPosition to dependencies
+  }, [isTracking, trackingData, session, nodes]);
 
   const checkProgress = () => {
     if (!geoJsonData || !userPosition) return;
@@ -528,3 +561,19 @@ const FreedomMap: React.FC<MapProps> = ({ geoJsonData, geoJsonDataRestrooms, tra
 };
 
 export default FreedomMap;
+
+
+function checkBadgesAtLocation(userPosition: L.LatLng, session: any, nodes: Node[]) {
+  if (!session) return;
+
+  nodes.forEach(({ name, coordinates, type }) => {
+    if (type === "Official Site") {
+      const locationPoint = new L.LatLng(coordinates[0], coordinates[1]);
+      const distance = userPosition.distanceTo(locationPoint);
+
+      if (distance < 21.34) {
+        createBadgeObject(name).then();
+      }
+    }
+  });
+}
